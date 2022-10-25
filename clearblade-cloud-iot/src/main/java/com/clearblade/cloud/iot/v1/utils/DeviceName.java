@@ -45,33 +45,27 @@ public class DeviceName {
 	    return new Builder(this);
 	  }
 
-	  public static DeviceName of(String project, String location, String registry, String device) {
-	    return newBuilder()
-	        .setProject(project)
-	        .setLocation(location)
-	        .setRegistry(registry)
-	        .setDevice(device)
-	        .build();
-	  }
+	public static DeviceName of(String project, String location, String registry, String device) {
+		return newBuilder().setProject(project).setLocation(location).setRegistry(registry).setDevice(device).build();
+	}
 
-	  public static String format(String project, String location, String registry, String device) {
-	    return newBuilder()
-	        .setProject(project)
-	        .setLocation(location)
-	        .setRegistry(registry)
-	        .setDevice(device)
-	        .build()
-	        .toString();
-	  }
-	
-	/** Builder for projects/{project}/locations/{location}/registries/{registry}/devices/{device}. */
-	  public static class Builder {
-	    private String project;
-	    private String location;
-	    private String registry;
-	    private String device;
+	public static String format(String project, String location, String registry, String device) {
+		return newBuilder().setProject(project).setLocation(location).setRegistry(registry).setDevice(device).build()
+				.toString();
+	}
 
-	    protected Builder() {}
+	/**
+	 * Builder for
+	 * projects/{project}/locations/{location}/registries/{registry}/devices/{device}.
+	 */
+	public static class Builder {
+		private String project;
+		private String location;
+		private String registry;
+		private String device;
+
+		protected Builder() {
+		}
 
 	    public String getProject() {
 	      return project;
