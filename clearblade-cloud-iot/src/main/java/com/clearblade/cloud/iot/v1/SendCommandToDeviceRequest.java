@@ -1,5 +1,7 @@
 package com.clearblade.cloud.iot.v1;
 
+import java.util.Arrays;
+
 import com.clearblade.cloud.iot.v1.utils.ByteString;
 import com.clearblade.cloud.iot.v1.utils.DeviceName;
 
@@ -7,21 +9,24 @@ final class SendCommandToDeviceRequest {
 
 	private final DeviceName name;
 	private final ByteString binaryData;
+	private final byte[] binaryDataByte;
 	private final String subFolder;
 
 	private SendCommandToDeviceRequest(Builder builder) {
 		this.name = builder.name;	
 		this.binaryData = builder.binaryData;
 		this.subFolder = builder.subFolder;
+		this.binaryDataByte = builder.binaryDataByte;
 	}
 
-		// Static class Builder
-		public static class Builder {
+	// Static class Builder
+	public static class Builder {
 
 		/// instance fields
 		private DeviceName name;
 		private ByteString binaryData;
 		private String subFolder;
+		private byte[] binaryDataByte;
 
 		public static Builder newBuilder() {
 			return new Builder();
@@ -41,6 +46,11 @@ final class SendCommandToDeviceRequest {
 			return this;
 		}
 
+		public Builder setBinaryDataByte(byte[] binaryDataByte) {
+			this.binaryDataByte = binaryDataByte;
+			return this;
+		}
+		
 		public Builder setSubFolder(String subFolder) {
 			this.subFolder = subFolder;
 			return this;
@@ -55,6 +65,6 @@ final class SendCommandToDeviceRequest {
 
 	@Override
 	public String toString() {
-		return "name = " + this.name.getDevice() + ", binaryData = " + this.binaryData+ ", subFolder = "+this.subFolder;
+		return "name = " + this.name.getDevice() + ", binaryData = " + this.binaryData+ ", subFolder = "+this.subFolder+ ", binaryDataByte = "+Arrays.toString(this.binaryDataByte);
 	}
 }

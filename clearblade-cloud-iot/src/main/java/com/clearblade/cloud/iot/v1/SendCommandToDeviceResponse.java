@@ -19,11 +19,10 @@ public class SendCommandToDeviceResponse {
 	private int httpStatusCode;
 	private String httpStatusResponse;
 	private Constants constants;
-	
-	protected SendCommandToDeviceResponse(Builder builder){
-	        this.request = builder.request;
-	}	
-	
+
+	protected SendCommandToDeviceResponse(Builder builder) {
+		this.request = builder.request;
+	}
 
 	public int getHttpStatusCode() {
 		return httpStatusCode;
@@ -34,7 +33,6 @@ public class SendCommandToDeviceResponse {
 		this.httpStatusCode = httpStatusCode;
 	}
 
-
 	public String getHttpStatusResponse() {
 		return httpStatusResponse;
 	}
@@ -42,7 +40,6 @@ public class SendCommandToDeviceResponse {
 	public void setHttpStatusResponse(String httpStatusResponse) {
 		this.httpStatusResponse = httpStatusResponse;
 	}
-
 
 	// Static class Builder
 	public static class Builder {

@@ -7,8 +7,8 @@ import com.clearblade.cloud.iot.v1.utils.DeviceName;
 public class DeviceManagerClient {
 	Constants constants = null;
 	/**
-	 * Initialise the Constants object 
-	 * This method will set details like project, location, registry, device 
+	 * Initialise the Constants object This method will set details like project,
+	 * location, registry, device
 	 */
 	public void init() {
 		constants = new Constants();
@@ -16,6 +16,7 @@ public class DeviceManagerClient {
 	
 	/**
 	 * SendCommandToDevice method
+	 * 
 	 * @param name
 	 * @param binaryData
 	 */
