@@ -53,6 +53,22 @@ public class ProcessRequest {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		} else if (methodName.equals("createDevice")) {
+			// https://iot-sandbox.clearblade.com/api/v/4/webhook/execute/fedbc9b40cde90befbd9b2dfde9d01/cloudiot_devices?deviceNumIds=124,666&subfolder=775
+			String deviceNumIds = constants.getNumIds();
+			String subfolder = constants.getSubFolder();
+			String params = "?deviceNumIds=" + deviceNumIds + "&subfolder=" + subfolder;
+
+			try {
+				obj = new URL(
+						constants.getHttpURLBegin() + constants.getEndPoint() + constants.getCreateDevicePathPart1()
+								+ constants.getSystemKey() + constants.getCreateDevicePathPart2() + params);
+				con = SetHttpConnection.getConnection(obj);
+				// Calling setConnectionMethod
+				responseCode = setConnectionMethods(con, methodName);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return responseCode;
 	}
@@ -75,6 +91,8 @@ public class ProcessRequest {
 					constants.getHttpRequestPropertyContentTypeOrAcceptValue());	
 			if(methodName.equals("sendCommandToDevice")){
 				inputString = constants.getJsonInputString();
+			}else if (methodName.equals("createDevice")) {
+				inputString = constants.getCreateDeviceInputString();			
 			}
 			// SetOutput to connection
 			con.setDoOutput(true);

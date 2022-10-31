@@ -44,4 +44,28 @@ public class DeviceManagerClient {
 		return (SendCommandToDeviceResponse.Builder.newBuilder().setSendCommandToDeviceRequest(request).build());
 	}
 
+	/**
+	 * Method used to call createDevice apicall
+	 * 
+	 * @param parent
+	 * @param device
+	 * @return Device object
+	 */
+	public void createDevice(RegistryName parent, Device device) {
+		CreateDeviceRequest request = CreateDeviceRequest.Builder.newBuilder()
+				.setParent(parent == null ? null : parent.toString()).setDevice(device).build();
+		CreateDeviceResponse response = this.createDevice(request);
+		response.processRequest();
+	}
+
+	/**
+	 * Print the response for createDevice
+	 * 
+	 * @param request
+	 * @return Response Object
+	 */
+	public CreateDeviceResponse createDevice(CreateDeviceRequest request) {
+		return (CreateDeviceResponse.Builder.newBuilder().setCreateDeviceRequest(request).build());
+	}
+
 }

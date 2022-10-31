@@ -4,14 +4,14 @@ import java.net.HttpURLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SendCommandToDeviceResponse {
-
-	static Logger log = Logger.getLogger(SendCommandToDeviceResponse.class.getName());
-	private final SendCommandToDeviceRequest request;
+public class CreateDeviceResponse {
+	
+	static Logger log = Logger.getLogger(CreateDeviceResponse.class.getName());
+	private final CreateDeviceRequest request;
 	private int httpStatusCode;
 	private String httpStatusResponse;
 
-	protected SendCommandToDeviceResponse(Builder builder) {
+	protected CreateDeviceResponse(Builder builder) {
 		this.request = builder.request;
 	}
 
@@ -35,7 +35,7 @@ public class SendCommandToDeviceResponse {
 	public static class Builder {
 
 		/// instance fields
-		private SendCommandToDeviceRequest request;
+		private CreateDeviceRequest request;
 
 		public static Builder newBuilder() {
 			return new Builder();
@@ -45,34 +45,47 @@ public class SendCommandToDeviceResponse {
 		}
 
 		// Setter methods
-		public Builder setSendCommandToDeviceRequest(SendCommandToDeviceRequest request) {
+		public Builder setCreateDeviceRequest(CreateDeviceRequest request) {
 			this.request = request;
 			return this;
 		}
 
 		// build method to deal with outer class
 		// to return outer instance
-		public SendCommandToDeviceResponse build() {
-			return new SendCommandToDeviceResponse(this);
+		public CreateDeviceResponse build() {
+			return new CreateDeviceResponse(this);
 		}
 	}
 	
 	/**
 	 * Mehtod used to process the request
-	 * Calling processRequestForMethod - sendCommandToDevice
+	 * Calling processRequestForMethod - CreateDevice
 	 */
 	public void processRequest() {
 		
 		ProcessRequest processRequest = new ProcessRequest();
-		int responseCode = processRequest.processRequestForMethod("sendCommandToDevice");
+		String msg = "";
+		
+		int responseCode = processRequest.processRequestForMethod("createDevice");
 		this.setHttpStatusCode(responseCode);
-		if (responseCode == HttpURLConnection.HTTP_OK) {
-			this.setHttpStatusResponse("HTTP_OK");
-			log.log(Level.INFO, "Request processed successfully for SendCommandToDevice method");
-		} else {
-			log.log(Level.SEVERE, "POST request not worked for sendCommandToDevice Method");
+		switch(responseCode) {
+			case HttpURLConnection.HTTP_BAD_REQUEST:
+					this.setHttpStatusResponse("HTTP_BAD_REQUEST");
+					break;
+			case HttpURLConnection.HTTP_INTERNAL_ERROR:
+					this.setHttpStatusResponse("HTTP_INTERNAL_ERROR");
+					break;
+			default: 
+					this.setHttpStatusResponse("HTTP_OK");
+					break;
 		}
-
+		if (responseCode == HttpURLConnection.HTTP_OK) {
+			msg = "Request processed for CreateDevice method.\n HTTP RESPONSE IS :: Status Code : "+this.getHttpStatusCode()+" Status Message : "+this.getHttpStatusResponse();
+			log.log(Level.INFO, msg);
+		} else {
+			msg = "Request is not processed for CreateDevice method.\n HTTP RESPONSE IS :: Status Code : "+this.getHttpStatusCode()+" Status Message : "+this.getHttpStatusResponse();
+			log.log(Level.SEVERE, msg);
+		}
 	}
 
 	@Override
@@ -81,7 +94,8 @@ public class SendCommandToDeviceResponse {
 				+ this.getHttpStatusResponse();
 	}
 
-	public SendCommandToDeviceRequest getRequest() {
+	public CreateDeviceRequest getRequest() {
 		return request;
 	}
+
 }

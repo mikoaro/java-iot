@@ -30,6 +30,13 @@ public class Constants {
 	private String sendCommandPathPart2;
 	private String jsonInputString;
 	
+	//Fields used to set values for createDevice method 
+	private String createDeviceMethodName;
+	private String createDevicePathPart1;
+	private String createDevicePathPart2;
+	private String numIds;
+	private String subFolder;
+	private String createDeviceInputString;
 	
 	//Fields used to fetch values from Properties file
 	Properties properties;
@@ -93,6 +100,12 @@ public class Constants {
 
 		this.setJsonInputString(properties.getProperty("jsonInputString"));
 		
+		this.setCreateDeviceMethodName(properties.getProperty("createDeviceMethodName"));
+		this.setCreateDevicePathPart1(properties.getProperty("createDevicePathPart1"));
+		this.setCreateDevicePathPart2(properties.getProperty("createDevicePathPart2"));
+		this.setNumIds(properties.getProperty("numIds"));
+		this.setSubFolder(properties.getProperty("subFolder"));
+		this.setCreateDeviceInputString(properties.getProperty("createDeviceInputString"));
 		
 	}
 	
@@ -232,4 +245,53 @@ public class Constants {
 		this.sendCommandPathPart2 = sendCommandPathPart2;
 	}
 
+	public String getCreateDeviceMethodName() {
+		return createDeviceMethodName;
+	}
+
+	public void setCreateDeviceMethodName(String createDeviceMethodName) {
+		this.createDeviceMethodName = createDeviceMethodName;
+	}
+
+	public String getCreateDevicePathPart1() {
+		return createDevicePathPart1;
+	}
+
+	public void setCreateDevicePathPart1(String createDevicePathPart1) {
+		this.createDevicePathPart1 = createDevicePathPart1;
+	}
+
+	public String getCreateDevicePathPart2() {
+		return createDevicePathPart2;
+	}
+
+	public void setCreateDevicePathPart2(String createDevicePathPart2) {
+		this.createDevicePathPart2 = createDevicePathPart2;
+	}
+
+	public String getNumIds() {
+		return numIds;
+	}
+
+	public void setNumIds(String numIds) {
+		this.numIds = numIds;
+	}
+
+	public String getSubFolder() {
+		return subFolder;
+	}
+
+	public void setSubFolder(String subFolder) {
+		this.subFolder = subFolder;
+	}
+
+	public String getCreateDeviceInputString() {
+		return createDeviceInputString;
+	}
+
+	public void setCreateDeviceInputString(String createDeviceInputString) {
+		this.createDeviceInputString = createDeviceInputString;
+	}
+	
+	
 }
