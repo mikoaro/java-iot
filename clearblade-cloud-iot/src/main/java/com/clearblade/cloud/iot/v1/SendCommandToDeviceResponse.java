@@ -1,6 +1,5 @@
 package com.clearblade.cloud.iot.v1;
 
-import java.net.HttpURLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,15 +61,16 @@ public class SendCommandToDeviceResponse {
 	 * Calling processRequestForMethod - sendCommandToDevice
 	 */
 	public void processRequest() {
-		
 		ProcessRequest processRequest = new ProcessRequest();
-		int responseCode = processRequest.processRequestForMethod("sendCommandToDevice");
-		this.setHttpStatusCode(responseCode);
-		if (responseCode == HttpURLConnection.HTTP_OK) {
-			this.setHttpStatusResponse("HTTP_OK");
-			log.log(Level.INFO, "Request processed successfully for SendCommandToDevice method");
+		String msg = "";
+		String responseMessage = processRequest.processRequestForMethod("sendCommandToDevice");
+		this.setHttpStatusResponse(responseMessage);
+		if (responseMessage.equals("OK")) {
+			msg = "Request processed successfully for SendCommandToDevice method";
+			log.log(Level.INFO, msg);
 		} else {
-			log.log(Level.SEVERE, "POST request not worked for sendCommandToDevice Method");
+			msg = "POST request not worked for sendCommandToDevice Method \n".concat(responseMessage);
+			log.log(Level.SEVERE, msg);
 		}
 
 	}

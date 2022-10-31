@@ -32,7 +32,7 @@ class DeviceManagerClientTest {
 	@Test
 	void testSendCommandToDeviceDeviceNameByteStringString() {
 		init();
-		int expectedResponse = 200;
+		String expectedResponse = "OK";
 		String msg = "";
 
 		DeviceName name = DeviceName.of(constants.getProject(), constants.getLocation(), constants.getRegistry(),
@@ -44,7 +44,7 @@ class DeviceManagerClientTest {
 		SendCommandToDeviceResponse actualResponse = client.sendCommandToDevice(request);
 		if (actualResponse != null) {
 			actualResponse.processRequest();
-			if(actualResponse.getHttpStatusCode() == expectedResponse) {
+			if(actualResponse.getHttpStatusResponse().equals(expectedResponse)) {
 				msg = "SendCommandToDeviceTest successfully executed";
 				log.log(Level.INFO, msg);
 			}else {
@@ -62,7 +62,7 @@ class DeviceManagerClientTest {
 	@Test
 	void testSendCommandToDeviceDeviceNameByteStringStringFail() {
 		init();
-		int expectedResponse = 200;
+		String expectedResponse = "OK";
 		String msg ="";
 		DeviceName name = DeviceName.of("","","","");
 		ByteString binaryData = new ByteString("");
@@ -72,7 +72,7 @@ class DeviceManagerClientTest {
 		SendCommandToDeviceResponse actualResponse = client.sendCommandToDevice(request);
 		if (actualResponse != null) {
 			actualResponse.processRequest();
-			if(actualResponse.getHttpStatusCode() != expectedResponse) {
+			if(actualResponse.getHttpStatusResponse().equals(expectedResponse)) {
 				msg = "SendCommandToDeviceTest Failure Case is Successful";
 				log.log(Level.INFO, msg);
 			}else {
@@ -89,7 +89,7 @@ class DeviceManagerClientTest {
 	@Test
 	void testCreateDeviceRegistryNameDevice() {
 		init();
-		int expectedResponse = 200;
+		String expectedResponse = "OK";
 		String msg = "";
 		RegistryName registryName = RegistryName.of(constants.getProject(), constants.getLocation(),
 				constants.getRegistry());
@@ -98,7 +98,7 @@ class DeviceManagerClientTest {
 		CreateDeviceResponse actualResponse = client.createDevice(request);
 		if (actualResponse != null) {
 			actualResponse.processRequest();
-			if(actualResponse.getHttpStatusCode() == expectedResponse) {
+			if(actualResponse.getHttpStatusResponse().equals(expectedResponse)) {
 				msg = "CreateDeviceTest execution is successful";
 				log.log(Level.INFO, msg);
 			}else {

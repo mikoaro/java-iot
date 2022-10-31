@@ -1,11 +1,10 @@
 package com.clearblade.cloud.iot.v1;
 
-import java.net.HttpURLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CreateDeviceResponse {
-	
+
 	static Logger log = Logger.getLogger(CreateDeviceResponse.class.getName());
 	private final CreateDeviceRequest request;
 	private int httpStatusCode;
@@ -56,34 +55,24 @@ public class CreateDeviceResponse {
 			return new CreateDeviceResponse(this);
 		}
 	}
-	
+
 	/**
-	 * Mehtod used to process the request
-	 * Calling processRequestForMethod - CreateDevice
+	 * Mehtod used to process the request Calling processRequestForMethod -
+	 * CreateDevice
 	 */
 	public void processRequest() {
-		
+
 		ProcessRequest processRequest = new ProcessRequest();
 		String msg = "";
-		
-		int responseCode = processRequest.processRequestForMethod("createDevice");
-		this.setHttpStatusCode(responseCode);
-		switch(responseCode) {
-			case HttpURLConnection.HTTP_BAD_REQUEST:
-					this.setHttpStatusResponse("HTTP_BAD_REQUEST");
-					break;
-			case HttpURLConnection.HTTP_INTERNAL_ERROR:
-					this.setHttpStatusResponse("HTTP_INTERNAL_ERROR");
-					break;
-			default: 
-					this.setHttpStatusResponse("HTTP_OK");
-					break;
-		}
-		if (responseCode == HttpURLConnection.HTTP_OK) {
-			msg = "Request processed for CreateDevice method.\n HTTP RESPONSE IS :: Status Code : "+this.getHttpStatusCode()+" Status Message : "+this.getHttpStatusResponse();
+		String responseMessage = processRequest.processRequestForMethod("createDevice");
+		this.setHttpStatusResponse(responseMessage);
+		if (responseMessage.equals("OK")) {
+			this.setHttpStatusCode(200);
+			msg = "Request processed for CreateDevice method";
 			log.log(Level.INFO, msg);
 		} else {
-			msg = "Request is not processed for CreateDevice method.\n HTTP RESPONSE IS :: Status Code : "+this.getHttpStatusCode()+" Status Message : "+this.getHttpStatusResponse();
+			this.setHttpStatusCode(0);
+			msg = "Request for CreateDevice failed \n" .concat(responseMessage);
 			log.log(Level.SEVERE, msg);
 		}
 	}

@@ -26,12 +26,12 @@ public class SyncSendCommandToDevice {
 		SendCommandToDeviceResponse response = deviceManagerClient.sendCommandToDevice(request);
 		if (response != null) {
 			response.processRequest();
-			if(response.getHttpStatusCode() == 200) {
-				msg = "SyncSendCommandToDevice Method execution successful :: " + response.toString() + "\n HTTP RESPONSE IS ::  Status Code : "+response.getHttpStatusCode() +" Status Message : " + response.getHttpStatusResponse();
+			if(response.getHttpStatusResponse().equals("OK")) {
+				msg = "SyncSendCommandToDevice Method worked successfully :: " + response.getHttpStatusResponse();
 				log.log(Level.INFO, msg);
 			}else {
-				msg = "SyncSendCommandToDevice Method execution failed :: " + response.toString() + "\n HTTP RESPONSE IS ::  Status Code : "+response.getHttpStatusCode() +" Status Message : " + response.getHttpStatusResponse();
-				log.log(Level.WARNING, msg);
+				msg = "SyncSendCommandToDevice Method execution failed :: " + response.getHttpStatusResponse();
+				log.log(Level.SEVERE, msg);
 			}
 		}else {
 			msg = "SyncSendCommandToDevice Method execution failed";

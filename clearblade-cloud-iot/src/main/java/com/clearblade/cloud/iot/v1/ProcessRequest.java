@@ -1,6 +1,8 @@
 package com.clearblade.cloud.iot.v1;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -17,6 +19,7 @@ public class ProcessRequest {
 	Constants constants;
 	URL obj;
 	HttpsURLConnection con;
+	String responseMessage;
 	int responseCode;
 	String inputString;
 
@@ -27,6 +30,7 @@ public class ProcessRequest {
 		con = null;
 		responseCode = 0;
 		inputString = null;
+		responseMessage = null;
 	}
 
 	/**
@@ -34,9 +38,9 @@ public class ProcessRequest {
 	 * are inputs ResponseCode - integer value is sent as return value
 	 * 
 	 * @param methodName
-	 * @return int - response code
+	 * @return String - response message
 	 */
-	public int processRequestForMethod(String methodName) {
+	public String processRequestForMethod(String methodName) {
 		// https://iot-sandbox.clearblade.com:443/api/v/4/webhook/execute/fedbc9b40cde90befbd9b2dfde9d01/cloudiot_devices?name=Rashmi_Device_Test&method=sendCommandToDevice
 		if (methodName.equals("sendCommandToDevice")) {
 
@@ -49,7 +53,7 @@ public class ProcessRequest {
 								+ constants.getSystemKey() + constants.getSendCommandPathPart2() + params);
 				con = SetHttpConnection.getConnection(obj);
 				// Calling setConnectionMethod
-				responseCode = setConnectionMethods(con, methodName);
+				responseMessage = setConnectionMethods(con, methodName);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -65,19 +69,19 @@ public class ProcessRequest {
 								+ constants.getSystemKey() + constants.getCreateDevicePathPart2() + params);
 				con = SetHttpConnection.getConnection(obj);
 				// Calling setConnectionMethod
-				responseCode = setConnectionMethods(con, methodName);
+				responseMessage = setConnectionMethods(con, methodName);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		return responseCode;
+		return responseMessage;
 	}
 	/**
 	 * Set connection methods
 	 * @param con
-	 * @returning response code
+	 * @returning response message
 	 */
-	public int setConnectionMethods(HttpsURLConnection con,String methodName) {
+	public String setConnectionMethods(HttpsURLConnection con,String methodName) {		
 		if (con != null) {
 			try {
 				con.setRequestMethod(constants.getHttpRequestMethodType());
@@ -97,31 +101,49 @@ public class ProcessRequest {
 			// SetOutput to connection
 			con.setDoOutput(true);
 			// Get responseCode from Connection
-			responseCode = getResponse(con, inputString);
+			responseMessage = getResponse(con, inputString);
 		} else {
-			responseCode = 0;
+			responseMessage = null;
 		}
-		return responseCode;
+		return responseMessage;
 	}
 
 	/**
 	 * Method used to get Response when inputString and connection object are inputs
-	 * ResponseCode - integer value is sent as return value
+	 * ResponseMessage - String value is sent as return value
 	 * 
 	 * @param con
 	 * @param inputString
-	 * @return responseCode
+	 * @return responseMessage 
 	 */
-	public int getResponse(HttpsURLConnection con, String inputString) {
+	public String getResponse(HttpsURLConnection con, String inputString) {
 		try (OutputStream os = con.getOutputStream()) {
+			StringBuilder response = new StringBuilder();
 			byte[] input = inputString.getBytes(StandardCharsets.UTF_8);
 			os.write(input, 0, input.length);
 			responseCode = con.getResponseCode();
+			if(responseCode != 200) {
+				BufferedReader in = null;
+				if(con.getErrorStream() != null) {					
+					in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+				}else if(con.getInputStream() != null) {
+					in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				}
+				String inputLine;
+				if(in != null) {
+					while((inputLine = in.readLine()) != null) {
+						response.append(inputLine);
+					}					
+				}
+				responseMessage = response.toString();
+			}else if(responseCode == 200) {
+				responseMessage = "OK";
+			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		return responseCode;
+		return responseMessage;
 	}
 }

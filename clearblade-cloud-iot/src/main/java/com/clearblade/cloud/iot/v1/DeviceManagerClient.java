@@ -45,7 +45,7 @@ public class DeviceManagerClient {
 	}
 
 	/**
-	 * Method used to call createDevice apicall
+	 * Method used to call createDevice api call
 	 * 
 	 * @param parent
 	 * @param device

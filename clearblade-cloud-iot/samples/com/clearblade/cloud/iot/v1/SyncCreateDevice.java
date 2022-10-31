@@ -26,12 +26,12 @@ public class SyncCreateDevice {
 		CreateDeviceResponse response = deviceManagerClient.createDevice(request);
 		if (response != null) {			
 			response.processRequest();
-			if(response.getHttpStatusCode() == 200) {
-				msg = "SyncCreateDevice Method worked successfully :: " + response.toString() + "\n HTTP RESPONSE IS ::  Status Code : "+response.getHttpStatusCode() +" Status Message : " + response.getHttpStatusResponse();
+			if(response.getHttpStatusResponse().equals("OK")) {
+				msg = "SyncCreateDevice Method worked successfully :: " + response.getHttpStatusResponse();
 				log.log(Level.INFO, msg);
 			}else {
-				msg = "SyncCreateDevice Method execution failed :: " + response.toString() + "\n HTTP RESPONSE IS ::  Status Code : "+response.getHttpStatusCode() +" Status Message : " + response.getHttpStatusResponse();
-				log.log(Level.WARNING, msg);
+				msg = "SyncCreateDevice Method execution failed :: " + response.getHttpStatusResponse();
+				log.log(Level.SEVERE, msg);
 			}
 		}else {
 			msg = "SyncCreateDevice Method execution failed";
