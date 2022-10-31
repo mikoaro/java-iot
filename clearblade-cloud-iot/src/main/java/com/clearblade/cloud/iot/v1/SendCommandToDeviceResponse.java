@@ -1,24 +1,15 @@
 package com.clearblade.cloud.iot.v1;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-
-import javax.net.ssl.HttpsURLConnection;
-
-import com.clearblade.cloud.iot.v1.utils.Constants;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SendCommandToDeviceResponse {
 
+	static Logger log = Logger.getLogger(SendCommandToDeviceResponse.class.getName());
 	private final SendCommandToDeviceRequest request;
 	private int httpStatusCode;
 	private String httpStatusResponse;
-	private Constants constants;
 
 	protected SendCommandToDeviceResponse(Builder builder) {
 		this.request = builder.request;
@@ -27,7 +18,6 @@ public class SendCommandToDeviceResponse {
 	public int getHttpStatusCode() {
 		return httpStatusCode;
 	}
-
 
 	public void setHttpStatusCode(int httpStatusCode) {
 		this.httpStatusCode = httpStatusCode;
@@ -67,52 +57,22 @@ public class SendCommandToDeviceResponse {
 		}
 	}
 	
-	public void init() {
-		constants = new Constants();
-	}
-	
+	/**
+	 * Mehtod used to process the request
+	 * Calling processRequestForMethod - sendCommandToDevice
+	 */
 	public void processRequest() {
-		init();
-		try {
-			String params = "?name=" + constants.getBuilder().getDevice() + "&method=" + constants.getMethodName();
-			URL obj = new URL("https://" + constants.getEndPoint() + constants.getPath() + constants.getSystemKey()
-					+ "/cloudiot_devices" + params);
-			HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
-			con.setRequestMethod("POST");
-
-			String cBTOken = constants.getToken();
-			con.setRequestProperty("ClearBlade-UserToken", cBTOken);
-			con.setRequestProperty("Content-Type", "application/json");
-			con.setRequestProperty("Accept", "application/json");
-
-			String jsonInputString = "{\"binaryData\": \"c2VuZEZ1bm55TWVzc2FnZVRvRGV2aWNl\"}";
-
-			con.setDoOutput(true);
-			try (OutputStream os = con.getOutputStream()) {
-				byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-				os.write(input, 0, input.length);
-
-				int responseCode = con.getResponseCode();
-				if (responseCode == HttpURLConnection.HTTP_OK) {
-					this.setHttpStatusCode(responseCode);
-					this.setHttpStatusResponse("HTTP_OK");
-					// success
-					BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-					String inputLine;
-					StringBuilder response = new StringBuilder();
-
-					while ((inputLine = in.readLine()) != null) {
-						response.append(inputLine);
-					}
-					in.close();
-				} else {
-					System.out.println("POST request not worked");
-				}
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		ProcessRequest processRequest = new ProcessRequest();
+		int responseCode = processRequest.processRequestForMethod("sendCommandToDevice");
+		this.setHttpStatusCode(responseCode);
+		
+		if (responseCode == HttpURLConnection.HTTP_OK) {
+			this.setHttpStatusCode(responseCode);
+			this.setHttpStatusResponse("HTTP_OK");
+			log.log(Level.INFO, "Request processed successfully for SendCommandToDevice method");
+		} else {
+			log.log(Level.SEVERE, "POST request not worked for sendCommandToDevice Method");
 		}
 
 	}
@@ -121,5 +81,9 @@ public class SendCommandToDeviceResponse {
 	public String toString() {
 		return "Http Status Code :: " + this.getHttpStatusCode() + " Http Status Response :: "
 				+ this.getHttpStatusResponse();
+	}
+
+	public SendCommandToDeviceRequest getRequest() {
+		return request;
 	}
 }

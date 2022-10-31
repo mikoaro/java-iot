@@ -5,7 +5,7 @@ import java.util.Arrays;
 import com.clearblade.cloud.iot.v1.utils.ByteString;
 import com.clearblade.cloud.iot.v1.utils.DeviceName;
 
-final class SendCommandToDeviceRequest {
+public class SendCommandToDeviceRequest {
 
 	private final DeviceName name;
 	private final ByteString binaryData;

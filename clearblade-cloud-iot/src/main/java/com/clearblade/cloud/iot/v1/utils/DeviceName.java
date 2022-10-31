@@ -2,48 +2,48 @@ package com.clearblade.cloud.iot.v1.utils;
 
 public class DeviceName {
 
-	  private final String project;
-	  private final String location;
-	  private final String registry;
-	  private final String device;
+	private final String project;
+	private final String location;
+	private final String registry;
+	private final String device;
 
-	  protected DeviceName() {
-	    project = null;
-	    location = null;
-	    registry = null;
-	    device = null;
-	  }
+	protected DeviceName() {
+		project = null;
+		location = null;
+		registry = null;
+		device = null;
+	}
 
-	  private DeviceName(Builder builder) {
-	    project = builder.getProject();
-	    location = builder.getLocation();
-	    registry = builder.getRegistry();
-	    device = builder.getDevice();
-	  }
+	private DeviceName(Builder builder) {
+		project = builder.getProject();
+		location = builder.getLocation();
+		registry = builder.getRegistry();
+		device = builder.getDevice();
+	}
 
-	  public String getProject() {
-	    return project;
-	  }
+	public String getProject() {
+		return project;
+	}
 
-	  public String getLocation() {
-	    return location;
-	  }
+	public String getLocation() {
+		return location;
+	}
 
-	  public String getRegistry() {
-	    return registry;
-	  }
+	public String getRegistry() {
+		return registry;
+	}
 
-	  public String getDevice() {
-	    return device;
-	  }
+	public String getDevice() {
+		return device;
+	}
 
-	  public static Builder newBuilder() {
-	    return new Builder();
-	  }
+	public static Builder newBuilder() {
+		return new Builder();
+	}
 
-	  public Builder toBuilder() {
-	    return new Builder(this);
-	  }
+	public Builder toBuilder() {
+		return new Builder(this);
+	}
 
 	public static DeviceName of(String project, String location, String registry, String device) {
 		return newBuilder().setProject(project).setLocation(location).setRegistry(registry).setDevice(device).build();
@@ -67,51 +67,51 @@ public class DeviceName {
 		protected Builder() {
 		}
 
-	    public String getProject() {
-	      return project;
-	    }
+		public String getProject() {
+			return project;
+		}
 
-	    public String getLocation() {
-	      return location;
-	    }
+		public String getLocation() {
+			return location;
+		}
 
-	    public String getRegistry() {
-	      return registry;
-	    }
+		public String getRegistry() {
+			return registry;
+		}
 
-	    public String getDevice() {
-	      return device;
-	    }
+		public String getDevice() {
+			return device;
+		}
 
-	    public Builder setProject(String project) {
-	      this.project = project;
-	      return this;
-	    }
+		public Builder setProject(String project) {
+			this.project = project;
+			return this;
+		}
 
-	    public Builder setLocation(String location) {
-	      this.location = location;
-	      return this;
-	    }
+		public Builder setLocation(String location) {
+			this.location = location;
+			return this;
+		}
 
-	    public Builder setRegistry(String registry) {
-	      this.registry = registry;
-	      return this;
-	    }
+		public Builder setRegistry(String registry) {
+			this.registry = registry;
+			return this;
+		}
 
-	    public Builder setDevice(String device) {
-	      this.device = device;
-	      return this;
-	    }
+		public Builder setDevice(String device) {
+			this.device = device;
+			return this;
+		}
 
-	    private Builder(DeviceName deviceName) {
-	      this.project = deviceName.project;
-	      this.location = deviceName.location;
-	      this.registry = deviceName.registry;
-	      this.device = deviceName.device;
-	    }
+		private Builder(DeviceName deviceName) {
+			this.project = deviceName.project;
+			this.location = deviceName.location;
+			this.registry = deviceName.registry;
+			this.device = deviceName.device;
+		}
 
-	    public DeviceName build() {
-	      return new DeviceName(this);
-	    }
-	  }	
+		public DeviceName build() {
+			return new DeviceName(this);
+		}
+	}
 }
