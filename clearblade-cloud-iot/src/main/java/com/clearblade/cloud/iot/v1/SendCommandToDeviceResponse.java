@@ -60,10 +60,11 @@ public class SendCommandToDeviceResponse {
 	 * Mehtod used to process the request
 	 * Calling processRequestForMethod - sendCommandToDevice
 	 */
-	public void processRequest() {
+	public void processRequest(SendCommandToDeviceRequest request) {
 		ProcessRequest processRequest = new ProcessRequest();
 		String msg = "";
-		String responseMessage = processRequest.processRequestForMethod("sendCommandToDevice");
+		String[] requestParamsArray = request.toString().split(",");
+		String responseMessage = processRequest.processRequestForMethod("sendCommandToDevice",requestParamsArray);
 		this.setHttpStatusResponse(responseMessage);
 		if (responseMessage.equals("OK")) {
 			msg = "Request processed successfully for SendCommandToDevice method";

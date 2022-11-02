@@ -1,11 +1,12 @@
-package com.clearblade.cloud.iot.v1;
+package com.clearblade.cloud.iot.v1.sendcommandtodevice;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.clearblade.cloud.iot.v1.DeviceManagerClient;
+import com.clearblade.cloud.iot.v1.SendCommandToDeviceRequest;
+import com.clearblade.cloud.iot.v1.SendCommandToDeviceResponse;
 import com.clearblade.cloud.iot.v1.utils.ByteString;
-import com.clearblade.cloud.iot.v1.utils.Constants;
-import com.clearblade.cloud.iot.v1.utils.DeviceName;
 
 public class AsyncSendCommandToDevice {
 	
@@ -17,15 +18,13 @@ public class AsyncSendCommandToDevice {
 
 	public static void asyncSendCommandToDevice() {
 		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
-		Constants constants = new Constants();
 		String msg = "";
-		DeviceName name = DeviceName.of(constants.getProject(), constants.getLocation(),
-				constants.getRegistry(), constants.getDeviceName());
-		SendCommandToDeviceRequest request = SendCommandToDeviceRequest.Builder.newBuilder().setName(name)
-				.setBinaryDataByte(ByteString.EMPTY).setSubFolder("subfolder153561774").build();
+		String name = "Rashmi_Device_Test";
+		SendCommandToDeviceRequest request = SendCommandToDeviceRequest.Builder.newBuilder().setDeviceName(name)
+				.setBinaryDataByte(ByteString.EMPTY).setSubfolder("subfolder1").build();
 		SendCommandToDeviceResponse response = deviceManagerClient.sendCommandToDevice(request);
 		if (response != null) {
-			response.processRequest();
+			response.processRequest(request);
 			if(response.getHttpStatusResponse().equals("OK")) {
 				msg = "AsyncSendCommandToDevice Method worked successfully :: " + response.getHttpStatusResponse();
 				log.log(Level.INFO, msg);

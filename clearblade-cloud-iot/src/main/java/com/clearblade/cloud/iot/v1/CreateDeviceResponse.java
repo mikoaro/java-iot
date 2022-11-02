@@ -3,6 +3,8 @@ package com.clearblade.cloud.iot.v1;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.clearblade.cloud.iot.v1.SendCommandToDeviceResponse.Builder;
+
 public class CreateDeviceResponse {
 
 	static Logger log = Logger.getLogger(CreateDeviceResponse.class.getName());
@@ -39,7 +41,7 @@ public class CreateDeviceResponse {
 		public static Builder newBuilder() {
 			return new Builder();
 		}
-
+		
 		private Builder() {
 		}
 
@@ -60,12 +62,13 @@ public class CreateDeviceResponse {
 	 * Mehtod used to process the request Calling processRequestForMethod -
 	 * CreateDevice
 	 */
-	public void processRequest() {
+	public void processRequest(CreateDeviceRequest request) {
 
 		ProcessRequest processRequest = new ProcessRequest();
 		String msg = "";
-		String responseMessage = processRequest.processRequestForMethod("createDevice");
-		this.setHttpStatusResponse(responseMessage);
+		String[] requestParamsArray = request.toString().split(",");
+		String responseMessage = processRequest.processRequestForMethod("createDevice",requestParamsArray);
+		this.setHttpStatusResponse(responseMessage);		
 		if (responseMessage.equals("OK")) {
 			this.setHttpStatusCode(200);
 			msg = "Request processed for CreateDevice method";
