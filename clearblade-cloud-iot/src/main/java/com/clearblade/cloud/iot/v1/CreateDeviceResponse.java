@@ -3,14 +3,14 @@ package com.clearblade.cloud.iot.v1;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SendCommandToDeviceResponse {
+public class CreateDeviceResponse {
 
-	static Logger log = Logger.getLogger(SendCommandToDeviceResponse.class.getName());
-	private final SendCommandToDeviceRequest request;
+	static Logger log = Logger.getLogger(CreateDeviceResponse.class.getName());
+	private final CreateDeviceRequest request;
 	private int httpStatusCode;
 	private String httpStatusResponse;
 
-	protected SendCommandToDeviceResponse(Builder builder) {
+	protected CreateDeviceResponse(Builder builder) {
 		this.request = builder.request;
 	}
 
@@ -34,46 +34,48 @@ public class SendCommandToDeviceResponse {
 	public static class Builder {
 
 		/// instance fields
-		private SendCommandToDeviceRequest request;
+		private CreateDeviceRequest request;
 
 		public static Builder newBuilder() {
 			return new Builder();
 		}
-
+		
 		private Builder() {
 		}
 
 		// Setter methods
-		public Builder setSendCommandToDeviceRequest(SendCommandToDeviceRequest request) {
+		public Builder setCreateDeviceRequest(CreateDeviceRequest request) {
 			this.request = request;
 			return this;
 		}
 
 		// build method to deal with outer class
 		// to return outer instance
-		public SendCommandToDeviceResponse build() {
-			return new SendCommandToDeviceResponse(this);
+		public CreateDeviceResponse build() {
+			return new CreateDeviceResponse(this);
 		}
 	}
-	
+
 	/**
-	 * Mehtod used to process the request
-	 * Calling processRequestForMethod - sendCommandToDevice
+	 * Mehtod used to process the request Calling processRequestForMethod -
+	 * CreateDevice
 	 */
-	public void processRequest(SendCommandToDeviceRequest request) {
+	public void processRequest(CreateDeviceRequest request) {
+
 		ProcessRequest processRequest = new ProcessRequest();
 		String msg = "";
 		String[] requestParamsArray = request.toString().split(",");
-		String responseMessage = processRequest.processRequestForMethod("sendCommandToDevice",requestParamsArray);
-		this.setHttpStatusResponse(responseMessage);
+		String responseMessage = processRequest.processRequestForMethod("createDevice",requestParamsArray);
+		this.setHttpStatusResponse(responseMessage);		
 		if (responseMessage.equals("OK")) {
-			msg = "Request processed successfully for SendCommandToDevice method";
+			this.setHttpStatusCode(200);
+			msg = "Request processed for CreateDevice method";
 			log.log(Level.INFO, msg);
 		} else {
-			msg = "POST request not worked for sendCommandToDevice Method \n".concat(responseMessage);
+			this.setHttpStatusCode(0);
+			msg = "Request for CreateDevice failed \n" .concat(responseMessage);
 			log.log(Level.SEVERE, msg);
 		}
-
 	}
 
 	@Override
@@ -82,7 +84,8 @@ public class SendCommandToDeviceResponse {
 				+ this.getHttpStatusResponse();
 	}
 
-	public SendCommandToDeviceRequest getRequest() {
+	public CreateDeviceRequest getRequest() {
 		return request;
 	}
+
 }
