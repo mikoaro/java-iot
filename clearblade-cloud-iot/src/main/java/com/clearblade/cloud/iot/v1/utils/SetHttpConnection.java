@@ -6,21 +6,17 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 public class SetHttpConnection {
-	private static HttpsURLConnection con;
+	public HttpsURLConnection con;
 	
-	private SetHttpConnection() {
+	public SetHttpConnection() {
 	}
 	
-	public static HttpsURLConnection getConnection(URL url) {
-		if(SetHttpConnection.con != null) {
-			return SetHttpConnection.con;
-		}else {
-			try {
-				con = (HttpsURLConnection) url.openConnection();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return con;
+	public HttpsURLConnection getConnection(URL url) {
+		try {
+			con = (HttpsURLConnection) url.openConnection();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		return con;
 	}
 }

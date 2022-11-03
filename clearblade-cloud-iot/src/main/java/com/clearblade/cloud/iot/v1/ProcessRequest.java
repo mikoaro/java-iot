@@ -28,12 +28,14 @@ public class ProcessRequest {
 	String deviceNumId;
 	String bodyParams;
 	ConfigParameters configParameters;
+	SetHttpConnection setCon;
 
 	// Empty Constructor
 	public ProcessRequest() {
 		configParameters = new ConfigParameters();
 		obj = null;
 		con = null;
+		setCon = null;
 		responseCode = 0;
 		inputString = null;
 		responseMessage = null;
@@ -57,15 +59,15 @@ public class ProcessRequest {
 					} else {
 						if (element.contains("binaryData") || element.contains("binaryDataByte")) {
 							String subStr = element.substring(element.indexOf("=") + 1, element.length()).trim();
-							if(subStr.equals("EMPTY")) {
-								bodyParamsStr = bodyParamsStr.concat("binaryData:\"\"");	
-							}else {
+							if (subStr.equals("EMPTY")) {
+								bodyParamsStr = bodyParamsStr.concat("binaryData:\"\"");
+							} else {
 								bodyParamsStr = bodyParamsStr.concat("binaryData:" + subStr);
 							}
 						}
 						if (element.contains(Constants.SUBFOLDER)) {
 							subfolderStr = element.substring(element.indexOf("=") + 1, element.length()).trim();
-							bodyParamsStr = bodyParamsStr.concat(",subfolder:\"" + subfolderStr+"\"");
+							bodyParamsStr = bodyParamsStr.concat(",subfolder:\"" + subfolderStr + "\"");
 						}
 					}
 				}
@@ -83,11 +85,11 @@ public class ProcessRequest {
 					}
 					if (element.contains("id")) {
 						deviceId = element.substring(element.indexOf("=") + 1, element.length()).trim();
-						bodyStr2 = bodyStr2.concat("{\"id\":\"" + deviceId+"\"");
+						bodyStr2 = bodyStr2.concat("{\"id\":\"" + deviceId + "\"");
 					}
 					if (element.contains("name")) {
 						deviceName = element.substring(element.indexOf("=") + 1, element.length()).trim();
-						bodyStr2 = bodyStr2.concat(",\"name\":\"" + deviceName+"\"");
+						bodyStr2 = bodyStr2.concat(",\"name\":\"" + deviceName + "\"");
 					}
 					if (element.contains("numId")) {
 						deviceNumId = element.substring(element.indexOf("=") + 1, element.length()).trim();
@@ -95,9 +97,9 @@ public class ProcessRequest {
 					}
 					if (element.contains("subfolder")) {
 						subfolderStr = element.substring(element.indexOf("=") + 1, element.length()).trim();
-						if(subfolderStr.equals("EMPTY")) {
+						if (subfolderStr.equals("EMPTY")) {
 							bodyStr2 = bodyStr2.concat(",\"subfolder\":\"\"");
-						}else {
+						} else {
 							bodyStr2 = bodyStr2.concat(",\"subfolder\":" + subfolderStr);
 						}
 					}
@@ -115,11 +117,12 @@ public class ProcessRequest {
 					this.setBodyParams(bodyStr2);
 				}
 			}
-		}else if((methodName.equals(Constants.DELETE_DEVICE)) || (methodName.equals(Constants.GET_DEVICE))) {
+		} else if ((methodName.equals(Constants.DELETE_DEVICE)) || (methodName.equals(Constants.GET_DEVICE))) {
 			if (requestParamsArray != null) {
 				int len = requestParamsArray.length;
 				if(len == 1) {
-					String subStr = requestParamsArray[0].substring(requestParamsArray[0].indexOf("=") + 1, requestParamsArray[0].length()).trim();
+					String subStr = requestParamsArray[0]
+							.substring(requestParamsArray[0].indexOf("=") + 1, requestParamsArray[0].length()).trim();
 					requestParams = requestParams.concat(subStr);
 				}
 			}
@@ -155,11 +158,14 @@ public class ProcessRequest {
 		}
 		try {
 			obj = new URL(finalURL);
-			con = SetHttpConnection.getConnection(obj);
+			setCon = new SetHttpConnection();
+			con = setCon.getConnection(obj);
 			// Calling setConnectionMethod
 			responseMessage = setConnectionMethods(con, methodName);
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			con.disconnect();
 		}
 
 		return responseMessage;
@@ -240,33 +246,35 @@ public class ProcessRequest {
 		StringBuilder response = new StringBuilder();
 		if (methodName.equals(Constants.SEND_COMMAND_TO_DEVICE) || methodName.equals(Constants.CREATE_DEVICE)) {
 			try (OutputStream os = con.getOutputStream()) {
-			byte[] input = bodyData.getBytes("utf-8");
-			os.write(input, 0, input.length);
-			responseCode = con.getResponseCode();
-			if (responseCode != 200) {
-				BufferedReader in = null;
-				if (con.getErrorStream() != null) {
-					in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-				} else if (con.getInputStream() != null) {
-					in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				}
-				String inputLine;
-				if (in != null) {
-					while ((inputLine = in.readLine()) != null) {
-						response.append(inputLine);
+				byte[] input = bodyData.getBytes("utf-8");
+				os.write(input, 0, input.length);
+				os.flush();
+				responseCode = con.getResponseCode();
+				if (responseCode != 200) {
+					BufferedReader in = null;
+					if (con.getErrorStream() != null) {
+						in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+					} else if (con.getInputStream() != null) {
+						in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 					}
+					String inputLine;
+					if (in != null) {
+						while ((inputLine = in.readLine()) != null) {
+							response.append(inputLine);
+						}
+					}
+					responseMessage = response.toString();
+				} else if (responseCode == 200) {
+					responseMessage = "OK";
 				}
-				responseMessage = response.toString();
-			} else if (responseCode == 200) {
-				responseMessage = "OK";
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} finally {
+				con.disconnect();
 			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-			
-		}else if (methodName.equals(Constants.DELETE_DEVICE)){
+		} else if (methodName.equals(Constants.DELETE_DEVICE)) {
 			try {
 				responseCode = con.getResponseCode();
 				if (responseCode != 200) {
@@ -288,6 +296,8 @@ public class ProcessRequest {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
+			} finally {
+				con.disconnect();
 			}
 		}else if(methodName.equals(Constants.GET_DEVICE)) {
 			try {
@@ -321,6 +331,8 @@ public class ProcessRequest {
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
+			} finally {
+				con.disconnect();
 			}
 		}	
 		return responseMessage;
