@@ -1,85 +1,44 @@
 package com.clearblade.cloud.iot.v1.test;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import com.clearblade.cloud.iot.v1.DeviceManagerClient;
 import com.clearblade.cloud.iot.v1.SendCommandToDeviceRequest;
 import com.clearblade.cloud.iot.v1.SendCommandToDeviceResponse;
 import com.clearblade.cloud.iot.v1.utils.ByteString;
-import com.clearblade.cloud.iot.v1.utils.Constants;
 import com.clearblade.cloud.iot.v1.utils.DeviceName;
 
 class DeviceManagerClientTest {
 
-	private DeviceManagerClient client;
-	private Constants constants;
 	static Logger log = Logger.getLogger(DeviceManagerClientTest.class.getName());
-	
-	void init() {
-		client = new DeviceManagerClient();
-		constants = new Constants();
-	}
 
 	@Test
-	void testSendCommandToDeviceDeviceNameByteStringString() {
-		init();
-		int expectedResponse = 200;
-		String msg = "";
+	public void sendCommandToDeviceTest() throws Exception {
+		SendCommandToDeviceResponse expectedResponse = SendCommandToDeviceResponse.Builder.newBuilder().build();
+		String project = "ingressdevelopmentenv";
+		String location = "central1";
+		String registry = "Rashmi_Registry_Test";
+		String name = "Rashmi_Device_Test";
+		DeviceName deviceName = DeviceName.of(project, location, registry, name);
+		ByteString binaryData = new ByteString("c2VuZEZ1bm55TWVzc2FnZVRvRGV2aWNl");
+		SendCommandToDeviceRequest expectedRequest = SendCommandToDeviceRequest.Builder.newBuilder().setName(deviceName)
+				.setBinaryData(binaryData).setSubfolder("subfolder1").build();
+		expectedResponse.processRequest(expectedRequest);
 
-		DeviceName name = DeviceName.of(constants.getProject(), constants.getLocation(), constants.getRegistry(),
-				constants.getDeviceName());
-		ByteString binaryData = new ByteString("");
+		SendCommandToDeviceResponse actualResponse = SendCommandToDeviceResponse.Builder.newBuilder().build();
+		DeviceName actualDeviceName = DeviceName.of(project, location, registry, "Rashmi_Device");
+		ByteString actualBinaryData = new ByteString("");
+		SendCommandToDeviceRequest actualRequest = SendCommandToDeviceRequest.Builder.newBuilder()
+				.setName(actualDeviceName).setBinaryData(actualBinaryData).setSubfolder("").build();
+		actualResponse.processRequest(actualRequest);
 
-		SendCommandToDeviceRequest request = SendCommandToDeviceRequest.Builder.newBuilder().setName(name)
-				.setBinaryData(binaryData).setSubFolder(null).build();
-		SendCommandToDeviceResponse actualResponse = client.sendCommandToDevice(request);
-		if (actualResponse != null) {
-			actualResponse.processRequest();
-			if(actualResponse.getHttpStatusCode() == expectedResponse) {
-				msg = "SendCommandToDeviceTest successfully executed";
-				log.log(Level.INFO, msg);
-			}else {
-				msg = "SendCommandToDeviceTest execution failed";
-				log.log(Level.WARNING, msg);
-				fail(msg);
-			}
-		} else {
-			msg = "SendCommandToDeviceTest execution failed";
-			log.log(Level.SEVERE,msg);
-			fail(msg);
-		}
-	}
+		Assert.assertEquals(expectedResponse, actualResponse);
 
-	@Test
-	void testSendCommandToDeviceDeviceNameByteStringStringFail() {
-		init();
-		int expectedResponse = 200;
-		String msg ="";
-		DeviceName name = DeviceName.of("","","","");
-		ByteString binaryData = new ByteString("");
-
-		SendCommandToDeviceRequest request = SendCommandToDeviceRequest.Builder.newBuilder().setName(name)
-				.setBinaryData(binaryData).setSubFolder(null).build();
-		SendCommandToDeviceResponse actualResponse = client.sendCommandToDevice(request);
-		if (actualResponse != null) {
-			actualResponse.processRequest();
-			if(actualResponse.getHttpStatusCode() != expectedResponse) {
-				msg = "SendCommandToDeviceTest Failure Case is Successful";
-				log.log(Level.INFO, msg);
-			}else {
-				msg = "SendCommandToDeviceTest Failure case testing is failed";
-				log.log(Level.WARNING,msg);
-			}
-		}else {
-			msg = "SendCommandToDeviceTest Failure case testing is failed";
-			log.log(Level.SEVERE, msg);
-			fail(msg);
-		}
+		Assert.assertEquals(deviceName.toString(), actualDeviceName.toString());
+		Assert.assertEquals(binaryData, actualBinaryData);
+		Assert.assertTrue((actualResponse.getHttpStatusResponse()).equals(expectedResponse.getHttpStatusResponse()));
 	}
 
 }
