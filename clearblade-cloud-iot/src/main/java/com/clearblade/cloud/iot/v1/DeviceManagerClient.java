@@ -55,4 +55,40 @@ public class DeviceManagerClient {
 		return (CreateDeviceResponse.Builder.newBuilder().setCreateDeviceRequest(request).build());
 	}
 
+	public final void deleteDevice(DeviceName name) {
+		DeleteDeviceRequest request = DeleteDeviceRequest.Builder.newBuilder().setDeviceName(name == null ? null : name.toString())
+				.build();
+		deleteDevice(request);
+	}
+
+	/**
+	 * Print the response for deleteDevice
+	 * 
+	 * @param request
+	 * @return Response object
+	 */
+	public DeleteDeviceResponse deleteDevice(DeleteDeviceRequest request) {
+		return (DeleteDeviceResponse.Builder.newBuilder().setDeleteDeviceRequest(request).build());
+	}
+
+	/**
+	 * Method used to call getDevice api
+	 * @param name
+	 * @return Device object
+	 */
+	public void getDevice(DeviceName name) {
+		    GetDeviceRequest request = GetDeviceRequest.Builder.newBuilder().setDeviceName(name == null ? null : name.toString()).build();
+		    getDevice(request);
+	}
+
+	/**
+	 * Print the response for getDevice
+	 * 
+	 * @param request
+	 * @return Response object
+	 */
+	public GetDeviceResponse getDevice(GetDeviceRequest request) {
+		return (GetDeviceResponse.Builder.newBuilder().setGetDeviceRequest(request).build());
+	}
+	
 }
