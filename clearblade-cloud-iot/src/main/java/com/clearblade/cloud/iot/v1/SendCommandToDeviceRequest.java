@@ -10,13 +10,15 @@ public class SendCommandToDeviceRequest {
 	private final DeviceName name;
 	private final ByteString binaryData;
 	private final byte[] binaryDataByte;
-	private final String subFolder;
+	private final String subfolder;
+	private final String deviceName;
 
 	private SendCommandToDeviceRequest(Builder builder) {
 		this.name = builder.name;	
 		this.binaryData = builder.binaryData;
-		this.subFolder = builder.subFolder;
+		this.subfolder = builder.subfolder;
 		this.binaryDataByte = builder.binaryDataByte;
+		this.deviceName = builder.deviceName;
 	}
 
 	// Static class Builder
@@ -25,8 +27,9 @@ public class SendCommandToDeviceRequest {
 		/// instance fields
 		private DeviceName name;
 		private ByteString binaryData;
-		private String subFolder;
+		private String subfolder;
 		private byte[] binaryDataByte;
+		private String deviceName;
 
 		public static Builder newBuilder() {
 			return new Builder();
@@ -51,11 +54,16 @@ public class SendCommandToDeviceRequest {
 			return this;
 		}
 		
-		public Builder setSubFolder(String subFolder) {
-			this.subFolder = subFolder;
+		public Builder setSubfolder(String subfolder) {
+			this.subfolder = subfolder;
 			return this;
 		}
 
+		public Builder setDeviceName(String deviceName) {
+			this.deviceName = deviceName;
+			return this;
+		}
+		
 		// build method to deal with outer class
 		// to return outer instance
 		public SendCommandToDeviceRequest build() {
@@ -65,6 +73,25 @@ public class SendCommandToDeviceRequest {
 
 	@Override
 	public String toString() {
-		return "name = " + this.name.getDevice() + ", binaryData = " + this.binaryData+ ", subFolder = "+this.subFolder+ ", binaryDataByte = "+Arrays.toString(this.binaryDataByte);
+		String requestParams="";
+		String bodyParams="";
+		if(this.name != null) {
+			requestParams = requestParams.concat("name = " + this.name.getDevice());
+		}else if(this.deviceName != null) {
+			requestParams = requestParams.concat("deviceName = "+this.deviceName);
+		}
+		if(this.binaryData != null) {
+			bodyParams = bodyParams.concat(",binaryData=");
+			bodyParams = bodyParams.concat(new String(this.binaryData.getBinaryDataArray()));
+		}else if(this.binaryDataByte != null) {
+			if(this.binaryDataByte.length == 0){
+				bodyParams = bodyParams.concat(",binaryDataByte=EMPTY");
+			}else {
+				bodyParams = bodyParams.concat(",binaryDataByte="+Arrays.toString(this.binaryDataByte));
+			}
+		}
+		bodyParams = bodyParams.concat(",subfolder = "+this.subfolder);
+		
+		return requestParams.concat(bodyParams);
 	}
 }
