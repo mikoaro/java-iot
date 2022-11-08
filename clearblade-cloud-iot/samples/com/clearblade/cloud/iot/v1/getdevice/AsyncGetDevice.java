@@ -15,8 +15,8 @@ public class AsyncGetDevice {
 	}
 
 	public static void asyncGetDevice() {
-		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
 		String msg = "";
+		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
 		String deviceName = "myOldDevice";
 		GetDeviceRequest request = GetDeviceRequest.Builder.newBuilder().setDeviceName(deviceName).build();
 		GetDeviceResponse response = deviceManagerClient.getDevice(request);

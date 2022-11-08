@@ -23,7 +23,8 @@ public class SyncCreateDevice {
 		String registryName = "Rashmi_Registry_Test";
 		RegistryName registryNm = RegistryName.newBuilder().setRegistry(registryName).build();
 		CreateDeviceRequest request = CreateDeviceRequest.Builder.newBuilder().setParent(registryNm)
-				.setDevice(Device.newBuilder().setId("SyncDeviceTest").setName("SyncDeviceTest").setNumId(69869).build()).build();
+				.setDevice(Device.newBuilder().setId("SyncDeviceTest1").setName("SyncDeviceTest1").setNumId(99998).build())
+				.setDeviceNumIds(new String[]{"223,553"}).setSubfolder("753").build();
 		CreateDeviceResponse response = deviceManagerClient.createDevice(request);
 		if (response != null) {			
 			response.processRequest(request);

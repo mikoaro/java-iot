@@ -22,7 +22,8 @@ public class AsyncCreateDevice {
 		String registryName = "Rashmi_Registry_Test";
 		RegistryName registryNm = RegistryName.newBuilder().setRegistry(registryName).build();
 		CreateDeviceRequest request = CreateDeviceRequest.Builder.newBuilder().setParent(registryNm)
-				.setDevice(Device.newBuilder().setId("NewAsyncDeviceTest").setName("NewAsyncDeviceTest").setNumId(79869).build()).build();
+				.setDevice(Device.newBuilder().setId("AsyncDeviceTest1").setName("AsyncDeviceTest1").setNumId(11111).build())
+				.setDeviceNumIds(new String[]{"123,153"}).setSubfolder("777").build();
 		CreateDeviceResponse response = deviceManagerClient.createDevice(request);
 		if (response != null) {			
 			response.processRequest(request);
