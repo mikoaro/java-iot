@@ -77,11 +77,29 @@ public class ProcessRequest {
 		} else if (methodName.equals(Constants.DEVICES_LIST) && (requestParams != null && requestParams.size() > 0)) {
 			parent = requestParams.get("parent").toString();
 			finalURL = urlPartial.concat("?parent=" + parent);
-		}else if (methodName.equals(Constants.DEVICE_STATES_LIST) && (requestParams != null && requestParams.size() > 0)) {
+		}else if (methodName.equals(Constants.DEVICE_STATES_LIST) && (requestParams != null && requestParams.size() > 0)) {			
+			urlPartial = Constants.HTTPS_URL_PREFIX.concat(configParameters.getEndPoint())
+			.concat(configParameters.getBaseURL()).concat(configParameters.getSystemKey())
+			.concat(configParameters.getDevicesStatesURLExtension());
 			name = requestParams.get("name").toString();
 			numStates = requestParams.get("numStates").toString();
 			finalURL = urlPartial.concat("?name=" + name+"&numStates="+Integer.parseInt(numStates));
-		}
+		}else if (methodName.equals(Constants.DEVICE_SET_STATES) && requestParams != null && requestParams.size() > 0) {
+			urlPartial = Constants.HTTPS_URL_PREFIX.concat(configParameters.getEndPoint())
+					.concat(configParameters.getBaseURL()).concat(configParameters.getSystemKey())
+					.concat(configParameters.getCloudiotdevicesURLExtension());
+		    name = requestParams.get("name").toString();
+		    method = requestParams.get("method").toString();
+			finalURL = urlPartial.concat("?name=" + name + "&method=" + method);
+		} else if (methodName.equals(Constants.DEVICE_GET_CONFIG) && requestParams != null && requestParams.size() > 0) {
+			urlPartial = Constants.HTTPS_URL_PREFIX.concat(configParameters.getEndPoint())
+					.concat(configParameters.getBaseURL()).concat(configParameters.getSystemKey())
+					.concat(configParameters.getCloudiotdevicesURLExtension());
+		    name = requestParams.get("name").toString();
+		    localVersion = requestParams.get("localVersion").toString();
+			finalURL = urlPartial.concat("?name=" + name + "&localVersion=" + localVersion);
+		} 
+
 		try {
 			obj = new URL(finalURL);
 			setCon = new SetHttpConnection();
@@ -110,11 +128,11 @@ public class ProcessRequest {
 					Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_ACCEPT_VALUE);
 
 			String methodType = "";
-			if ((methodName.equals(Constants.SEND_COMMAND_TO_DEVICE) || methodName.equals(Constants.CREATE_DEVICE))) {
+			if ((methodName.equals(Constants.SEND_COMMAND_TO_DEVICE) || methodName.equals(Constants.CREATE_DEVICE)) || (methodName.equals(Constants.DEVICE_SET_STATES))) {
 				methodType = Constants.HTTP_REQUEST_METHOD_TYPE_POST;
 			} else if (methodName.equals(Constants.DELETE_DEVICE)) {
 				methodType = Constants.HTTP_REQUEST_METHOD_TYPE_DELETE;
-			} else if ((methodName.equals(Constants.GET_DEVICE)) || (methodName.equals(Constants.DEVICES_LIST)) || (methodName.equals(Constants.DEVICE_STATES_LIST))) {
+			} else if ((methodName.equals(Constants.GET_DEVICE)) || (methodName.equals(Constants.DEVICES_LIST)) || (methodName.equals(Constants.DEVICE_STATES_LIST)) || (methodName.equals(Constants.DEVICE_GET_CONFIG))) {
 				methodType = Constants.HTTP_REQUEST_METHOD_TYPE_GET;
 			}
 			try {
@@ -127,8 +145,8 @@ public class ProcessRequest {
 			con.setDoOutput(true);
 
 			// Get responseCode from Connection
-			if (methodName.equals(Constants.SEND_COMMAND_TO_DEVICE) || methodName.equals(Constants.CREATE_DEVICE)) {
-				responseMessage = getResponseForSendCommandCreateDevice(con);
+			if (methodName.equals(Constants.SEND_COMMAND_TO_DEVICE) || methodName.equals(Constants.CREATE_DEVICE) || methodName.equals(Constants.DEVICE_SET_STATES)) {
+				responseMessage = getResponseForPostMethod(con);
 			} else if (methodName.equals(Constants.DELETE_DEVICE)) {
 				responseMessage = getResponseForDeleteDevice(con);
 			} else if (methodName.equals(Constants.GET_DEVICE)) {
@@ -136,6 +154,8 @@ public class ProcessRequest {
 			}else if (methodName.equals(Constants.DEVICES_LIST)) {
 				responseMessage = getResponseForGetRequest(con);
 			}else if (methodName.equals(Constants.DEVICE_STATES_LIST)) {
+				responseMessage = getResponseForGetRequest(con);
+			}else if (methodName.equals(Constants.DEVICE_GET_CONFIG)) {
 				responseMessage = getResponseForGetRequest(con);
 			}
 		}
@@ -193,7 +213,7 @@ public class ProcessRequest {
 		return responseMessage;
 	}
 
-	public String getResponseForSendCommandCreateDevice(HttpsURLConnection con) {
+	public String getResponseForPostMethod(HttpsURLConnection con) {
 		StringBuilder response = new StringBuilder();
 		try (OutputStream os = con.getOutputStream()) {
 			JSONObject js = this.getBodyJSONObj();
