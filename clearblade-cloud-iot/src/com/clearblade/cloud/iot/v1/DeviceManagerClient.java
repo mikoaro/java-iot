@@ -1,5 +1,6 @@
 package com.clearblade.cloud.iot.v1;
 
+import com.clearblade.cloud.iot.v1.utils.ByteString;
 import com.clearblade.cloud.iot.v1.utils.Device;
 import com.clearblade.cloud.iot.v1.utils.DeviceName;
 import com.clearblade.cloud.iot.v1.utils.RegistryName;
@@ -129,5 +130,51 @@ public class DeviceManagerClient {
 	public DeviceStatesListResponse deviceStatesList(DeviceStatesListRequest request) {
 		return (DeviceStatesListResponse.Builder.newBuilder().setDeviceStatesListRequest(request).build());
 	}
-	
+
+	/**
+	 * DeviceSetStates method
+	 * 
+	 * @param name, method
+	 * @param binaryData
+	 */
+	public void devicesSetStates(String name, ByteString binaryData) {
+		DeviceSetStatesRequest request = DeviceSetStatesRequest.Builder.newBuilder().setDeviceName(name)
+				.setBinaryData(binaryData).build();
+		this.deviceSetStates(request);
+		DeviceSetStatesResponse response = this.deviceSetStates(request);
+		response.processRequest(request);
+	}
+	/**
+	 * Print the response for DeviceSetStatesRequest
+	 * 
+	 * @param request
+	 * @return Response object
+	 */
+	public DeviceSetStatesResponse deviceSetStates(DeviceSetStatesRequest request) {
+		return (DeviceSetStatesResponse.Builder.newBuilder().setDeviceSetStatesRequest(request).build());
+	}
+
+	/**
+	 * Method used to call getDeviceConfig api
+	 * @param name
+	 * @return Device Config - binary Data and version
+	 */
+	public void getDeviceConfig(DeviceName name,String localVersion) {
+		    GetDeviceConfigRequest request = GetDeviceConfigRequest.Builder.newBuilder().setDeviceName(name == null ? null : name.toString()).setLocalVersion(localVersion).build();
+		    getDeviceConfig(request);
+	}
+
+	/**
+	 * Print the response for getDeviceConfig
+	 * 
+	 * @param request
+	 * @return Response object
+	 */
+	public GetDeviceConfigResponse getDeviceConfig(GetDeviceConfigRequest request) {
+		return (GetDeviceConfigResponse.Builder.newBuilder().setGetDeviceConfigRequest(request).build());
+	}
+
+
+
 }
+
