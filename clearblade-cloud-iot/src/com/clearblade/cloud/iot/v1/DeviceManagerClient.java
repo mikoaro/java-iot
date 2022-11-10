@@ -174,6 +174,49 @@ public class DeviceManagerClient {
 		return (GetDeviceConfigResponse.Builder.newBuilder().setGetDeviceConfigRequest(request).build());
 	}
 
+	/**
+	 * ModifyCloudToDeviceConfig method
+	 * 
+	 * @param device object
+	 * @param versionToUpdate
+	 * @param binaryData
+	 */
+	public void modifyCloudToDeviceConfig(Device device, com.clearblade.cloud.iot.v1.utils.ByteString binaryData, String versionToUpdate) {
+		ModifyCloudToDeviceConfigRequest request = ModifyCloudToDeviceConfigRequest.Builder.newBuilder().setDevice(device)
+																						   .setBinaryData(binaryData).setVersionToUpdate(versionToUpdate).build();
+		this.modifyCloudToDeviceConfig(request);
+		ModifyCloudToDeviceConfigResponse response = this.modifyCloudToDeviceConfig(request);
+		response.processRequest(request);
+	}
+	/**
+	 * Print the response for ModifyCloudToDeviceConfig
+	 * 
+	 * @param request
+	 * @return Response object
+	 */
+	public ModifyCloudToDeviceConfigResponse modifyCloudToDeviceConfig(ModifyCloudToDeviceConfigRequest request) {
+		return (ModifyCloudToDeviceConfigResponse.Builder.newBuilder().setModifyCloudToDeviceConfigRequest(request).build());
+	}
+
+
+	/**
+	 * Method used to call DeviceConfigVersionsList api
+	 * @param name and numVersions
+	 */
+	public void deviceConfigVersionsList(String name, String numVersions) {
+		DeviceConfigVersionsListRequest request = DeviceConfigVersionsListRequest.Builder.newBuilder().setName(name).setNumVersions(numVersions).build();
+		deviceConfigVersionsList(request);
+	}
+
+	/**
+	 * Print the response for deviceConfigVersionsList
+	 *  
+	 * @param request
+	 * @return Response object
+	 */
+	public DeviceConfigVersionsListResponse deviceConfigVersionsList(DeviceConfigVersionsListRequest request) {
+		return (DeviceConfigVersionsListResponse.Builder.newBuilder().setDeviceConfigVersionsListRequest(request).build());
+	}
 
 
 }

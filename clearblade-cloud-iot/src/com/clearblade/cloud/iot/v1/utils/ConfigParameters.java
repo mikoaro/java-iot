@@ -13,6 +13,7 @@ public class ConfigParameters {
 	private String devicesURLExtension;
 	private String devicesStatesURLExtension;
 	private String cloudiotdevicesURLExtension;
+    private String cloudiotDeviceConfigURLExtension;
 	private String project;
 	private String location;
 	private String registry;
@@ -63,6 +64,7 @@ public class ConfigParameters {
 		this.setDevicesURLExtension(properties.getProperty("devicesURLExtension"));
 		this.setCloudiotdevicesURLExtension(properties.getProperty("cloudiotdevicesURLExtension"));
 		this.setDevicesStatesURLExtension(properties.getProperty("devicesStatesURLExtension"));
+		this.setCloudiotdevicesURLExtension(properties.getProperty("cloudiotDeviceConfigURLExtension"));
 		this.setProject(properties.getProperty("project"));
 		this.setLocation(properties.getProperty("location"));
 		this.setRegistry(properties.getProperty("registry"));
@@ -122,6 +124,14 @@ public class ConfigParameters {
 
 	public void setCloudiotdevicesURLExtension(String cloudiotdevicesURLExtension) {
 		this.cloudiotdevicesURLExtension = cloudiotdevicesURLExtension;
+	}
+	
+	public String getCloudiotDeviceConfigURLExtension() {
+		return cloudiotDeviceConfigURLExtension;
+	}
+
+	public void setCloudiotDeviceConfigURLExtension(String cloudiotDeviceConfigURLExtension) {
+		this.cloudiotDeviceConfigURLExtension = cloudiotDeviceConfigURLExtension;
 	}
 
 	public String getProject() {
