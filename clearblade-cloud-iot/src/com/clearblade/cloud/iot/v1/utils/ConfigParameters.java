@@ -10,6 +10,7 @@ public class ConfigParameters {
 	private String systemKey;
 	private String token;
 	private String baseURL;
+	private String cloudiotURLExtension;
 	private String devicesURLExtension;
 	private String devicesStatesURLExtension;
 	private String cloudiotdevicesURLExtension;
@@ -61,6 +62,7 @@ public class ConfigParameters {
 		this.setSystemKey(properties.getProperty("systemKey"));
 		this.setToken(properties.getProperty("token"));
 		this.setBaseURL(properties.getProperty("baseURL"));
+		this.setCloudiotURLExtension(properties.getProperty("cloudiotURLExtension"));
 		this.setDevicesURLExtension(properties.getProperty("devicesURLExtension"));
 		this.setCloudiotdevicesURLExtension(properties.getProperty("cloudiotdevicesURLExtension"));
 		this.setDevicesStatesURLExtension(properties.getProperty("devicesStatesURLExtension"));
@@ -100,6 +102,14 @@ public class ConfigParameters {
 
 	public void setBaseURL(String baseURL) {
 		this.baseURL = baseURL;
+	}
+	
+	public String getCloudiotURLExtension() {
+		return cloudiotURLExtension;
+	}
+
+	public void setCloudiotURLExtension(String cloudiotURLExtension) {
+		this.cloudiotURLExtension = cloudiotURLExtension;
 	}
 
 	public String getDevicesURLExtension() {
