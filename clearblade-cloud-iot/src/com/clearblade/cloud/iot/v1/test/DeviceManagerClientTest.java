@@ -5,11 +5,11 @@ import java.util.logging.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.clearblade.cloud.iot.v1.CreateDeviceRequest;
-import com.clearblade.cloud.iot.v1.CreateDeviceResponse;
 import com.clearblade.cloud.iot.v1.DeviceManagerClient;
-import com.clearblade.cloud.iot.v1.SendCommandToDeviceRequest;
-import com.clearblade.cloud.iot.v1.SendCommandToDeviceResponse;
+import com.clearblade.cloud.iot.v1.createdevice.CreateDeviceRequest;
+import com.clearblade.cloud.iot.v1.createdevice.CreateDeviceResponse;
+import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceRequest;
+import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceResponse;
 import com.clearblade.cloud.iot.v1.utils.ByteString;
 import com.clearblade.cloud.iot.v1.utils.Device;
 import com.clearblade.cloud.iot.v1.utils.DeviceName;

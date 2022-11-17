@@ -4,8 +4,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.clearblade.cloud.iot.v1.DeviceManagerClient;
-import com.clearblade.cloud.iot.v1.GetDeviceRequest;
-import com.clearblade.cloud.iot.v1.GetDeviceResponse;
 
 public class AsyncGetDevice {
 	static Logger log = Logger.getLogger(AsyncGetDevice.class.getName());
@@ -23,15 +21,12 @@ public class AsyncGetDevice {
 		if (response != null) {
 			response.processRequest(request);
 			if (response.getHttpStatusResponse().equals("OK")) {
-				msg = "AsyncGetDevice Method worked successfully :: " + response.getHttpStatusResponse();
-				log.log(Level.INFO, msg);
+				log.log(Level.INFO, "AsyncGetDevice Method worked successfully :: {0}",response.getHttpStatusResponse());
 			} else {
-				msg = "AsyncGetDevice Method execution failed :: " + response.getHttpStatusResponse();
-				log.log(Level.SEVERE, msg);
+				log.log(Level.SEVERE, "AsyncGetDevice Method execution failed :: {0}",response.getHttpStatusResponse());
 			}
 		} else {
-			msg = "AsyncGetDevice Method execution failed";
-			log.log(Level.SEVERE, msg);
+			log.log(Level.SEVERE, "AsyncGetDevice Method execution failed");
 		}
 	}
 

@@ -5,9 +5,6 @@ import java.util.logging.Logger;
 
 import com.clearblade.cloud.iot.v1.DeviceManagerClient;
 
-import com.clearblade.cloud.iot.v1.GetDeviceRequest;
-import com.clearblade.cloud.iot.v1.GetDeviceResponse;
-
 public class SyncGetDevice {
 	static Logger log = Logger.getLogger(SyncGetDevice.class.getName());
 
@@ -17,22 +14,18 @@ public class SyncGetDevice {
 
 	public static void syncGetDevice() {
 		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
-		String msg = "";
 		String deviceName = "Rashmi_Device_Test";		
 		GetDeviceRequest request = GetDeviceRequest.Builder.newBuilder().setDeviceName(deviceName).build();
 		GetDeviceResponse response = deviceManagerClient.getDevice(request);
 		if (response != null) {
 			response.processRequest(request);
 			if (response.getHttpStatusResponse().equals("OK")) {
-				msg = "SyncGetDevice Method worked successfully :: " + response.getHttpStatusResponse();
-				log.log(Level.INFO, msg);
+				log.log(Level.INFO, "SyncGetDevice Method worked successfully :: {0}",response.getHttpStatusResponse());
 			} else {
-				msg = "SyncGetDevice Method execution failed :: " + response.getHttpStatusResponse();
-				log.log(Level.SEVERE, msg);
+				log.log(Level.SEVERE, "SyncGetDevice Method execution failed :: {0}",response.getHttpStatusResponse());
 			}
 		} else {
-			msg = "SyncGetDevice Method execution failed";
-			log.log(Level.SEVERE, msg);
+			log.log(Level.SEVERE, "SyncGetDevice Method execution failed");
 		}
 	}
 

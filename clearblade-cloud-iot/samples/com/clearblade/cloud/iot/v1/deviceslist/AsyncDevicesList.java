@@ -4,9 +4,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.clearblade.cloud.iot.v1.DeviceManagerClient;
-import com.clearblade.cloud.iot.v1.DevicesListRequest;
-import com.clearblade.cloud.iot.v1.DevicesListResponse;
-import com.clearblade.cloud.iot.v1.utils.ConfigParameters;
 import com.clearblade.cloud.iot.v1.utils.RegistryName;
 
 public class AsyncDevicesList {
@@ -18,24 +15,19 @@ public class AsyncDevicesList {
 	}
 
 	public static void asyncDevicesList(){
-		String msg = "";
 		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
-		ConfigParameters configParams = new ConfigParameters();
-		RegistryName parent = RegistryName.of(configParams.getProject(), configParams.getLocation(), configParams.getRegistry());
+		RegistryName parent = RegistryName.of("ingressdevelopmentenv","us-central1","Rashmi_Registry_Test");
 		DevicesListRequest request = DevicesListRequest.Builder.newBuilder().setParent(parent).build();
 		DevicesListResponse response = deviceManagerClient.devicesList(request);
 		if (response != null) {
 			response.processRequest(request);
 			if (response.getHttpStatusResponse().equals("OK")) {
-				msg = "AsyncDevicesList Method worked successfully :: " + response.getHttpStatusResponse();
-				log.log(Level.INFO, msg);
+				log.log(Level.INFO, "AsyncDevicesList Method worked successfully :: {0}",response.getHttpStatusResponse());
 			} else {
-				msg = "AsyncDevicesList Method execution failed :: " + response.getHttpStatusResponse();
-				log.log(Level.SEVERE, msg);
+				log.log(Level.SEVERE, "AsyncDevicesList Method execution failed :: {0}",response.getHttpStatusResponse());
 			}
 		} else {
-			msg = "AsyncDevicesList Method execution failed";
-			log.log(Level.SEVERE, msg);
+			log.log(Level.SEVERE, "AsyncDevicesList Method execution failed");
 		}
 
 	}

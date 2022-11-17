@@ -14,7 +14,7 @@
         </configuration>
       </plugin>
     </plugins>
-  </build>
+   </build>
  <dependencies>
 	<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
 	<dependency>
@@ -29,5 +29,17 @@
 	    <version>5.9.1</version>
 	    <scope>test</scope>
 	</dependency>
+	<!-- https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305 -->
+	<dependency>
+	    <groupId>com.google.code.findbugs</groupId>
+	    <artifactId>jsr305</artifactId>
+	    <version>3.0.2</version>
+	</dependency>
+	<!--dependency>
+		<groupId>org.apache.httpcomponents</groupId>
+		<artifactId>httpclient</artifactId>
+		<version>4.5.4</version>
+	</dependency-->
+	<!-- Thanks for using https://jar-download.com -->
  </dependencies>  
 </project>

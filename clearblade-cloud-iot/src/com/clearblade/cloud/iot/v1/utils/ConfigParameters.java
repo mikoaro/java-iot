@@ -5,17 +5,22 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigParameters {
+	
 	// Fields used to set values from properties file
-	private String endPoint;
-	private String systemKey;
-	private String token;
+
+	private String project;
+	private String region;
+	private String registry;
+	private String endpointPort;
+	
+	private String getSystemCredentialsExtension;
+
 	private String baseURL;
+	private String cloudiotURLExtension;
 	private String devicesURLExtension;
 	private String devicesStatesURLExtension;
 	private String cloudiotdevicesURLExtension;
-	private String project;
-	private String location;
-	private String registry;
+    private String cloudiotDeviceConfigURLExtension;
 
 	// Fields used to fetch values from Properties file
 	Properties properties;
@@ -56,48 +61,25 @@ public class ConfigParameters {
 	public void setValues() {
 		// get Configurations uploaded from config.properties file
 		getConfigurations();
-		this.setEndPoint(properties.getProperty("endPoint"));
-		this.setSystemKey(properties.getProperty("systemKey"));
-		this.setToken(properties.getProperty("token"));
 		this.setBaseURL(properties.getProperty("baseURL"));
+		this.setCloudiotURLExtension(properties.getProperty("cloudiotURLExtension"));
 		this.setDevicesURLExtension(properties.getProperty("devicesURLExtension"));
 		this.setCloudiotdevicesURLExtension(properties.getProperty("cloudiotdevicesURLExtension"));
 		this.setDevicesStatesURLExtension(properties.getProperty("devicesStatesURLExtension"));
+		this.setCloudiotdevicesURLExtension(properties.getProperty("cloudiotDeviceConfigURLExtension"));
 		this.setProject(properties.getProperty("project"));
-		this.setLocation(properties.getProperty("location"));
+		this.setRegion(properties.getProperty("region"));
 		this.setRegistry(properties.getProperty("registry"));
+		this.setGetSystemCredentialsExtension(properties.getProperty("getSystemCredentialsExtension"));		
+		this.setEndpointPort(properties.getProperty("endPointPort"));
 	}
 
-	public String getEndPoint() {
-		return endPoint;
+	public String getCloudiotURLExtension() {
+		return cloudiotURLExtension;
 	}
 
-	public void setEndPoint(String endPoint) {
-		this.endPoint = endPoint;
-	}
-
-	public String getSystemKey() {
-		return systemKey;
-	}
-
-	public void setSystemKey(String systemKey) {
-		this.systemKey = systemKey;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	public String getBaseURL() {
-		return baseURL;
-	}
-
-	public void setBaseURL(String baseURL) {
-		this.baseURL = baseURL;
+	public void setCloudiotURLExtension(String cloudiotURLExtension) {
+		this.cloudiotURLExtension = cloudiotURLExtension;
 	}
 
 	public String getDevicesURLExtension() {
@@ -123,7 +105,16 @@ public class ConfigParameters {
 	public void setCloudiotdevicesURLExtension(String cloudiotdevicesURLExtension) {
 		this.cloudiotdevicesURLExtension = cloudiotdevicesURLExtension;
 	}
+	
+	
+	public String getCloudiotDeviceConfigURLExtension() {
+		return cloudiotDeviceConfigURLExtension;
+	}
 
+	public void setCloudiotDeviceConfigURLExtension(String cloudiotDeviceConfigURLExtension) {
+		this.cloudiotDeviceConfigURLExtension = cloudiotDeviceConfigURLExtension;
+	}
+	 
 	public String getProject() {
 		return project;
 	}
@@ -132,12 +123,12 @@ public class ConfigParameters {
 		this.project = project;
 	}
 
-	public String getLocation() {
-		return location;
+	public String getRegion() {
+		return region;
 	}
 
-	public void setLocation(String location) {
-		this.location = location;
+	public void setRegion(String region) {
+		this.region = region;
 	}
 
 	public String getRegistry() {
@@ -147,5 +138,29 @@ public class ConfigParameters {
 	public void setRegistry(String registry) {
 		this.registry = registry;
 	}
+
+	public String getGetSystemCredentialsExtension() {
+		return getSystemCredentialsExtension;
+	}
+
+	public void setGetSystemCredentialsExtension(String getSystemCredentialsExtension) {
+		this.getSystemCredentialsExtension = getSystemCredentialsExtension;
+	}
+
+	public String getEndpointPort() {
+		return endpointPort;
+	}
+
+	public void setEndpointPort(String endpointPort) {
+		this.endpointPort = endpointPort;
+	}
+
+	public String getBaseURL() {
+		return baseURL;
+	}
+
+	public void setBaseURL(String baseURL) {
+		this.baseURL = baseURL;
+	}	
 
 }
