@@ -10,6 +10,8 @@ public class Constants {
 	public static final String GET_DEVICE = "getDevice";
 	public static final String DEVICES_LIST = "devicesList";
 	public static final String DEVICE_STATES_LIST = "deviceStatesList";
+	public static final String DEVICE_SET_STATES = "setState";
+	public static final String DEVICE_GET_CONFIG = "deviceGetConfig";
 
 	// Constants used for setting up http connection - for common use
 	public static final String HTTPS_URL_PREFIX = "https://";
