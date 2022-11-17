@@ -17,8 +17,8 @@ public class AsyncCreateDevice {
 	}
 
 	public static void asyncCreateDevice() {
-		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
 		String msg = "";
+		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
 		String registryName = "Rashmi_Registry_Test";
 		RegistryName registryNm = RegistryName.newBuilder().setRegistry(registryName).build();
 		CreateDeviceRequest request = CreateDeviceRequest.Builder.newBuilder().setParent(registryNm)

@@ -12,6 +12,8 @@ public class Constants {
 	public static final String DEVICE_STATES_LIST = "deviceStatesList";
 	public static final String DEVICE_SET_STATES = "setState";
 	public static final String DEVICE_GET_CONFIG = "deviceGetConfig";
+	public static final String MODIFY_CLOUD_TO_DEVICE_CONFIG = "modifyCloudToDeviceConfig";
+	public static final String DEVICE_CONFIG_VERSIONS_LIST = "deviceConfigVersionsList";
 
 	// Constants used for setting up http connection - for common use
 	public static final String HTTPS_URL_PREFIX = "https://";

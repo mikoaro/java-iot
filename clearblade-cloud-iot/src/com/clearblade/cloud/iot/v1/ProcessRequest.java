@@ -53,6 +53,9 @@ public class ProcessRequest {
 		String subfolder;
 		String parent;
 		String numStates;
+		String method;
+		String localVersion;
+		String numVersions;
 		
 
 		// Setting partial URL
@@ -98,6 +101,15 @@ public class ProcessRequest {
 		    name = requestParams.get("name").toString();
 		    localVersion = requestParams.get("localVersion").toString();
 			finalURL = urlPartial.concat("?name=" + name + "&localVersion=" + localVersion);
+		}else if (methodName.equals(Constants.MODIFY_CLOUD_TO_DEVICE_CONFIG) && requestParams != null && requestParams.size() > 0) {
+			name = requestParams.get("name").toString();
+			method = requestParams.get("method").toString();
+			finalURL = urlPartial.concat("?name=" + name + "&method=" + method);
+		} else if (methodName.equals(Constants.DEVICE_CONFIG_VERSIONS_LIST) && requestParams != null && requestParams.size() > 0) {
+			urlPartial = Constants.HTTPS_URL_PREFIX.concat(configParameters.getEndPoint()).concat(configParameters.getBaseURL()).concat(configParameters.getSystemKey()).concat(configParameters.getCloudiotdevicesURLExtension());
+		    name = requestParams.get("name").toString();
+		    numVersions = requestParams.get("numVersions").toString();
+			finalURL = urlPartial.concat("?name=" + name + "&numVersions=" + numVersions);
 		} 
 
 		try {
@@ -128,11 +140,11 @@ public class ProcessRequest {
 					Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_ACCEPT_VALUE);
 
 			String methodType = "";
-			if ((methodName.equals(Constants.SEND_COMMAND_TO_DEVICE) || methodName.equals(Constants.CREATE_DEVICE)) || (methodName.equals(Constants.DEVICE_SET_STATES))) {
+			if ((methodName.equals(Constants.SEND_COMMAND_TO_DEVICE) || methodName.equals(Constants.CREATE_DEVICE)) || (methodName.equals(Constants.DEVICE_SET_STATES)) || methodName.equals(Constants.MODIFY_CLOUD_TO_DEVICE_CONFIG)) {
 				methodType = Constants.HTTP_REQUEST_METHOD_TYPE_POST;
 			} else if (methodName.equals(Constants.DELETE_DEVICE)) {
 				methodType = Constants.HTTP_REQUEST_METHOD_TYPE_DELETE;
-			} else if ((methodName.equals(Constants.GET_DEVICE)) || (methodName.equals(Constants.DEVICES_LIST)) || (methodName.equals(Constants.DEVICE_STATES_LIST)) || (methodName.equals(Constants.DEVICE_GET_CONFIG))) {
+			} else if ((methodName.equals(Constants.GET_DEVICE)) || (methodName.equals(Constants.DEVICES_LIST)) || (methodName.equals(Constants.DEVICE_STATES_LIST)) || (methodName.equals(Constants.DEVICE_GET_CONFIG))|| (methodName.equals(Constants.DEVICE_CONFIG_VERSIONS_LIST))) {
 				methodType = Constants.HTTP_REQUEST_METHOD_TYPE_GET;
 			}
 			try {
@@ -145,17 +157,11 @@ public class ProcessRequest {
 			con.setDoOutput(true);
 
 			// Get responseCode from Connection
-			if (methodName.equals(Constants.SEND_COMMAND_TO_DEVICE) || methodName.equals(Constants.CREATE_DEVICE) || methodName.equals(Constants.DEVICE_SET_STATES)) {
+			if (methodName.equals(Constants.SEND_COMMAND_TO_DEVICE) || methodName.equals(Constants.CREATE_DEVICE) || methodName.equals(Constants.DEVICE_SET_STATES) || methodName.equals(Constants.MODIFY_CLOUD_TO_DEVICE_CONFIG)) {
 				responseMessage = getResponseForPostMethod(con);
 			} else if (methodName.equals(Constants.DELETE_DEVICE)) {
 				responseMessage = getResponseForDeleteDevice(con);
-			} else if (methodName.equals(Constants.GET_DEVICE)) {
-				responseMessage = getResponseForGetRequest(con);
-			}else if (methodName.equals(Constants.DEVICES_LIST)) {
-				responseMessage = getResponseForGetRequest(con);
-			}else if (methodName.equals(Constants.DEVICE_STATES_LIST)) {
-				responseMessage = getResponseForGetRequest(con);
-			}else if (methodName.equals(Constants.DEVICE_GET_CONFIG)) {
+			} else if (methodName.equals(Constants.GET_DEVICE) || methodName.equals(Constants.DEVICES_LIST) || methodName.equals(Constants.DEVICE_STATES_LIST) || methodName.equals(Constants.DEVICE_GET_CONFIG) || methodName.equals(Constants.DEVICE_CONFIG_VERSIONS_LIST)) {
 				responseMessage = getResponseForGetRequest(con);
 			}
 		}
