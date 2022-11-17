@@ -218,6 +218,48 @@ public class DeviceManagerClient {
 		return (DeviceConfigVersionsListResponse.Builder.newBuilder().setDeviceConfigVersionsListRequest(request).build());
 	}
 
+	/**
+	 * bindDeviceToGateway method
+	 * @param parent
+	 * @param gatewayId
+	 * @param deviceId
+	 */
+	public void bindDeviceToGateway(String parent, String gatewayId, String deviceId) {
+		BindDeviceToGatewayRequest request = BindDeviceToGatewayRequest.Builder.newBuilder().setParent(parent).setGateway(gatewayId).setDevice(deviceId).build();
+		this.bindDeviceToGateway(request);
+		BindDeviceToGatewayResponse response = this.bindDeviceToGateway(request);
+		response.processRequest(request);
+	}
+	/**
+	 * Print the response for bindDeviceToGateway
+	 * 
+	 * @param request
+	 * @return Response object
+	 */
+	public BindDeviceToGatewayResponse bindDeviceToGateway(BindDeviceToGatewayRequest request) {
+		return (BindDeviceToGatewayResponse.Builder.newBuilder().setBindDeviceToGatewayRequest(request).build());
+	}
 
+	/**
+	 * unbindDeviceFromGateway method
+	 * @param parent
+	 * @param gatewayId
+	 * @param deviceId
+	 */
+	public void unbindDeviceFromGateway(String parent, String gatewayId, String deviceId) {
+		UnbindDeviceFromGatewayRequest request = UnbindDeviceFromGatewayRequest.Builder.newBuilder().setParent(parent).setGateway(gatewayId).setDevice(deviceId).build();
+		this.unbindDeviceFromGateway(request);
+		UnbindDeviceFromGatewayResponse response = this.unbindDeviceFromGateway(request);
+		response.processRequest(request);
+	}
+	/**
+	 * Print the response for unbindDeviceFromGateway
+	 * 
+	 * @param request
+	 * @return Response object
+	 */
+	public UnbindDeviceFromGatewayResponse unbindDeviceFromGateway(UnbindDeviceFromGatewayRequest request) {
+		return (UnbindDeviceFromGatewayResponse.Builder.newBuilder().setUnbindDeviceFromGatewayRequest(request).build());
+	}
 }
 
