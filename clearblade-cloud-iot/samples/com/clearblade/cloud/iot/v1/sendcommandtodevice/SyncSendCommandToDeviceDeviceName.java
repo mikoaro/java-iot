@@ -4,8 +4,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.clearblade.cloud.iot.v1.DeviceManagerClient;
-import com.clearblade.cloud.iot.v1.SendCommandToDeviceRequest;
-import com.clearblade.cloud.iot.v1.SendCommandToDeviceResponse;
 import com.clearblade.cloud.iot.v1.utils.ByteString;
 import com.clearblade.cloud.iot.v1.utils.DeviceName;
 
@@ -17,7 +15,6 @@ public class SyncSendCommandToDeviceDeviceName {
 
 	public static void syncSendCommandToDeviceDeviceName() {
 		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
-		String msg = "";
 		String project = "ingressdevelopmentenv";
 		String location = "central1";
 		String registry = "Rashmi_Registry_Test";
@@ -29,15 +26,12 @@ public class SyncSendCommandToDeviceDeviceName {
 		if (response != null) {
 			response.processRequest(request);
 			if(response.getHttpStatusResponse().equals("OK")) {
-				msg = "SyncSendCommandToDeviceDeviceName Method worked successfully :: " + response.getHttpStatusResponse();
-				log.log(Level.INFO, msg);
+				log.log(Level.INFO, "SyncSendCommandToDeviceDeviceName Method worked successfully :: {0}",response.getHttpStatusResponse());
 			}else {
-				msg = "SyncSendCommandToDeviceDeviceName Method execution failed :: " + response.getHttpStatusResponse();
-				log.log(Level.SEVERE, msg);
+				log.log(Level.SEVERE, "SyncSendCommandToDeviceDeviceName Method execution failed :: {0}",response.getHttpStatusResponse());
 			}
 		}else {
-			msg = "SyncSendCommandToDeviceDeviceName Method execution failed";
-			log.log(Level.SEVERE, msg);
+			log.log(Level.SEVERE, "SyncSendCommandToDeviceDeviceName Method execution failed");
 		}
 	}
 

@@ -20,7 +20,7 @@ public class Device {
 	private final List<String> lastErrorStatus;
 	private final List<String> config;
 	private final List<String> state;	
-	private final int logLevel;
+	private final String logLevel;
 	private final List<String> metadata;
 	private final List<String> gatewayConfig;
 	
@@ -39,7 +39,7 @@ public class Device {
 		lastErrorStatus = new ArrayList<>();
 		config = new ArrayList<>();
 		state = new ArrayList<>();
-		logLevel = 0;
+		logLevel = "NONE";
 		metadata = new ArrayList<>();
 		gatewayConfig = new ArrayList<>();
 	}
@@ -73,11 +73,14 @@ public class Device {
 		return new Builder(this);
 	}
 
-	public static Device of(String id, String name, int numId, List<Object> credentials, List<String> lastErrorStatus,List<String> config, List<String> state, int logLevel, List<String> metadata, List<String> gatewayConfig) {
+	public static Device of(String id, String name, int numId, List<Object> credentials, List<String> lastErrorStatus,List<String> config, List<String> state, String logLevel, List<String> metadata, List<String> gatewayConfig) {
 		return newBuilder().setId(id).setName(name).setNumId(numId).setCredentials(credentials).setLastErrorStatus(lastErrorStatus).setConfig(config).setState(state).setLogLevel(logLevel).setMetadata(metadata).setGatewayConfig(gatewayConfig).build();
 	}
 
-	public static String format(String id, String name, int numId, List<Object> credentials, List<String> lastErrorStatus,List<String> config, List<String> state, int logLevel, List<String> metadata, List<String> gatewayConfig) {
+	public static Device patch(String id, String name, String logLevel, boolean blocked) {
+		return newBuilder().setId(id).setName(name).setLogLevel(logLevel).setBlocked(blocked).build();
+	}
+	public static String format(String id, String name, int numId, List<Object> credentials, List<String> lastErrorStatus,List<String> config, List<String> state, String logLevel, List<String> metadata, List<String> gatewayConfig) {
 		return newBuilder().setId(id).setName(name).setNumId(numId).setCredentials(credentials).setLastErrorStatus(lastErrorStatus).setConfig(config).setState(state).setLogLevel(logLevel).setMetadata(metadata).setGatewayConfig(gatewayConfig).build()
 				.toString();
 	}
@@ -101,7 +104,7 @@ public class Device {
 		private List<String> lastErrorStatus;
 		private List<String> config;
 		private List<String> state;	
-		private int logLevel;
+		private String logLevel;
 		private List<String> metadata;
 		private List<String> gatewayConfig;
 
@@ -174,7 +177,7 @@ public class Device {
 			return gatewayConfig;
 		}
 
-		public int getLogLevel() {
+		public String getLogLevel() {
 			return logLevel;
 		}
 		
@@ -212,7 +215,7 @@ public class Device {
 			return this;
 		}
 
-		public Builder setLogLevel(int logLevel) {
+		public Builder setLogLevel(String logLevel) {
 			this.logLevel = logLevel;
 			return this;
 		}
@@ -231,6 +234,42 @@ public class Device {
 			this.gatewayConfig = gatewayConfig;
 			return this;
 		}
+		
+		public Builder setBlocked(boolean blocked) {
+			this.blocked = blocked;
+			return this;
+		}
+		
+		public Builder setLastHeartbeatTime(Timestamp lastHeartbeatTime) {
+			this.lastHeartbeatTime = lastHeartbeatTime;
+			return this;
+		}
+
+		public Builder setLastEventTime(Timestamp lastEventTime) {
+			this.lastEventTime = lastEventTime;
+			return this;
+		}
+
+		public Builder setLastStateTime(Timestamp lastStateTime) {
+			this.lastStateTime = lastStateTime;
+			return this;
+		}
+
+		public Builder setLastConfigAckTime(Timestamp lastConfigAckTime) {
+			this.lastConfigAckTime = lastConfigAckTime;
+			return this;
+		}
+
+		public Builder setLastConfigSendTime(Timestamp lastConfigSendTime) {
+			this.lastConfigSendTime = lastConfigSendTime;
+			return this;
+		}
+
+		public Builder setLastErrorTime(Timestamp lastErrorTime) {
+			this.lastErrorTime = lastErrorTime;
+			return this;
+		}
+
 		private Builder(Device device) {
 			this.id = device.id;
 			this.name = device.name;

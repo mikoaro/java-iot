@@ -1,12 +1,44 @@
 package com.clearblade.cloud.iot.v1;
 
-import com.clearblade.cloud.iot.v1.utils.ByteString;
+import com.clearblade.cloud.iot.v1.binddevicetogateway.BindDeviceToGatewayRequest;
+import com.clearblade.cloud.iot.v1.binddevicetogateway.BindDeviceToGatewayResponse;
+import com.clearblade.cloud.iot.v1.createdevice.CreateDeviceRequest;
+import com.clearblade.cloud.iot.v1.createdevice.CreateDeviceResponse;
+import com.clearblade.cloud.iot.v1.deletedevice.DeleteDeviceRequest;
+import com.clearblade.cloud.iot.v1.deletedevice.DeleteDeviceResponse;
+import com.clearblade.cloud.iot.v1.deviceconfigversionslist.DeviceConfigVersionsListRequest;
+import com.clearblade.cloud.iot.v1.deviceconfigversionslist.DeviceConfigVersionsListResponse;
+import com.clearblade.cloud.iot.v1.devicepatch.DevicePatchRequest;
+import com.clearblade.cloud.iot.v1.devicepatch.DevicePatchResponse;
+import com.clearblade.cloud.iot.v1.deviceslist.DevicesListRequest;
+import com.clearblade.cloud.iot.v1.deviceslist.DevicesListResponse;
+import com.clearblade.cloud.iot.v1.devicestateslist.DeviceStatesListRequest;
+import com.clearblade.cloud.iot.v1.devicestateslist.DeviceStatesListResponse;
+import com.clearblade.cloud.iot.v1.getdevice.GetDeviceRequest;
+import com.clearblade.cloud.iot.v1.getdevice.GetDeviceResponse;
+import com.clearblade.cloud.iot.v1.modifycloudtodeviceconfig.ModifyCloudToDeviceConfigRequest;
+import com.clearblade.cloud.iot.v1.modifycloudtodeviceconfig.ModifyCloudToDeviceConfigResponse;
+import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceRequest;
+import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceResponse;
+import com.clearblade.cloud.iot.v1.unbinddevicefromgateway.UnbindDeviceFromGatewayRequest;
+import com.clearblade.cloud.iot.v1.unbinddevicefromgateway.UnbindDeviceFromGatewayResponse;
 import com.clearblade.cloud.iot.v1.utils.Device;
 import com.clearblade.cloud.iot.v1.utils.DeviceName;
 import com.clearblade.cloud.iot.v1.utils.RegistryName;
 
 public class DeviceManagerClient {
 
+
+	/**
+	 * Print the response for sendCommandToDevice
+	 * 
+	 * @param request
+	 * @return Response object
+	 */
+	public SendCommandToDeviceResponse sendCommandToDeviceAsync(SendCommandToDeviceRequest request) {
+		return (SendCommandToDeviceResponse.Builder.newBuilder().setSendCommandToDeviceRequest(request).build());
+	}
+	
 	/**
 	 * SendCommandToDevice method
 	 * 
@@ -17,7 +49,6 @@ public class DeviceManagerClient {
 			String subfolder) {
 		SendCommandToDeviceRequest request = SendCommandToDeviceRequest.Builder.newBuilder().setName(name)
 				.setBinaryData(binaryData).setSubfolder(subfolder).build();
-		this.sendCommandToDevice(request);
 		SendCommandToDeviceResponse response = this.sendCommandToDevice(request);
 		response.processRequest(request);
 	}
@@ -132,49 +163,107 @@ public class DeviceManagerClient {
 	}
 
 	/**
-	 * DeviceSetStates method
+	 * ModifyCloudToDeviceConfig method
 	 * 
-	 * @param name, method
+	 * @param device object
+	 * @param versionToUpdate
 	 * @param binaryData
 	 */
-	public void devicesSetStates(String name, ByteString binaryData) {
-		DeviceSetStatesRequest request = DeviceSetStatesRequest.Builder.newBuilder().setDeviceName(name)
-				.setBinaryData(binaryData).build();
-		this.deviceSetStates(request);
-		DeviceSetStatesResponse response = this.deviceSetStates(request);
+	public void modifyCloudToDeviceConfig(Device device, com.clearblade.cloud.iot.v1.utils.ByteString binaryData, String versionToUpdate) {
+		ModifyCloudToDeviceConfigRequest request = ModifyCloudToDeviceConfigRequest.Builder.newBuilder().setDevice(device)
+																						   .setBinaryData(binaryData).setVersionToUpdate(versionToUpdate).build();
+		ModifyCloudToDeviceConfigResponse response = this.modifyCloudToDeviceConfig(request);
 		response.processRequest(request);
 	}
 	/**
-	 * Print the response for DeviceSetStatesRequest
+	 * Print the response for ModifyCloudToDeviceConfig
 	 * 
 	 * @param request
 	 * @return Response object
 	 */
-	public DeviceSetStatesResponse deviceSetStates(DeviceSetStatesRequest request) {
-		return (DeviceSetStatesResponse.Builder.newBuilder().setDeviceSetStatesRequest(request).build());
+	public ModifyCloudToDeviceConfigResponse modifyCloudToDeviceConfig(ModifyCloudToDeviceConfigRequest request) {
+		return (ModifyCloudToDeviceConfigResponse.Builder.newBuilder().setModifyCloudToDeviceConfigRequest(request).build());
+	}
+
+
+	/**
+	 * Method used to call DeviceConfigVersionsList api
+	 * @param name and numVersions
+	 */
+	public void deviceConfigVersionsList(String name, String numVersions) {
+		DeviceConfigVersionsListRequest request = DeviceConfigVersionsListRequest.Builder.newBuilder().setName(name).setNumVersions(numVersions).build();
+		deviceConfigVersionsList(request);
 	}
 
 	/**
-	 * Method used to call getDeviceConfig api
+	 * Print the response for deviceConfigVersionsList
+	 *  
+	 * @param request
+	 * @return Response object
+	 */
+	public DeviceConfigVersionsListResponse deviceConfigVersionsList(DeviceConfigVersionsListRequest request) {
+		return (DeviceConfigVersionsListResponse.Builder.newBuilder().setDeviceConfigVersionsListRequest(request).build());
+	}
+
+	/**
+	 * bindDeviceToGateway method
+	 * @param parent
+	 * @param gatewayId
+	 * @param deviceId
+	 */
+	public void bindDeviceToGateway(String parent, String gatewayId, String deviceId) {
+		BindDeviceToGatewayRequest request = BindDeviceToGatewayRequest.Builder.newBuilder().setParent(parent).setGateway(gatewayId).setDevice(deviceId).build();
+		BindDeviceToGatewayResponse response = this.bindDeviceToGateway(request);
+		response.processRequest(request);
+	}
+	/**
+	 * Print the response for bindDeviceToGateway
+	 * 
+	 * @param request
+	 * @return Response object
+	 */
+	public BindDeviceToGatewayResponse bindDeviceToGateway(BindDeviceToGatewayRequest request) {
+		return (BindDeviceToGatewayResponse.Builder.newBuilder().setBindDeviceToGatewayRequest(request).build());
+	}
+
+	/**
+	 * unbindDeviceFromGateway method
+	 * @param parent
+	 * @param gatewayId
+	 * @param deviceId
+	 */
+	public void unbindDeviceFromGateway(String parent, String gatewayId, String deviceId) {
+		UnbindDeviceFromGatewayRequest request = UnbindDeviceFromGatewayRequest.Builder.newBuilder().setParent(parent).setGateway(gatewayId).setDevice(deviceId).build();
+		UnbindDeviceFromGatewayResponse response = this.unbindDeviceFromGateway(request);
+		response.processRequest(request);
+	}
+	/**
+	 * Print the response for unbindDeviceFromGateway
+	 * @param request
+	 * @return Response object
+	 */
+	public UnbindDeviceFromGatewayResponse unbindDeviceFromGateway(UnbindDeviceFromGatewayRequest request) {
+		return (UnbindDeviceFromGatewayResponse.Builder.newBuilder().setUnbindDeviceFromGatewayRequest(request).build());
+	}
+
+	/**
+	 * devicePatch method
 	 * @param name
-	 * @return Device Config - binary Data and version
+	 * @param updateMask
+	 * @param device object - id, name, logLevel, blocked
 	 */
-	public void getDeviceConfig(DeviceName name,String localVersion) {
-		    GetDeviceConfigRequest request = GetDeviceConfigRequest.Builder.newBuilder().setDeviceName(name == null ? null : name.toString()).setLocalVersion(localVersion).build();
-		    getDeviceConfig(request);
+	public void devicePatch(String name, String updateMask, Device device) {
+		DevicePatchRequest request = DevicePatchRequest.Builder.newBuilder().setName(name).setUpdateMask(updateMask).setDevice(device).build();
+		DevicePatchResponse response = this.devicePatch(request);
+		response.processRequest(request);
 	}
-
 	/**
-	 * Print the response for getDeviceConfig
-	 * 
+	 * Print the response for devicePatch
 	 * @param request
 	 * @return Response object
 	 */
-	public GetDeviceConfigResponse getDeviceConfig(GetDeviceConfigRequest request) {
-		return (GetDeviceConfigResponse.Builder.newBuilder().setGetDeviceConfigRequest(request).build());
+	public DevicePatchResponse devicePatch(DevicePatchRequest request) {
+		return (DevicePatchResponse.Builder.newBuilder().setDevicePatchRequest(request).build());
 	}
-
-
-
 }
 
