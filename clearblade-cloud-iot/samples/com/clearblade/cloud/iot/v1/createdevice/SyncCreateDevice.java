@@ -1,11 +1,17 @@
 package com.clearblade.cloud.iot.v1.createdevice;
 
-import java.util.logging.Level;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import com.clearblade.cloud.iot.v1.DeviceManagerClient;
 import com.clearblade.cloud.iot.v1.utils.Device;
+import com.clearblade.cloud.iot.v1.utils.DeviceConfig;
+import com.clearblade.cloud.iot.v1.utils.GatewayConfig;
+import com.clearblade.cloud.iot.v1.utils.GatewayType;
+import com.clearblade.cloud.iot.v1.utils.LogLevel;
 import com.clearblade.cloud.iot.v1.utils.RegistryName;
+import com.clearblade.cloud.iot.v1.utils.Status;
 
 public class SyncCreateDevice {
 	static Logger log = Logger.getLogger(SyncCreateDevice.class.getName());
@@ -17,21 +23,22 @@ public class SyncCreateDevice {
 	public static void syncCreateDevice() {
 
 		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
-		String registryName = "Rashmi_Registry_Test";
-		RegistryName registryNm = RegistryName.newBuilder().setRegistry(registryName).build();
-		CreateDeviceRequest request = CreateDeviceRequest.Builder.newBuilder().setParent(registryNm)
-				.setDevice(Device.newBuilder().setId("SyncDeviceTest2").setName("SyncDeviceTest2").setNumId(49998).build())
-				.setDeviceNumIds(new String[]{"226,556"}).setSubfolder("758").build();
-		CreateDeviceResponse response = deviceManagerClient.createDevice(request);
-		if (response != null) {			
-			response.processRequest(request);
-			if(response.getHttpStatusResponse().equals("OK")) {
-				log.log(Level.INFO, "SyncCreateDevice Method worked successfully :: {0}",response.getHttpStatusResponse());
-			}else {
-				log.log(Level.INFO, "SyncCreateDevice Method execution failed :: {0}",response.getHttpStatusResponse());
-			}
-		}else {
-			log.log(Level.SEVERE, "SyncCreateDevice Method execution failed");
-		}
+		RegistryName parent = RegistryName.of("ingressdevelopmentenv", "us-central1", "Rashmi_Registry_Test");
+		GatewayConfig gatewayCfg = new GatewayConfig();
+		gatewayCfg.setGatewayType(GatewayType.NON_GATEWAY);
+		Device device = Device.newBuilder()
+				              .setId("SyncTest22").setName("SyncTest22")
+				              .setNumId("2314").setBlocked(false)
+				              .setGatewayConfig(gatewayCfg)
+				              .setLogLevel(LogLevel.DEBUG)
+				              .setCredentials(new ArrayList<>())
+				              .setLastErrorStatus(new Status())
+				              .setConfig(new DeviceConfig())
+				              .setMetadata(new HashMap<>())
+				              .build();
+		CreateDeviceRequest request = CreateDeviceRequest.Builder.newBuilder().setParent(parent).setDevice(device).build();
+		Device response = deviceManagerClient.createDevice(request);
+		System.out.println(response.toBuilder().getName());
+		
 	}
 }

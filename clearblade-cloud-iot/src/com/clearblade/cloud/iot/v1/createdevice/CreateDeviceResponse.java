@@ -60,34 +60,6 @@ public class CreateDeviceResponse {
 		}
 	}
 
-	/**
-	 * Mehtod used to process the request Calling processRequestForMethod -
-	 * CreateDevice
-	 */
-	public void processRequest(CreateDeviceRequest request) {
-		String msg = "";
-		JSONObject requestParams = new JSONObject();
-		JSONObject bodyParams = new JSONObject();
-		ProcessRequest processRequest = new ProcessRequest();
-		if(request != null) {
-			String logMsg = "Sending request to device :: "+request.toString();
-			log.log(Level.INFO,logMsg);
-			requestParams = (JSONObject) request.requestParams.clone();
-			bodyParams = (JSONObject) request.bodyParams.clone();
-		}		
-		String responseMessage = processRequest.processRequestForMethod("createDevice",requestParams,bodyParams);
-		this.setHttpStatusResponse(responseMessage);		
-		if (responseMessage.equals("OK")) {
-			this.setHttpStatusCode(200);
-			msg = "Request processed for CreateDevice method";
-			log.log(Level.INFO, msg);
-		} else {
-			this.setHttpStatusCode(0);
-			msg = "Request for CreateDevice failed \n" .concat(responseMessage);
-			log.log(Level.SEVERE, msg);
-		}
-	}
-
 	@Override
 	public String toString() {
 		return "Http Status Code :: " + this.getHttpStatusCode() + " Http Status Response :: "

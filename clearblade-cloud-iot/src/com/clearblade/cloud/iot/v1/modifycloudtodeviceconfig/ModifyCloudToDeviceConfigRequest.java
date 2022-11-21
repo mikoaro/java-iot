@@ -6,19 +6,16 @@ import org.json.simple.JSONObject;
 
 import com.clearblade.cloud.iot.v1.utils.ByteString;
 import com.clearblade.cloud.iot.v1.utils.Constants;
-import com.clearblade.cloud.iot.v1.utils.Device;
 
 public class ModifyCloudToDeviceConfigRequest {
-	
-	private final Device device;
-	private final String versionToUpdate;
-	private final ByteString binaryData;
-	private final byte[] binaryDataByte;
-	public JSONObject requestParams;
-	public JSONObject bodyParams;
+
+	private String deviceName;
+	private String versionToUpdate;
+	private ByteString binaryData;
+	private byte[] binaryDataByte;
 
 	private ModifyCloudToDeviceConfigRequest(Builder builder) {
-		this.device = builder.device;
+		this.deviceName = builder.deviceName;
 		this.versionToUpdate = builder.versionToUpdate;
 		this.binaryData = builder.binaryData;
 		this.binaryDataByte = builder.binaryDataByte;
@@ -28,11 +25,11 @@ public class ModifyCloudToDeviceConfigRequest {
 	public static class Builder {
 
 		/// instance fields
-		private Device device;
+		private String deviceName;
 		private String versionToUpdate;
 		private ByteString binaryData;
 		private byte[] binaryDataByte;
-		
+
 		public static Builder newBuilder() {
 			return new Builder();
 		}
@@ -41,8 +38,8 @@ public class ModifyCloudToDeviceConfigRequest {
 		}
 
 		// Setter methods
-		public Builder setDevice(Device device) {
-			this.device = device;
+		public Builder setName(String deviceName) {
+			this.deviceName = deviceName;
 			return this;
 		}
 
@@ -56,7 +53,7 @@ public class ModifyCloudToDeviceConfigRequest {
 			return this;
 		}
 
-		public Builder setBinaryDataByte(byte[] binaryDataByte) {
+		public Builder setBinaryData(byte[] binaryDataByte) {
 			this.binaryDataByte = binaryDataByte;
 			return this;
 		}
@@ -68,55 +65,31 @@ public class ModifyCloudToDeviceConfigRequest {
 		}
 	}
 
-	public JSONObject getRequestParams() {
-		return requestParams;
-	}
-
-	public void setRequestParams(JSONObject requestParams) {
-		this.requestParams = requestParams;
-	}
-
-	public JSONObject getBodyParams() {
-		return bodyParams;
-	}
-
-	public void setBodyParams(JSONObject bodyParams) {
-		this.bodyParams = bodyParams;
+	@Override
+	public String toString() {
+		return "name = " + this.deviceName + ", versionToUpdate = " + this.versionToUpdate;
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public String toString() {
-		requestParams = new JSONObject();
-		bodyParams = new JSONObject();
-		
-		String dName = "";
-		String bData = null;
-		String versionToUpdateStr = "1";
-		
-		if(this.device != null) {
-			dName = this.device.toBuilder().getName();
-		}
-		if(this.binaryData != null) {
+	public String[] getBodyAndParams() {
+		String[] output = new String[2];
+		String params = "name=" + this.deviceName + "&method=" + Constants.MODIFY_CLOUD_TO_DEVICE_CONFIG;
+		String bData = "EMPTY";
+		if (this.binaryData != null) {
 			bData = new String(this.binaryData.getBinaryDataArray());
-		}else if(this.binaryDataByte != null) {
-			if(this.binaryDataByte.length == 0){
+		} else if (this.binaryDataByte != null) {
+			if (this.binaryDataByte.length == 0) {
 				bData = "EMPTY";
-			}else {
+			} else {
 				bData = Arrays.toString(this.binaryDataByte);
 			}
 		}
-		if(this.versionToUpdate != null) {
-			versionToUpdateStr = this.versionToUpdate;
-		}
-		String method = Constants.MODIFY_CLOUD_TO_DEVICE_CONFIG;
-		
-		requestParams.put("name", dName);
-		requestParams.put("method", method);
+		JSONObject bodyParams = new JSONObject();
 		bodyParams.put("binaryData", bData);
-		bodyParams.put("versionToUpdate", versionToUpdateStr);
-		
-		return "name = "+dName+", binaryData = "+bData+", versionToUpdate = "+versionToUpdate;
-	}
+		bodyParams.put("versionToUpdate", this.versionToUpdate);
 
+		output[0] = params;
+		output[1] = bodyParams.toJSONString();
+		return output;
+	}
 }

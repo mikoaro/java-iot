@@ -1,59 +1,83 @@
 package com.clearblade.cloud.iot.v1.deviceslist;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import com.clearblade.cloud.iot.v1.ProcessRequest;
 import com.clearblade.cloud.iot.v1.utils.Device;
 
 public class DevicesListResponse {
-	
+
 	static Logger log = Logger.getLogger(DevicesListResponse.class.getName());
-	
-	private final DevicesListRequest request;
-	private int httpStatusCode;
-	private String httpStatusResponse;
+
+	private String nextPageToken;
 	private List<Device> devicesList;
 
 	protected DevicesListResponse(Builder builder) {
-		this.request = builder.request;
+		this.devicesList = builder.devicesList;
+		this.nextPageToken = builder.nextPageToken;
 	}
 
-	public int getHttpStatusCode() {
-		return httpStatusCode;
+	public String getNextPageToken() {
+		return nextPageToken;
 	}
 
-	public void setHttpStatusCode(int httpStatusCode) {
-		this.httpStatusCode = httpStatusCode;
+	public void setNextPageToken(String nextPageToken) {
+		this.nextPageToken = nextPageToken;
 	}
 
-	public String getHttpStatusResponse() {
-		return httpStatusResponse;
+	public List<Device> getDevicesList() {
+		return devicesList;
 	}
 
-	public void setHttpStatusResponse(String httpStatusResponse) {
-		this.httpStatusResponse = httpStatusResponse;
+	public void setDevicesList(List<Device> devicesList) {
+		this.devicesList = devicesList;
 	}
-	
+
 	// Static class Builder
 	public static class Builder {
 
 		/// instance fields
-		private DevicesListRequest request;
+		private String nextPageToken;
+		private List<Device> devicesList = new ArrayList<>();
 
 		public static Builder newBuilder() {
 			return new Builder();
 		}
-		
+
 		private Builder() {
 		}
 
 		// Setter methods
-		public Builder setDevicesListRequest(DevicesListRequest request) {
-			this.request = request;
+		public Builder buildResponse(String jsonString) {
+			try {
+				JSONObject jsonObj = new JSONObject();
+				JSONParser jsonParser = new JSONParser();
+				jsonObj = (JSONObject) (jsonParser.parse(jsonString));
+
+				JSONArray devicesArray = (JSONArray) jsonObj.get("devices");
+				@SuppressWarnings("rawtypes")
+				Iterator deviceIterate = devicesArray.iterator();
+				while (deviceIterate.hasNext()) {
+					JSONObject deviceJson = (JSONObject) deviceIterate.next();
+					Device deviceObj = Device.newBuilder().build();
+					deviceObj.loadFromString(deviceJson.toString());
+					devicesList.add(deviceObj);
+				}
+
+				if (jsonObj.containsKey("nextPageToken"))
+					nextPageToken = (String) jsonObj.get("nextPageToken");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return this;
 		}
 
@@ -64,49 +88,4 @@ public class DevicesListResponse {
 		}
 	}
 
-	/**
-	 * Mehtod used to process the request Calling processRequestForMethod -
-	 * DevicesList
-	 */
-	@SuppressWarnings("unchecked")
-	public void processRequest(DevicesListRequest request) {
-		String msg = "";
-		ProcessRequest processRequest = new ProcessRequest();
-		JSONObject requestParams = new JSONObject();
-		JSONObject bodyParams = new JSONObject();
-		if(request != null) {
-			requestParams.put("parent", request.toString());
-			requestParams.put("fieldMask", "EMPTY");
-		}
-		String responseMessage = processRequest.processRequestForMethod("devicesList", requestParams, bodyParams);
-		this.setHttpStatusResponse(responseMessage);
-		if (responseMessage.equals("OK")) {
-			this.setHttpStatusCode(200);
-			msg = "Request processed for DevicesList method";
-			
-			log.log(Level.INFO, msg);
-		} else {
-			this.setHttpStatusCode(0);
-			msg = "Request for DevicesList failed \n" .concat(responseMessage);
-			log.log(Level.SEVERE, msg);
-		}
-	}
-	
-	@Override
-	public String toString() {
-		return "Http Status Code :: " + this.getHttpStatusCode() + " Http Status Response :: "
-				+ this.getHttpStatusResponse();
-	}
-	
-	public DevicesListRequest getRequest() {
-		return request;
-	}
-
-	public List<Device> getDevicesList() {
-		return devicesList;
-	}
-
-	public void setDevicesList(List<Device> devicesList) {
-		this.devicesList = devicesList;
-	}
 }

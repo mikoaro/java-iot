@@ -1,16 +1,34 @@
 package com.clearblade.cloud.iot.v1.utils;
 
 public class DeviceState {
-	private final ByteString binaryData;
+	private String updateTime;
+	private String binaryData;
 	
 	public DeviceState(Builder builder) {
+		updateTime = builder.updateTime;
 		binaryData = builder.getBinaryData();
 	}
 	
-	public ByteString getBinaryData() {
+	public DeviceState() {
+		
+	}
+	public String getBinaryData() {
 		return binaryData;
 	}
 	
+	
+	public String getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public void setBinaryData(String binaryData) {
+		this.binaryData = binaryData;
+	}
+
 	public static Builder newBuilder() {
 		return new Builder();
 	}
@@ -20,20 +38,33 @@ public class DeviceState {
 	}
 
 	public static class Builder {
-		private ByteString binaryData;
+		private String binaryData;
+		private String updateTime;
 
 		protected Builder() {
 		}
 
-		public ByteString getBinaryData() {
+		
+		public String getUpdateTime() {
+			return updateTime;
+		}
+
+
+		public Builder setUpdateTime(String updateTime) {
+			this.updateTime = updateTime;
+			return this;
+		}
+
+		public String getBinaryData() {
 			return binaryData;
 		}
 
-		public Builder setBinaryData(ByteString binaryData) {
+		public Builder setBinaryData(String binaryData) {
 			this.binaryData = binaryData;
 			return this;
 		}
 		private Builder(DeviceState deviceState) {
+			this.updateTime = deviceState.updateTime;
 			this.binaryData = deviceState.binaryData;
 		}
 
@@ -42,4 +73,19 @@ public class DeviceState {
 		}
 	}
 
+	@Override
+	public String toString() {
+		String stateStr = "";
+		if(this.getUpdateTime() != null) {
+			stateStr+= "{\"updateTime\":\""+this.getUpdateTime()+"\",";
+		}else {
+			stateStr+= "{\"updateTime\":\"\",";
+		}		
+		if(this.getBinaryData() != null) {
+			stateStr+=	"\"binaryData\":\""+this.getBinaryData()+"\"}";
+		}else {
+			stateStr+=	"\"binaryData\":\"\"}";
+		}
+		return stateStr;
+	}
 }

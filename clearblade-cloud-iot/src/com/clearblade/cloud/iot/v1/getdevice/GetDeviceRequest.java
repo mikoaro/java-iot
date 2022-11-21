@@ -1,18 +1,24 @@
 package com.clearblade.cloud.iot.v1.getdevice;
 
+import com.clearblade.cloud.iot.v1.utils.DeviceName;
+import com.clearblade.cloud.iot.v1.utils.FieldMask;
+
 public class GetDeviceRequest {
 	
-	private final String deviceName;
-
+	private final DeviceName name;
+	private final FieldMask fieldMask;
+	
 	private GetDeviceRequest(Builder builder) {
-		this.deviceName = builder.deviceName;
+		this.name = builder.name;
+		this.fieldMask = builder.fieldMask;
 	}
 	
 	// Static class Builder
 	public static class Builder {
 
 		/// instance fields
-		private String deviceName;
+		private DeviceName name;
+		private FieldMask fieldMask;
 
 		public static Builder newBuilder() {
 			return new Builder();
@@ -22,8 +28,20 @@ public class GetDeviceRequest {
 		}
 
 		// Setter methods
-		public Builder setDeviceName(String deviceName) {
-			this.deviceName = deviceName;
+		public FieldMask getFieldMask() {
+			return fieldMask;
+		}
+
+		public Builder setFieldMask(FieldMask fieldMask) {
+			this.fieldMask = fieldMask;
+			return this;
+		}		
+		public DeviceName getName() {
+			return name;
+		}
+
+		public Builder setName(DeviceName name) {
+			this.name = name;
 			return this;
 		}
 
@@ -36,7 +54,12 @@ public class GetDeviceRequest {
 
 	@Override
 	public String toString() {
-		return this.deviceName;
+		String params = "";
+		params = "name="+this.name.toString();
+		if(this.fieldMask.toString() != "") {
+			params+= "&fieldMask="+this.fieldMask.toString();
+		}
+		return params;
 	}
 
 

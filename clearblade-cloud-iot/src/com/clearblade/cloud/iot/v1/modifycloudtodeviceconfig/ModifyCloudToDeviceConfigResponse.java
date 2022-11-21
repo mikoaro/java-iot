@@ -61,33 +61,6 @@ public class ModifyCloudToDeviceConfigResponse {
 		}
 	}
 
-	/**
-	 * Mehtod used to process the request Calling processRequestForMethod -
-	 * ModifyCloudToDeviceConfig
-	 */
-	public void processRequest(ModifyCloudToDeviceConfigRequest request) {
-		String msg = "";
-		JSONObject requestParams = new JSONObject();
-		JSONObject bodyParams = new JSONObject();
-		ProcessRequest processRequest = new ProcessRequest();
-		if(request != null) {
-			String logMsg = "Modify Cloud To Device Config Request :: "+request.toString();
-			log.log(Level.INFO,logMsg);
-			requestParams = (JSONObject) request.requestParams.clone();
-			bodyParams = (JSONObject) request.bodyParams.clone();
-		}		
-		String responseMessage = processRequest.processRequestForMethod(Constants.MODIFY_CLOUD_TO_DEVICE_CONFIG,requestParams,bodyParams);
-		this.setHttpStatusResponse(responseMessage);		
-		if (responseMessage.equals("OK")) {
-			this.setHttpStatusCode(200);
-			msg = "Request processed for MODIFY_CLOUD_TO_DEVICE_CONFIG method";
-			log.log(Level.INFO, msg);
-		} else {
-			this.setHttpStatusCode(0);
-			msg = "Request for MODIFY_CLOUD_TO_DEVICE_CONFIG failed \n" .concat(responseMessage);
-			log.log(Level.SEVERE, msg);
-		}
-	}
 
 	@Override
 	public String toString() {

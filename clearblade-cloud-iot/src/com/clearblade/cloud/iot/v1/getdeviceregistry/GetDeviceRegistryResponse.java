@@ -1,4 +1,4 @@
-package com.clearblade.cloud.iot.v1.devicepatch;
+package com.clearblade.cloud.iot.v1.getdeviceregistry;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -7,15 +7,18 @@ import org.json.simple.JSONObject;
 
 import com.clearblade.cloud.iot.v1.ProcessRequest;
 import com.clearblade.cloud.iot.v1.utils.Constants;
+import com.clearblade.cloud.iot.v1.utils.RegistryName;
 
-public class DevicePatchResponse {
-
-	static Logger log = Logger.getLogger(DevicePatchResponse.class.getName());
-	private final DevicePatchRequest request;
+public class GetDeviceRegistryResponse {
+	
+	static Logger log = Logger.getLogger(GetDeviceRegistryResponse.class.getName());
+	
+	private final GetDeviceRegistryRequest request;
 	private int httpStatusCode;
 	private String httpStatusResponse;
+	private RegistryName registry;
 
-	protected DevicePatchResponse(Builder builder) {
+	protected GetDeviceRegistryResponse(Builder builder) {
 		this.request = builder.request;
 	}
 
@@ -39,7 +42,7 @@ public class DevicePatchResponse {
 	public static class Builder {
 
 		/// instance fields
-		private DevicePatchRequest request;
+		private GetDeviceRegistryRequest request;
 
 		public static Builder newBuilder() {
 			return new Builder();
@@ -49,42 +52,41 @@ public class DevicePatchResponse {
 		}
 
 		// Setter methods
-		public Builder setDevicePatchRequest(DevicePatchRequest request) {
+		public Builder setGetDeviceRegistryRequest(GetDeviceRegistryRequest request) {
 			this.request = request;
 			return this;
 		}
 
 		// build method to deal with outer class
 		// to return outer instance
-		public DevicePatchResponse build() {
-			return new DevicePatchResponse(this);
+		public GetDeviceRegistryResponse build() {
+			return new GetDeviceRegistryResponse(this);
 		}
 	}
 
 	/**
 	 * Mehtod used to process the request Calling processRequestForMethod -
-	 * DevicePatch
+	 * GetDeviceRegistry
 	 */
-	public void processRequest(DevicePatchRequest request) {
+	@SuppressWarnings("unchecked")
+	public void processRequest(GetDeviceRegistryRequest request) {
 		String msg = "";
+		ProcessRequest processRequest = new ProcessRequest();
 		JSONObject requestParams = new JSONObject();
 		JSONObject bodyParams = new JSONObject();
-		ProcessRequest processRequest = new ProcessRequest();
 		if(request != null) {
-			String logMsg = "Device Patch Request :: "+request.toString();
-			log.log(Level.INFO,logMsg);
-			requestParams = (JSONObject) request.requestParams.clone();
-			bodyParams = (JSONObject) request.bodyParams.clone();
-		}		
-		String responseMessage = processRequest.processRequestForMethod(Constants.DEVICE_PATCH,requestParams,bodyParams);
-		this.setHttpStatusResponse(responseMessage);		
+			requestParams.put("name", request.toString());
+		}
+		String responseMessage = processRequest.processRequestForMethod(Constants.GET_DEVICE_REGISTRY, requestParams, bodyParams);
+		this.setHttpStatusResponse(responseMessage);
 		if (responseMessage.equals("OK")) {
 			this.setHttpStatusCode(200);
-			msg = "Request processed for Device patch method";
+			msg = "Request processed for GET_DEVICE_REGISTRY method";
+			
 			log.log(Level.INFO, msg);
 		} else {
 			this.setHttpStatusCode(0);
-			msg = "Request for Device patch failed \n" .concat(responseMessage);
+			msg = "Request for GET_DEVICE_REGISTRY failed \n" .concat(responseMessage);
 			log.log(Level.SEVERE, msg);
 		}
 	}
@@ -95,8 +97,16 @@ public class DevicePatchResponse {
 				+ this.getHttpStatusResponse();
 	}
 
-	public DevicePatchRequest getRequest() {
+	public GetDeviceRegistryRequest getRequest() {
 		return request;
+	}
+
+	public RegistryName getRegistry() {
+		return registry;
+	}
+
+	public void setRegistryName(RegistryName registryName) {
+		this.registry = registryName;
 	}
 
 }

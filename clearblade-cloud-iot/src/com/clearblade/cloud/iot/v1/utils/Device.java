@@ -1,55 +1,73 @@
 package com.clearblade.cloud.iot.v1.utils;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 public class Device {
-	
-	private final String id;
-	private final String name;
-	private final int numId;
-	private final List<Object> credentials;
-	private final Timestamp lastHeartbeatTime;
-	private final Timestamp lastEventTime;
-	private final Timestamp lastStateTime;
-	private final Timestamp lastConfigAckTime;
-	private final Timestamp lastConfigSendTime;
-	private final boolean blocked;
-    private final Timestamp	lastErrorTime;
-	private final List<String> lastErrorStatus;
-	private final List<String> config;
-	private final List<String> state;	
-	private final String logLevel;
-	private final List<String> metadata;
-	private final List<String> gatewayConfig;
-	
+
+	private String id;
+	private String name;
+	private String numId;
+	private List<DeviceCredential> credentials;
+	private String lastHeartbeatTime;
+	private String lastEventTime;
+	private String lastStateTime;
+	private String lastConfigAckTime;
+	private String lastConfigSendTime;
+	private boolean blocked;
+	private String lastErrorTime;
+	private Status lastErrorStatus;
+	private DeviceConfig config;
+	private DeviceState state;
+	private LogLevel logLevel;
+	private Map<String,String> metadata;
+	private GatewayConfig gatewayConfig;
+
 	public Device() {
-		id = "";
-		name = "";
-		numId = 0;
+		id = null;
+		name = null;
+		numId = null;
 		credentials = new ArrayList<>();
-		lastHeartbeatTime = new Timestamp(0);
-		lastEventTime = new Timestamp(0);
-		lastStateTime = new Timestamp(0);
-		lastConfigAckTime = new Timestamp(0);
-		lastConfigSendTime = new Timestamp(0);
+		lastHeartbeatTime = null;
+		lastEventTime = null;
+		lastStateTime = null;
+		lastConfigAckTime = null;
+		lastConfigSendTime = null;
 		blocked = false;
-		lastErrorTime = new Timestamp(0);
-		lastErrorStatus = new ArrayList<>();
-		config = new ArrayList<>();
-		state = new ArrayList<>();
-		logLevel = "NONE";
-		metadata = new ArrayList<>();
-		gatewayConfig = new ArrayList<>();
+		lastErrorTime = null;
+		lastErrorStatus = new Status();
+		lastErrorStatus.setCode(0);
+		lastErrorStatus.setMessage("");
+		config = new DeviceConfig();
+		config.setCloudUpdateTime("");
+		config.setBinaryData("");
+		config.setDeviceAckTime("");
+		config.setVersion("");
+		state = new DeviceState();
+		state.setBinaryData("");
+		state.setUpdateTime("");
+		logLevel = LogLevel.NONE;
+		metadata = new HashMap<>();
+		gatewayConfig = new GatewayConfig();
+		gatewayConfig.setGatewayAuthMethod(GatewayAuthMethod.UNRECOGNIZED);
+		gatewayConfig.setGatewayType(GatewayType.NON_GATEWAY);
+		gatewayConfig.setLastAccessedGatewayId("");
+		gatewayConfig.setLastAccessedGatewayTime("");
 	}
-	
+
 	private Device(Builder builder) {
 		id = builder.getId();
 		name = builder.getName();
 		numId = builder.getNumId();
 		credentials = builder.getCredentials();
-		lastHeartbeatTime = builder.getLastHeartbeatTime();		
+		lastHeartbeatTime = builder.getLastHeartbeatTime();
 		lastEventTime = builder.getLastEventTime();
 		lastStateTime = builder.getLastStateTime();
 		lastConfigAckTime = builder.getLastConfigAckTime();
@@ -63,7 +81,6 @@ public class Device {
 		metadata = builder.getMetadata();
 		gatewayConfig = builder.getGatewayConfig();
 	}
-	
 
 	public static Builder newBuilder() {
 		return new Builder();
@@ -73,46 +90,68 @@ public class Device {
 		return new Builder(this);
 	}
 
-	public static Device of(String id, String name, int numId, List<Object> credentials, List<String> lastErrorStatus,List<String> config, List<String> state, String logLevel, List<String> metadata, List<String> gatewayConfig) {
-		return newBuilder().setId(id).setName(name).setNumId(numId).setCredentials(credentials).setLastErrorStatus(lastErrorStatus).setConfig(config).setState(state).setLogLevel(logLevel).setMetadata(metadata).setGatewayConfig(gatewayConfig).build();
-	}
+	public static Device of(String id, String name, String numId, List<DeviceCredential> credentials,
+			String lastHeartbeatTime, String lastEventTime,
+			String lastStateTime, String lastConfigAckTime, String lastConfigSendTime, boolean blocked,
+			String lastErrorTime,
+			Status lastErrorStatus, DeviceConfig config, DeviceState state, LogLevel logLevel,
+			Map<String, String> metadata, GatewayConfig gatewayConfig) {
 
-	public static Device patch(String id, String name, String logLevel, boolean blocked) {
+		return newBuilder().setId(id).setName(name).setNumId(numId).setCredentials(credentials)
+				.setLastHeartbeatTime(lastHeartbeatTime).setLastEventTime(lastEventTime)
+				.setLastStateTime(lastStateTime).setLastConfigAckTime(lastConfigAckTime)
+				.setLastConfigSendTime(lastConfigSendTime).setBlocked(blocked).setLastErrorTime(lastErrorTime)
+				.setLastErrorStatus(lastErrorStatus).setConfig(config).setState(state).setLogLevel(logLevel)
+				.setMetadata(metadata).setGatewayConfig(gatewayConfig)
+				.build();
+	}
+	 
+	public static Device patch(String id, String name, LogLevel logLevel, boolean blocked) {
 		return newBuilder().setId(id).setName(name).setLogLevel(logLevel).setBlocked(blocked).build();
 	}
-	public static String format(String id, String name, int numId, List<Object> credentials, List<String> lastErrorStatus,List<String> config, List<String> state, String logLevel, List<String> metadata, List<String> gatewayConfig) {
-		return newBuilder().setId(id).setName(name).setNumId(numId).setCredentials(credentials).setLastErrorStatus(lastErrorStatus).setConfig(config).setState(state).setLogLevel(logLevel).setMetadata(metadata).setGatewayConfig(gatewayConfig).build()
-				.toString();
+
+	public static String format(String id, String name, String numId, List<DeviceCredential> credentials,
+			String lastHeartbeatTime, String lastEventTime,
+			String lastStateTime, String lastConfigAckTime, String lastConfigSendTime, boolean blocked,
+			String lastErrorTime,
+			Status lastErrorStatus, DeviceConfig config, DeviceState state, LogLevel logLevel,
+			Map<String, String> metadata, GatewayConfig gatewayConfig) {
+
+		return newBuilder().setId(id).setName(name).setNumId(numId).setCredentials(credentials)
+				.setLastHeartbeatTime(lastHeartbeatTime).setLastEventTime(lastEventTime)
+				.setLastStateTime(lastStateTime).setLastConfigAckTime(lastConfigAckTime)
+				.setLastConfigSendTime(lastConfigSendTime).setBlocked(blocked).setLastErrorTime(lastErrorTime)
+				.setLastErrorStatus(lastErrorStatus).setConfig(config).setState(state).setLogLevel(logLevel)
+				.setMetadata(metadata).setGatewayConfig(gatewayConfig)
+				.build().toString();
 	}
 
 	/**
-	 * Builder for setting 
-	 * Device - id, name, credentials and logLevel
+	 * Builder for setting Device - id, name, credentials and logLevel
 	 */
 	public static class Builder {
 		private String id;
 		private String name;
-		private int numId;
-		private List<Object> credentials;
-		private Timestamp lastHeartbeatTime;
-		private Timestamp lastEventTime;
-		private Timestamp lastStateTime;
-		private Timestamp lastConfigAckTime;
-		private Timestamp lastConfigSendTime;
+		private String numId;
+		private List<DeviceCredential> credentials;
+		private String lastHeartbeatTime;
+		private String lastEventTime;
+		private String lastStateTime;
+		private String lastConfigAckTime;
+		private String lastConfigSendTime;
 		private boolean blocked;
-	    private Timestamp	lastErrorTime;
-		private List<String> lastErrorStatus;
-		private List<String> config;
-		private List<String> state;	
-		private String logLevel;
-		private List<String> metadata;
-		private List<String> gatewayConfig;
+		private String lastErrorTime;
+		private Status lastErrorStatus;
+		private DeviceConfig config;
+		private DeviceState state;
+		private LogLevel logLevel;
+		private Map<String,String> metadata;
+		private GatewayConfig gatewayConfig;
 
-		
 		protected Builder() {
-			
+
 		}
-		
+
 		public String getId() {
 			return id;
 		}
@@ -121,31 +160,31 @@ public class Device {
 			return name;
 		}
 
-		public int getNumId() {
+		public String getNumId() {
 			return numId;
 		}
 
-		public List<Object> getCredentials() {
+		public List<DeviceCredential> getCredentials() {
 			return credentials;
-		}		
-		
-		public Timestamp getLastHeartbeatTime() {
+		}
+
+		public String getLastHeartbeatTime() {
 			return lastHeartbeatTime;
 		}
 
-		public Timestamp getLastEventTime() {
+		public String getLastEventTime() {
 			return lastEventTime;
 		}
 
-		public Timestamp getLastStateTime() {
+		public String getLastStateTime() {
 			return lastStateTime;
 		}
 
-		public Timestamp getLastConfigAckTime() {
+		public String getLastConfigAckTime() {
 			return lastConfigAckTime;
 		}
 
-		public Timestamp getLastConfigSendTime() {
+		public String getLastConfigSendTime() {
 			return lastConfigSendTime;
 		}
 
@@ -153,34 +192,34 @@ public class Device {
 			return blocked;
 		}
 
-		public Timestamp getLastErrorTime() {
+		public String getLastErrorTime() {
 			return lastErrorTime;
 		}
 
-		public List<String> getLastErrorStatus() {
+		public Status getLastErrorStatus() {
 			return lastErrorStatus;
 		}
 
-		public List<String> getConfig() {
+		public DeviceConfig getConfig() {
 			return config;
 		}
 
-		public List<String> getState() {
+		public DeviceState getState() {
 			return state;
 		}
 
-		public List<String> getMetadata() {
+		public Map<String,String> getMetadata() {
 			return metadata;
 		}
 
-		public List<String> getGatewayConfig() {
+		public GatewayConfig getGatewayConfig() {
 			return gatewayConfig;
 		}
 
-		public String getLogLevel() {
+		public LogLevel getLogLevel() {
 			return logLevel;
 		}
-		
+
 		public static Builder newBuilder() {
 			return newBuilder();
 		}
@@ -195,81 +234,83 @@ public class Device {
 			return this;
 		}
 
-		public Builder setNumId(int numId) {
+		public Builder setNumId(String numId) {
 			this.numId = numId;
 			return this;
 		}
-		
-		public Builder setCredentials(List<Object> credentials) {
+
+		public Builder setCredentials(List<DeviceCredential> credentials) {
 			this.credentials = credentials;
 			return this;
 		}
 
-		public Builder setLastErrorStatus(List<String> lastErrorStatus) {
+		public Builder setLastErrorStatus(Status lastErrorStatus) {
 			this.lastErrorStatus = lastErrorStatus;
 			return this;
 		}
 
-		public Builder setConfig(List<String> config) {
+		public Builder setConfig(DeviceConfig config) {
 			this.config = config;
 			return this;
 		}
 
-		public Builder setLogLevel(String logLevel) {
+		public Builder setLogLevel(LogLevel logLevel) {
 			this.logLevel = logLevel;
 			return this;
 		}
 
-		public Builder setState(List<String> state) {
+		public Builder setState(DeviceState state) {
 			this.state = state;
 			return this;
 		}
 
-		public Builder setMetadata(List<String> metadata) {
+		public Builder setMetadata(Map<String, String> metadata) {
 			this.metadata = metadata;
 			return this;
 		}
-		
-		public Builder setGatewayConfig(List<String> gatewayConfig) {
+
+		public Builder setGatewayConfig(GatewayConfig gatewayConfig) {
 			this.gatewayConfig = gatewayConfig;
 			return this;
 		}
-		
+
 		public Builder setBlocked(boolean blocked) {
 			this.blocked = blocked;
 			return this;
 		}
-		
-		public Builder setLastHeartbeatTime(Timestamp lastHeartbeatTime) {
+
+		public Builder setLastHeartbeatTime(String lastHeartbeatTime) {
 			this.lastHeartbeatTime = lastHeartbeatTime;
 			return this;
 		}
 
-		public Builder setLastEventTime(Timestamp lastEventTime) {
+		public Builder setLastEventTime(String lastEventTime) {
 			this.lastEventTime = lastEventTime;
 			return this;
 		}
 
-		public Builder setLastStateTime(Timestamp lastStateTime) {
+		public Builder setLastStateTime(String lastStateTime) {
 			this.lastStateTime = lastStateTime;
 			return this;
 		}
 
-		public Builder setLastConfigAckTime(Timestamp lastConfigAckTime) {
+		public Builder setLastConfigAckTime(String lastConfigAckTime) {
 			this.lastConfigAckTime = lastConfigAckTime;
 			return this;
 		}
 
-		public Builder setLastConfigSendTime(Timestamp lastConfigSendTime) {
+		public Builder setLastConfigSendTime(String lastConfigSendTime) {
 			this.lastConfigSendTime = lastConfigSendTime;
 			return this;
 		}
 
-		public Builder setLastErrorTime(Timestamp lastErrorTime) {
+		public Builder setLastErrorTime(String lastErrorTime) {
 			this.lastErrorTime = lastErrorTime;
 			return this;
 		}
 
+		
+		
 		private Builder(Device device) {
 			this.id = device.id;
 			this.name = device.name;
@@ -281,7 +322,7 @@ public class Device {
 			this.lastConfigAckTime = device.lastConfigAckTime;
 			this.lastConfigSendTime = device.lastConfigSendTime;
 			this.blocked = device.blocked;
-		    this.lastErrorTime = device.lastErrorTime;
+			this.lastErrorTime = device.lastErrorTime;
 			this.lastErrorStatus = device.lastErrorStatus;
 			this.config = device.config;
 			this.state = device.state;
@@ -294,17 +335,205 @@ public class Device {
 			return new Device(this);
 		}
 	}
+
 	@Override
 	public String toString() {
-		String deviceStr ="";
-		deviceStr = deviceStr.concat("id="+this.id+",name="+this.name+",numId="+this.numId+",credentials="+this.credentials
-									 +",lastHeartbeatTime="+this.lastHeartbeatTime+",lastEventTime="+this.lastEventTime
-									 +",lastStateTime="+this.lastStateTime+",lastConfigAckTime="+this.lastConfigAckTime
-									 +",lastConfigSendTime="+this.lastConfigSendTime+",blocked="+this.blocked
-									 +",lastErrorTime="+this.lastErrorTime
-									 + ",lastErrorStatus="+this.lastErrorStatus+",config="+this.config
-									 +",state="+this.state+",logLevel="+this.logLevel+",metadata="+this.metadata
-									 +",gatewayConfig="+this.gatewayConfig);
+		String deviceStr = "";
+		deviceStr = deviceStr.concat("id=" + this.id + ",name=" + this.name + ",numId=" + this.numId + ",credentials="
+				+ this.credentials + ",lastHeartbeatTime=" + this.lastHeartbeatTime + ",lastEventTime="
+				+ this.lastEventTime + ",lastStateTime=" + this.lastStateTime + ",lastConfigAckTime="
+				+ this.lastConfigAckTime + ",lastConfigSendTime=" + this.lastConfigSendTime + ",blocked=" + this.blocked
+				+ ",lastErrorTime=" + this.lastErrorTime + ",lastErrorStatus=" + this.lastErrorStatus + ",config="
+				+ this.config + ",state=" + this.state + ",logLevel=" + this.logLevel + ",metadata=" + this.metadata
+				+ ",gatewayConfig=" + this.gatewayConfig);
 		return deviceStr;
 	}
+
+
+	@SuppressWarnings("unchecked")
+	public String createDeviceJSONObject() {
+		String bodyStr = "";
+		JSONObject deviceObj = new JSONObject();
+		deviceObj.put("id", this.id);
+		deviceObj.put("name", this.name);
+		deviceObj.put("numId", this.numId);
+ 		List<DeviceCredential> credentialList = new ArrayList<>();
+ 		if(this.credentials.size() > 0) {
+ 	 		DeviceCredential credentialObj = this.credentials.get(0);
+ 	 		credentialList.add(credentialObj);
+ 		}
+		deviceObj.put("credentials",credentialList);
+		deviceObj.put("gatewayConfig", this.gatewayConfig.toString());
+		deviceObj.put("logLevel", this.logLevel.name());
+		deviceObj.put("lastHeartbeatTime",this.lastHeartbeatTime);		
+		deviceObj.put("lastEventTime",this.lastEventTime);
+		deviceObj.put("lastStateTime",this.lastStateTime);
+		deviceObj.put("lastConfigAckTime",this.lastConfigAckTime);
+		deviceObj.put("lastConfigSendTime",this.lastConfigSendTime);
+		deviceObj.put("blocked",false);
+		deviceObj.put("lastErrorTime", this.lastErrorTime);
+		String metaStr = "";
+		if(this.metadata != null) {
+			Set metaSet = this.metadata.keySet();
+			Iterator itr = metaSet.iterator();
+			int setSize = metaSet.size();
+			int i = 0;
+			while(itr.hasNext()) {
+				String key = (String) itr.next();
+				String value = this.metadata.get(key).toString();
+				if(i >= 0 && i < setSize) {
+					metaStr += "{\""+key+"\":"+"\""+value+"\",";
+				}else if(i == setSize){
+					metaStr += "{\""+key+"\":"+"\""+value+"\"}";
+				}else {
+					metaStr += "{\""+key+"\":"+"\""+value+"\"";
+				}
+				i++;
+			}
+		}
+		deviceObj.put("metadata", metaStr);
+		String errorStatusStr = "";
+		if(this.lastErrorStatus != null) {
+			errorStatusStr+= this.lastErrorStatus.toString();
+		}
+		deviceObj.put("lastErrorStatus", errorStatusStr);
+		String configStr = "";
+		if(this.config != null) {
+			configStr += this.config.toString();
+		}
+		deviceObj.put("config", configStr);
+		String stateStr = "";
+		if(this.state != null) {
+			stateStr += this.state.toString();
+		}
+		deviceObj.put("state", stateStr);
+		bodyStr = deviceObj.toString();
+		return bodyStr;
+	}
+
+	public void loadFromString(String inputStr) {
+		try {
+			JSONParser parser = new JSONParser();
+			JSONObject deviceObj = (JSONObject) parser.parse(inputStr);
+
+			if (deviceObj != null && deviceObj.size() > 0) {
+
+				Set deviceSet = deviceObj.keySet();
+				Iterator itr = deviceSet.iterator();
+				while (itr.hasNext()) {
+					String key = (String) itr.next();
+					Object value = deviceObj.get(key);
+
+					if (key.equals("id")) {
+						this.id = value.toString();
+					}
+					if (key.equals("name")) {
+						this.name = value.toString();
+					}
+					if (key.equals("numId")) {
+						this.numId = value.toString();
+					}
+					if (key.equals("lastHeartbeatTime")) {
+						this.lastHeartbeatTime = value.toString();
+					}
+					if (key.equals("lastEventTime")) {
+						this.lastEventTime = value.toString();
+					}
+					if (key.equals("lastStateTime")) {
+						this.lastStateTime = value.toString();
+					}
+					if (key.equals("lastConfigAckTime")) {
+						this.lastConfigAckTime = value.toString();
+					}
+					if (key.equals("lastConfigSendTime")) {
+						this.lastConfigSendTime = value.toString();
+					}
+					if (key.equals("blocked")) {
+						this.blocked = Boolean.valueOf(value.toString());
+					}
+					if (key.equals("lastErrorTime")) {
+						this.lastErrorTime = value.toString();
+					}
+					if (key.equals("lastErrorStatus")) {
+						JSONObject errorStatus = (JSONObject) value;
+						Status status = new Status();
+						if (errorStatus.containsKey("code"))
+							status.setCode(errorStatus.get("code"));
+						if (errorStatus.containsKey("message"))
+							status.setMessage((String) errorStatus.get("message"));
+						this.lastErrorStatus = status;
+					}
+
+					if (key.equals("config")) {
+						JSONObject configJsonObject = (JSONObject) value;
+						DeviceConfig deviceCfg = new DeviceConfig();
+						if (configJsonObject.containsKey("version"))
+							deviceCfg.setVersion((String) configJsonObject.get("version"));
+						if (configJsonObject.containsKey("cloudUpdateTime"))
+							deviceCfg.setCloudUpdateTime((String) configJsonObject.get("cloudUpdateTime"));
+						if (configJsonObject.containsKey("deviceAckTime"))
+							deviceCfg.setDeviceAckTime((String) configJsonObject.get("deviceAckTime"));
+						if (configJsonObject.containsKey("binaryData"))
+							deviceCfg.setBinaryData((String) configJsonObject.get("binaryData"));
+						this.config = deviceCfg;
+					}
+
+					if (key.equals("state")) {
+						JSONObject stateJsonObject = (JSONObject) value;
+						DeviceState deviceState = new DeviceState();
+						if (stateJsonObject.containsKey("binaryData"))
+							deviceState.setBinaryData((String) stateJsonObject.get("binaryData"));
+						if (stateJsonObject.containsKey("updateTime"))
+							deviceState.setUpdateTime((String) stateJsonObject.get("updateTime"));
+						this.state = deviceState;
+					}
+
+					if (key.equals("logLevel")) {
+						if (value != null) {
+							this.logLevel = LogLevel.valueOf(value.toString());
+						}
+					}
+
+					if (key.equals("metadata")) {
+						JSONObject metadataJsonObject = (JSONObject) value;
+
+						Map<String, String> metadataMap = new HashMap<>();
+						Set metadataSet = metadataJsonObject.keySet();
+						if (metadataSet.size() > 0) {
+							Iterator metadIterator = metadataSet.iterator();
+							while (metadIterator.hasNext()) {
+								String metadataKey = (String) metadIterator.next();
+								String metatdataValue = (String) metadataJsonObject.get(metadataKey);
+								metadataMap.put(metadataKey, metatdataValue);
+							}
+						}
+
+						this.metadata = metadataMap;
+					}
+					if (key.equals("gatewayConfig")) {
+						JSONObject gatewayConfigJsonObject = (JSONObject) value;
+						GatewayConfig gatewayConfig = new GatewayConfig();
+						if (gatewayConfigJsonObject.containsKey("gatewayType"))
+							gatewayConfig.setGatewayType(
+									GatewayType.valueOf((String) gatewayConfigJsonObject.get("gatewayType")));
+						if (gatewayConfigJsonObject.containsKey("gatewayAuthMethod"))
+							gatewayConfig.setGatewayAuthMethod(GatewayAuthMethod
+									.valueOf((String) gatewayConfigJsonObject.get("gatewayAuthMethod")));
+						if (gatewayConfigJsonObject.containsKey("lastAccessedGatewayId"))
+							gatewayConfig.setLastAccessedGatewayId(
+									(String) gatewayConfigJsonObject.get("lastAccessedGatewayId"));
+						if (gatewayConfigJsonObject.containsKey("lastAccessedGatewayTime"))
+							gatewayConfig.setLastAccessedGatewayTime(
+									(String) gatewayConfigJsonObject.get("lastAccessedGatewayTime"));
+
+						this.gatewayConfig = gatewayConfig;
+					}
+				}
+			}	
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

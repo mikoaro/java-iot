@@ -1,17 +1,28 @@
 package com.clearblade.cloud.iot.v1.deletedevice;
 
+import com.clearblade.cloud.iot.v1.utils.DeviceName;
+
 public class DeleteDeviceRequest {
-	private final String deviceName;
+	private DeviceName name;
 
 	private DeleteDeviceRequest(Builder builder) {
-		this.deviceName = builder.deviceName;
+		this.name = builder.name;
+	}
+
+	
+	public DeviceName getName() {
+		return name;
+	}
+
+	public void setName(DeviceName name) {
+		this.name = name;
 	}
 
 	// Static class Builder
 	public static class Builder {
 
 		/// instance fields
-		private String deviceName;
+		private DeviceName name;
 
 		public static Builder newBuilder() {
 			return new Builder();
@@ -20,22 +31,24 @@ public class DeleteDeviceRequest {
 		private Builder() {
 		}
 
-		// Setter methods
-		public Builder setDeviceName(String deviceName) {
-			this.deviceName = deviceName;
-			return this;
-		}
-
 		// build method to deal with outer class
 		// to return outer instance
 		public DeleteDeviceRequest build() {
 			return new DeleteDeviceRequest(this);
 		}
+
+		// Setter methods
+		public Builder setName(DeviceName name) {
+			this.name = name;
+			return this;
+		}
 	}
 
 	@Override
 	public String toString() {
-		return this.deviceName;
+		String params = "";
+		params = "name="+this.name.toString();
+		return params;
 	}
 
 }

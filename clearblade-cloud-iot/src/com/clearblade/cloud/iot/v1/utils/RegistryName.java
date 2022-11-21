@@ -100,4 +100,8 @@ public class RegistryName {
 	public String toString() {
 		return "projects/"+this.getProject()+"/locations/"+this.getLocation();
 	}
+	
+	public String getRegistryFullName() {
+		return "projects/"+this.getProject()+"/locations/"+this.getLocation()+"/registries/"+this.getRegistry();
+	}
 }

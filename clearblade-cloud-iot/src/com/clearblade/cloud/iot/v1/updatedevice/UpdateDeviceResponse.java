@@ -1,24 +1,21 @@
-package com.clearblade.cloud.iot.v1.devicestateslist;
+package com.clearblade.cloud.iot.v1.updatedevice;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.json.simple.JSONObject;
 
 import com.clearblade.cloud.iot.v1.ProcessRequest;
-import com.clearblade.cloud.iot.v1.utils.DeviceState;
+import com.clearblade.cloud.iot.v1.utils.Constants;
 
-public class DeviceStatesListResponse {
-	
-	static Logger log = Logger.getLogger(DeviceStatesListResponse.class.getName());
-	
-	private final DeviceStatesListRequest request;
+public class UpdateDeviceResponse {
+
+	static Logger log = Logger.getLogger(UpdateDeviceResponse.class.getName());
+	private final UpdateDeviceRequest request;
 	private int httpStatusCode;
 	private String httpStatusResponse;
-	private List<DeviceState> deviceStatesList;
-	
-	protected DeviceStatesListResponse(Builder builder) {
+
+	protected UpdateDeviceResponse(Builder builder) {
 		this.request = builder.request;
 	}
 
@@ -37,12 +34,12 @@ public class DeviceStatesListResponse {
 	public void setHttpStatusResponse(String httpStatusResponse) {
 		this.httpStatusResponse = httpStatusResponse;
 	}
-	
+
 	// Static class Builder
 	public static class Builder {
 
 		/// instance fields
-		private DeviceStatesListRequest request;
+		private UpdateDeviceRequest request;
 
 		public static Builder newBuilder() {
 			return new Builder();
@@ -52,60 +49,54 @@ public class DeviceStatesListResponse {
 		}
 
 		// Setter methods
-		public Builder setDeviceStatesListRequest(DeviceStatesListRequest request) {
+		public Builder setUpdateDeviceRequest(UpdateDeviceRequest request) {
 			this.request = request;
 			return this;
 		}
 
 		// build method to deal with outer class
 		// to return outer instance
-		public DeviceStatesListResponse build() {
-			return new DeviceStatesListResponse(this);
+		public UpdateDeviceResponse build() {
+			return new UpdateDeviceResponse(this);
 		}
 	}
+
 	/**
 	 * Mehtod used to process the request Calling processRequestForMethod -
-	 * DevicesList
+	 * DevicePatch
 	 */
-	public void processRequest(DeviceStatesListRequest request) {
+	public void processRequest(UpdateDeviceRequest request) {
 		String msg = "";
-		ProcessRequest processRequest = new ProcessRequest();
 		JSONObject requestParams = new JSONObject();
-		JSONObject bodyParams = new JSONObject();		
+		JSONObject bodyParams = new JSONObject();
+		ProcessRequest processRequest = new ProcessRequest();
 		if(request != null) {
-			log.log(Level.INFO,request.toString());
+			String logMsg = "Device Patch Request :: "+request.toString();
+			log.log(Level.INFO,logMsg);
 			requestParams = (JSONObject) request.requestParams.clone();
-		}
-		String responseMessage = processRequest.processRequestForMethod("deviceStatesList", requestParams, bodyParams);
-		this.setHttpStatusResponse(responseMessage);
+			bodyParams = (JSONObject) request.bodyParams.clone();
+		}		
+		String responseMessage = processRequest.processRequestForMethod(Constants.UPDATE_DEVICE,requestParams,bodyParams);
+		this.setHttpStatusResponse(responseMessage);		
 		if (responseMessage.equals("OK")) {
 			this.setHttpStatusCode(200);
-			msg = "Request processed for DeviceStatesList method";
-			
+			msg = "Request processed for Device patch method";
 			log.log(Level.INFO, msg);
 		} else {
 			this.setHttpStatusCode(0);
-			msg = "Request for DeviceStatesList failed \n" .concat(responseMessage);
+			msg = "Request for Device patch failed \n" .concat(responseMessage);
 			log.log(Level.SEVERE, msg);
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Http Status Code :: " + this.getHttpStatusCode() + " Http Status Response :: "
 				+ this.getHttpStatusResponse();
 	}
-	
-	public DeviceStatesListRequest getRequest() {
+
+	public UpdateDeviceRequest getRequest() {
 		return request;
-	}
-
-	public List<DeviceState> getDeviceStatesList() {
-		return deviceStatesList;
-	}
-
-	public void setDeviceStatesList(List<DeviceState> deviceStatesList) {
-		this.deviceStatesList = deviceStatesList;
 	}
 
 }

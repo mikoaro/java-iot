@@ -27,8 +27,11 @@ public class Constants {
 	public static final String DEVICE_CONFIG_VERSIONS_LIST = "deviceConfigVersionsList";
 	public static final String BIND_DEVICE_TO_GATEWAY = "bindDeviceToGateway";
 	public static final String UNBIND_DEVICE_FROM_GATEWAY = "unbindDeviceFromGateway";
-	public static final String DEVICE_PATCH = "devicePatch";
+	public static final String UPDATE_DEVICE = "updateDevice";
 	public static final String GET_REGISTRY_CREDENTIALS="getRegistryCredentials";
+	public static final String GET_DEVICE_REGISTRY = "getDeviceRegistry";
+	public static final String UPDATE_DEVICE_REGISTRY = "updateDeviceRegistry";
+	public static final String CREATE_DEVICE_REGISTRY = "createDeviceRegistry";
 	
 	// Constants used for setting up http connection - for common use
 	public static final String HTTPS_URL_PREFIX = "https://";
@@ -44,6 +47,7 @@ public class Constants {
 	//Commonly used String literal
 	public static final String SUBFOLDER = "subfolder";
 	public static final String NAME = "?name=";
+	public static final String PARENT = "?parent=";
 	
 	public static final String UTF8 = "utf-8";
 

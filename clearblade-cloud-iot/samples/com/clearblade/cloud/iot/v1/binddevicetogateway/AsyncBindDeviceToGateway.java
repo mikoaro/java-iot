@@ -1,9 +1,9 @@
 package com.clearblade.cloud.iot.v1.binddevicetogateway;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.clearblade.cloud.iot.v1.DeviceManagerClient;
+import com.clearblade.cloud.iot.v1.DeviceManagerAsyncClient;
+import com.clearblade.cloud.iot.v1.utils.RegistryName;
 
 public class AsyncBindDeviceToGateway {
 	static Logger log = Logger.getLogger(AsyncBindDeviceToGateway.class.getName());
@@ -13,24 +13,12 @@ public class AsyncBindDeviceToGateway {
 	}
 
 	public static void asyncBindDeviceToGateway() {
-		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
-		String parent = "Rashmi_Device_Test";
-		String gateway = "Rashmi_Gateway_Test";
-		String device = "Rashmi_Device_Test";
-				
-		BindDeviceToGatewayRequest request = BindDeviceToGatewayRequest.Builder.newBuilder().setParent(parent).setGateway(gateway).setDevice(device).build();
-		BindDeviceToGatewayResponse response = deviceManagerClient.bindDeviceToGateway(request);
-		
-		if (response != null) {
-			response.processRequest(request);
-			if(response.getHttpStatusResponse().equals("OK")) {
-				log.log(Level.INFO, "AsyncBindDeviceToGateway Method worked successfully :: {0}",response.getHttpStatusResponse());
-			}else {
-				log.log(Level.SEVERE, "AsyncBindDeviceToGateway Method execution failed :: {0}",response.getHttpStatusResponse());
-			}
-		}else {
-			log.log(Level.SEVERE, "AsyncBindDeviceToGateway Method execution failed");
-		}
+		DeviceManagerAsyncClient deviceManagerAsyncClient = new DeviceManagerAsyncClient();
+		BindDeviceToGatewayRequest request = BindDeviceToGatewayRequest.Builder.newBuilder()
+				.setParent(RegistryName.of("ingressdevelopmentenv", "us-central1", "Rashmi_Registry_Test").toString())
+				.setGateway("Rashmi_Gateway_Test").setDevice("myOldDevice").build();
+		BindDeviceToGatewayResponse response = deviceManagerAsyncClient.bindDeviceToGateway(request);
+		System.out.println(response.toString());
 	
 	}
 }

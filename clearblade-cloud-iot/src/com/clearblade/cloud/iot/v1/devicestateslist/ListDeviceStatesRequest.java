@@ -2,14 +2,13 @@ package com.clearblade.cloud.iot.v1.devicestateslist;
 
 import org.json.simple.JSONObject;
 
-public class DeviceStatesListRequest {
+public class ListDeviceStatesRequest {
 
 	private final String name;
 	private final String numStates;
 	JSONObject requestParams;
 
-	
-	private DeviceStatesListRequest(Builder builder) {
+	private ListDeviceStatesRequest(Builder builder) {
 		this.name = builder.name;
 		this.numStates = builder.numStates;
 	}
@@ -20,7 +19,7 @@ public class DeviceStatesListRequest {
 		/// instance fields
 		private String name;
 		private String numStates;
-		
+
 		public static Builder newBuilder() {
 			return new Builder();
 		}
@@ -41,20 +40,20 @@ public class DeviceStatesListRequest {
 
 		// build method to deal with outer class
 		// to return outer instance
-		public DeviceStatesListRequest build() {
-			return new DeviceStatesListRequest(this);
+		public ListDeviceStatesRequest build() {
+			return new ListDeviceStatesRequest(this);
 		}
-		
+
 	}
 
 	public JSONObject getRequestParams() {
 		return requestParams;
 	}
-	
+
 	public void setRequestParams(JSONObject requestParams) {
 		this.requestParams = requestParams;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public String toString() {
@@ -62,6 +61,14 @@ public class DeviceStatesListRequest {
 		requestParams.put("name", this.name);
 		requestParams.put("numStates", this.numStates);
 		this.setRequestParams(requestParams);
-		return "name="+this.name+",numStates="+this.numStates;
+		return "name=" + this.name + ",numStates=" + this.numStates;
+	}
+
+	public String getParamsForList() {
+		String params = "";
+		params = "name=" + this.name;
+		params += "&numStates=" + this.numStates;
+
+		return params;
 	}
 }

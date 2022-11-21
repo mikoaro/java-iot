@@ -37,7 +37,7 @@ public class UnbindDeviceFromGatewayRequest {
 			this.parent = parent;
 			return this;
 		}
-		
+
 		public Builder setGateway(String gateway) {
 			this.gateway = gateway;
 			return this;
@@ -47,7 +47,7 @@ public class UnbindDeviceFromGatewayRequest {
 			this.device = device;
 			return this;
 		}
-		
+
 		// build method to deal with outer class
 		// to return outer instance
 		public UnbindDeviceFromGatewayRequest build() {
@@ -62,7 +62,7 @@ public class UnbindDeviceFromGatewayRequest {
 	public void setRequestParams(JSONObject requestParams) {
 		this.requestParams = requestParams;
 	}
-	
+
 	public JSONObject getBodyParams() {
 		return bodyParams;
 	}
@@ -70,6 +70,7 @@ public class UnbindDeviceFromGatewayRequest {
 	public void setBodyParams(JSONObject bodyParams) {
 		this.bodyParams = bodyParams;
 	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public String toString() {
@@ -78,14 +79,27 @@ public class UnbindDeviceFromGatewayRequest {
 		String method = Constants.UNBIND_DEVICE_FROM_GATEWAY;
 		requestParams.put("method", method);
 		requestParams.put("parent", this.parent);
-		
+
 		bodyParams.put("gatewayId", this.gateway);
 		bodyParams.put("deviceId", this.device);
-		
+
 		this.setRequestParams(requestParams);
 		this.setBodyParams(bodyParams);
-		
-		return "parent=" + this.parent + ",gateway=" + this.gateway+", device= "+this.device;
+
+		return "parent=" + this.parent + ",gateway=" + this.gateway + ", device= " + this.device;
+	}
+
+	@SuppressWarnings("unchecked")
+	public String[] getBodyAndParams() {
+		String[] output = new String[2];
+		String params = "parent=" + this.parent + "&method=" + Constants.UNBIND_DEVICE_FROM_GATEWAY;
+		bodyParams = new JSONObject();
+		bodyParams.put("gatewayId", this.gateway);
+		bodyParams.put("deviceId", this.device);
+
+		output[0] = params;
+		output[1] = bodyParams.toJSONString();
+		return output;
 	}
 
 }

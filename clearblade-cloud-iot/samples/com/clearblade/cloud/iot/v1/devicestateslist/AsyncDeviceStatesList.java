@@ -3,7 +3,10 @@ package com.clearblade.cloud.iot.v1.devicestateslist;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.clearblade.cloud.iot.v1.DeviceManagerAsyncClient;
 import com.clearblade.cloud.iot.v1.DeviceManagerClient;
+import com.clearblade.cloud.iot.v1.utils.DeviceName;
+import com.clearblade.cloud.iot.v1.utils.DeviceState;
 
 public class AsyncDeviceStatesList {
 
@@ -14,20 +17,15 @@ public class AsyncDeviceStatesList {
 	}
 
 	public static void asyncDeviceStatesList() {
-		String name = "Rashmi_Device_Test";
-		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
+		DeviceManagerAsyncClient deviceManagerClient = new DeviceManagerAsyncClient();
 
-		DeviceStatesListRequest request = DeviceStatesListRequest.Builder.newBuilder().setName(name).setNumStates(1643330779).build();
-		DeviceStatesListResponse response = deviceManagerClient.deviceStatesList(request);
-		if (response != null) {
-			response.processRequest(request);
-			if (response.getHttpStatusResponse().equals("OK")) {
-				log.log(Level.INFO, "AsyncDeviceStatesList Method worked successfully :: {0}",response.getHttpStatusResponse());
-			} else {
-				log.log(Level.SEVERE, "AsyncDeviceStatesList Method execution failed :: {0} ",response.getHttpStatusResponse());
-			}
-		} else {
-			log.log(Level.SEVERE, "AsyncDeviceStatesList Method execution failed");
+		ListDeviceStatesRequest request = ListDeviceStatesRequest.Builder.newBuilder().setName(DeviceName
+				.of("ingressdevelopmentenv", "us-central1", "Rashmi_Registry_Test", "Rashmi_Device_Test")
+				.toString()).setNumStates(1643330779).build();
+		ListDeviceStatesResponse response = deviceManagerClient.listDeviceStates(request);
+
+		for (DeviceState element : response.getDeviceStatesList()) {
+			System.out.println(element.toString());
 		}
 	}
 

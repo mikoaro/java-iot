@@ -1,10 +1,10 @@
 package com.clearblade.cloud.iot.v1.sendcommandtodevice;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.clearblade.cloud.iot.v1.DeviceManagerClient;
+import com.clearblade.cloud.iot.v1.DeviceManagerAsyncClient;
 import com.clearblade.cloud.iot.v1.utils.ByteString;
+import com.clearblade.cloud.iot.v1.utils.DeviceName;
 
 public class AsyncSendCommandToDevice {
 
@@ -15,23 +15,14 @@ public class AsyncSendCommandToDevice {
 	}
 
 	public static void asyncSendCommandToDevice() {
-		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
-		String name = "AsyncDeviceTest1";
-		
-		SendCommandToDeviceRequest request = SendCommandToDeviceRequest.Builder.newBuilder().setDeviceName(name)
-				.setBinaryDataByte(ByteString.EMPTY).setSubfolder("subfolder1").build();
-		
-		SendCommandToDeviceResponse response = deviceManagerClient.sendCommandToDeviceAsync(request);		
-		if (response != null) {
-			response.processRequestAsync(request);
-			if (response.getHttpStatusResponse().equals("OK")) {
-				log.log(Level.INFO, "AsyncSendCommandToDevice Method worked successfully :: {0}",response.getHttpStatusResponse());
-			} else {
-				log.log(Level.SEVERE, "AsyncSendCommandToDevice Method execution failed :: {0}",response.getHttpStatusResponse());
-			}
-		} else {
-			log.log(Level.SEVERE, "AsyncSendCommandToDevice Method execution failed");
-		}
+		DeviceManagerAsyncClient deviceManagerAsyncClient = new DeviceManagerAsyncClient();
+		SendCommandToDeviceRequest request = SendCommandToDeviceRequest.Builder.newBuilder()
+				.setName(DeviceName
+						.of("ingressdevelopmentenv", "us-central1", "MandarTest1", "mandar_device")
+						.toString())
+				.setBinaryData(new ByteString("c2VuZEZ1bm55TWVzc2FnZVRvRGV2aWNl")).setSubfolder("testdata").build();
+		SendCommandToDeviceResponse response = deviceManagerAsyncClient.sendCommandToDevice(request);
+		System.out.println(response.toString());
 
 	}
 }

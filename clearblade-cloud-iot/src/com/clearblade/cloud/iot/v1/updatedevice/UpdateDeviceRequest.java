@@ -1,20 +1,35 @@
-package com.clearblade.cloud.iot.v1.devicepatch;
+package com.clearblade.cloud.iot.v1.updatedevice;
 
 import org.json.simple.JSONObject;
 
 import com.clearblade.cloud.iot.v1.utils.Device;
 
-public class DevicePatchRequest {
+public class UpdateDeviceRequest {
 	private final String name;
 	private final Device device;
 	private final String updateMask;
 	JSONObject requestParams;
 	JSONObject bodyParams;
 
-	private DevicePatchRequest(Builder builder) {
+	private UpdateDeviceRequest(Builder builder) {
 		this.name = builder.name;
 		this.updateMask = builder.updateMask;
 		this.device = builder.device;
+	}
+	public JSONObject getRequestParams() {
+		return requestParams;
+	}
+
+	public void setRequestParams(JSONObject requestParams) {
+		this.requestParams = requestParams;
+	}
+
+	public JSONObject getBodyParams() {
+		return bodyParams;
+	}
+
+	public void setBodyParams(JSONObject bodyParams) {
+		this.bodyParams = bodyParams;
 	}
 
 	// Static class Builder
@@ -50,31 +65,14 @@ public class DevicePatchRequest {
 		
 		// build method to deal with outer class
 		// to return outer instance
-		public DevicePatchRequest build() {
-			return new DevicePatchRequest(this);
+		public UpdateDeviceRequest build() {
+			return new UpdateDeviceRequest(this);
 		}
 	}
 
-	public JSONObject getRequestParams() {
-		return requestParams;
-	}
-
-	public void setRequestParams(JSONObject requestParams) {
-		this.requestParams = requestParams;
-	}
-	
-	public JSONObject getBodyParams() {
-		return bodyParams;
-	}
-
-	public void setBodyParams(JSONObject bodyParams) {
-		this.bodyParams = bodyParams;
-	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public String toString() {
-		requestParams = new JSONObject();
-		bodyParams = new JSONObject();
 		requestParams.put("name", this.name);
 		requestParams.put("updateMask", this.updateMask);
 		
@@ -83,10 +81,24 @@ public class DevicePatchRequest {
 		bodyParams.put("logLevel", this.device.toBuilder().getLogLevel());
 		bodyParams.put("blocked", this.device.toBuilder().isBlocked());
 		
-		this.setRequestParams(requestParams);
-		this.setBodyParams(bodyParams);
-		
 		return "name=" + this.name + ",updateMask=" + this.updateMask+", logLevel= "+this.device.toBuilder().getLogLevel();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public String[] getBodyAndParams() {
+		String[] output = new String[2];
+		
+		String params = "name="+this.name+"&updateMask="+this.updateMask;
+		bodyParams = new JSONObject();
+
+		bodyParams.put("id", this.device.toBuilder().getId());
+		bodyParams.put("name", this.device.toBuilder().getName());
+		bodyParams.put("logLevel", this.device.toBuilder().getLogLevel().toString());
+		bodyParams.put("blocked", this.device.toBuilder().isBlocked());
+		
+		output[0] = params;
+		output[1] = bodyParams.toString();
+		return output;
 	}
 
 }

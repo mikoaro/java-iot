@@ -114,4 +114,10 @@ public class DeviceName {
 			return new DeviceName(this);
 		}
 	}
+	@Override
+	public String toString() {
+		
+		return this.device;
+		
+	}
 }
