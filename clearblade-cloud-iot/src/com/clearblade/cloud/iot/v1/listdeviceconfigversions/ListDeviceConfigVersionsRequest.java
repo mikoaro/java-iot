@@ -1,13 +1,13 @@
-package com.clearblade.cloud.iot.v1.deviceconfigversionslist;
+package com.clearblade.cloud.iot.v1.listdeviceconfigversions;
 
 import org.json.simple.JSONObject;
 
-public class DeviceConfigVersionsListRequest {
+public class ListDeviceConfigVersionsRequest {
 	private final String name;
 	private final String numVersions;
 	JSONObject requestParams;
 
-	private DeviceConfigVersionsListRequest(Builder builder) {
+	private ListDeviceConfigVersionsRequest(Builder builder) {
 		this.name = builder.name;
 		this.numVersions = builder.numVersions;
 	}
@@ -32,15 +32,15 @@ public class DeviceConfigVersionsListRequest {
 			return this;
 		}
 
-		public Builder setNumVersions(String numVersions) {
-			this.numVersions = numVersions;
+		public Builder setNumVersions(int numVersions) {
+			this.numVersions = String.valueOf(numVersions);
 			return this;
 		}
 
 		// build method to deal with outer class
 		// to return outer instance
-		public DeviceConfigVersionsListRequest build() {
-			return new DeviceConfigVersionsListRequest(this);
+		public ListDeviceConfigVersionsRequest build() {
+			return new ListDeviceConfigVersionsRequest(this);
 		}
 
 	}
@@ -63,4 +63,11 @@ public class DeviceConfigVersionsListRequest {
 		return "name=" + this.name + ",numVersions=" + this.numVersions;
 	}
 
+	public String getParamsForList() {
+		String params = "";
+		params = "name=" + this.name;
+		params += "&numVersions=" + this.numVersions;
+
+		return params;
+	}
 }

@@ -9,6 +9,8 @@ import com.clearblade.cloud.iot.v1.deviceslist.DevicesListResponse;
 import com.clearblade.cloud.iot.v1.devicestateslist.ListDeviceStatesRequest;
 import com.clearblade.cloud.iot.v1.devicestateslist.ListDeviceStatesResponse;
 import com.clearblade.cloud.iot.v1.getdevice.GetDeviceRequest;
+import com.clearblade.cloud.iot.v1.listdeviceconfigversions.ListDeviceConfigVersionsRequest;
+import com.clearblade.cloud.iot.v1.listdeviceconfigversions.ListDeviceConfigVersionsResponse;
 import com.clearblade.cloud.iot.v1.modifycloudtodeviceconfig.ModifyCloudToDeviceConfigRequest;
 import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceRequest;
 import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceResponse;
@@ -314,5 +316,38 @@ public class ClearBladeDeviceManager {
 		}
 		return null;
 	}
+
+	public ListDeviceConfigVersionsResponse listDeviceConfigVersions(ListDeviceConfigVersionsRequest request) {
+		SyncClient syncClient = new SyncClient();
+		String[] responseArray = syncClient.get(configParameters.getCloudiotConfigURLExtension(),
+				request.getParamsForList());
+		int responseCode = Integer.parseInt(responseArray[0]);
+		if (responseCode == 200) {
+			ListDeviceConfigVersionsResponse listDeviceConfigVersionsResponse = ListDeviceConfigVersionsResponse.Builder.newBuilder()
+					.buildResponse(responseArray[2]).build();
+			// deviceObj.loadFromString(responseArray[2]);
+			return listDeviceConfigVersionsResponse;
+		}
+		return null;
+	}
+
+	public ListDeviceConfigVersionsResponse asyncListDeviceConfigVersions(ListDeviceConfigVersionsRequest request) {
+		try {
+			AsyncClient asyncClient = new AsyncClient();
+			String[] responseArray = asyncClient.asyncListDeviceConfigVersions(configParameters.getCloudiotConfigURLExtension(),
+					request.getParamsForList());
+			int responseCode = Integer.parseInt(responseArray[0]);
+			if (responseCode == 200) {
+				ListDeviceConfigVersionsResponse listDeviceConfigVersionsResponse = ListDeviceConfigVersionsResponse.Builder.newBuilder()
+						.buildResponse(responseArray[2]).build();
+				// deviceObj.loadFromString(responseArray[2]);
+				return listDeviceConfigVersionsResponse;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 
 }

@@ -414,7 +414,25 @@ public class AsyncClient {
 		return responseArray;
 	}
 
-//Registry Apis
+	private Future<Object> listDeviceConfigVersionsAsync() {
+		return CompletableFuture.supplyAsync(this::get);
+	}
+
+	public String[] asyncListDeviceConfigVersions(String apiName, String params)
+			throws InterruptedException {
+		this.apiName = apiName;
+		this.params = params;
+		Future<Object> future = listDeviceConfigVersionsAsync();
+		try {
+			future.get(15000, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			e.printStackTrace();
+			Thread.currentThread().interrupt();
+		}
+		return responseArray;
+	}
+
+	//Registry Apis
 	/**
 	 * Method used to generate URL for apicall
 	 * @param apiName - path to api

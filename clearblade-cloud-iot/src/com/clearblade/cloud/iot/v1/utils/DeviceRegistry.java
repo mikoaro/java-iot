@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 //https://cloud.google.com/iot/docs/reference/cloudiot/rest/v1/projects.locations.registries#DeviceRegistry
@@ -203,17 +204,16 @@ public class DeviceRegistry {
 						this.credentials = credentialList;
 					}
 					if(key.equals("eventNotificationConfigs")) {
-						JSONArray eventJsonArray = value;
-						
+						JSONArray eventJsonArray = (JSONArray) value;
 						List<EventNotificationConfig> eventNotificationCfgs = new ArrayList<>();
-						//list implementation pending
-						EventNotificationConfig eventNotificationCfg = new EventNotificationConfig();
-						if (eventJsonObject.containsKey("subfolderMatches"))
-							eventNotificationCfg.setPubsubTopicName((String) eventJsonObject.get("subfolderMatches"));
-						if (eventJsonObject.containsKey("pubsubTopicName"))
-							eventNotificationCfg.setPubsubTopicName((String) eventJsonObject.get("pubsubTopicName"));
-						eventNotificationCfgs.add(eventNotificationCfg);
-						
+						Iterator eventIterator = eventJsonArray.iterator();
+						while (eventIterator.hasNext()) {
+							JSONObject eventJson = (JSONObject) eventIterator.next();
+							EventNotificationConfig eventObj = EventNotificationConfig.newBuilder().setSubfolderMatches((String)eventJson.get("subfolderMatches"))
+									.setPubsubTopicName((String)eventJson.get("pubsubTopicName"))
+									.build();
+							eventNotificationCfgs.add(eventObj);
+						}
 						this.eventNotificationConfigs = eventNotificationCfgs;						
 					}
 					if(key.equals("stateNotificationConfig")) {

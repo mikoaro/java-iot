@@ -12,6 +12,8 @@ import com.clearblade.cloud.iot.v1.devicestateslist.ListDeviceStatesRequest;
 import com.clearblade.cloud.iot.v1.devicestateslist.ListDeviceStatesResponse;
 import com.clearblade.cloud.iot.v1.getdevice.GetDeviceRequest;
 import com.clearblade.cloud.iot.v1.getdeviceregistry.GetDeviceRegistryRequest;
+import com.clearblade.cloud.iot.v1.listdeviceconfigversions.ListDeviceConfigVersionsRequest;
+import com.clearblade.cloud.iot.v1.listdeviceconfigversions.ListDeviceConfigVersionsResponse;
 import com.clearblade.cloud.iot.v1.modifycloudtodeviceconfig.ModifyCloudToDeviceConfigRequest;
 import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceRequest;
 import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceResponse;
@@ -110,6 +112,11 @@ public class DeviceManagerAsyncClient {
 	public ListDeviceStatesResponse listDeviceStates(ListDeviceStatesRequest request) {
 		ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
 		return cbManager.asyncListDeviceStates(request);
+	}
+
+	public ListDeviceConfigVersionsResponse listDeviceConfigVersions(ListDeviceConfigVersionsRequest request) {
+		ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
+		return cbManager.asyncListDeviceConfigVersions(request);
 	}
 	
 	//Registry Apis

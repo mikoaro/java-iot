@@ -21,6 +21,7 @@ public class ConfigParameters {
 	private String devicesStatesURLExtension;
 	private String cloudiotdevicesURLExtension;
     private String cloudiotDeviceConfigURLExtension;
+    private String cloudiotConfigURLExtension;
 
 	// Fields used to fetch values from Properties file
 	Properties properties;
@@ -67,6 +68,7 @@ public class ConfigParameters {
 		this.setCloudiotdevicesURLExtension(properties.getProperty("cloudiotdevicesURLExtension"));
 		this.setDevicesStatesURLExtension(properties.getProperty("devicesStatesURLExtension"));
 		this.setCloudiotdevicesURLExtension(properties.getProperty("cloudiotDeviceConfigURLExtension"));
+		this.setCloudiotConfigURLExtension(properties.getProperty("cloudiotConfigURLExtension"));
 		this.setProject(properties.getProperty("project"));
 		this.setRegion(properties.getProperty("region"));
 		this.setRegistry(properties.getProperty("registry"));
@@ -161,6 +163,14 @@ public class ConfigParameters {
 
 	public void setBaseURL(String baseURL) {
 		this.baseURL = baseURL;
+	}	
+
+	public String getCloudiotConfigURLExtension() {
+		return cloudiotConfigURLExtension;
+	}
+
+	public void setCloudiotConfigURLExtension(String cloudiotConfigURLExtension) {
+		this.cloudiotConfigURLExtension = cloudiotConfigURLExtension;
 	}	
 
 }

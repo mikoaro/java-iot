@@ -1,6 +1,5 @@
 package com.clearblade.cloud.iot.v1.devicestateslist;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.clearblade.cloud.iot.v1.DeviceManagerClient;
