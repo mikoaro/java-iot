@@ -3,14 +3,12 @@ package com.clearblade.cloud.iot.v1.deviceslist;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import com.clearblade.cloud.iot.v1.ProcessRequest;
 import com.clearblade.cloud.iot.v1.utils.Device;
 
 public class DevicesListResponse {

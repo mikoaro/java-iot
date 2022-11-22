@@ -1,11 +1,7 @@
 package com.clearblade.cloud.iot.v1.sendcommandtodevice;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.json.simple.JSONObject;
-
-import com.clearblade.cloud.iot.v1.ProcessRequest;
 
 public class SendCommandToDeviceResponse {
 
@@ -58,66 +54,6 @@ public class SendCommandToDeviceResponse {
 		public SendCommandToDeviceResponse build() {
 			return new SendCommandToDeviceResponse(this);
 		}
-	}
-	
-	/**
-	 * Mehtod used to process the request
-	 * Calling processRequestForMethod - sendCommandToDevice
-	 */
-	
-	public void processRequest(SendCommandToDeviceRequest request) {
-		String msg = "";
-		JSONObject requestParams = new JSONObject();
-		JSONObject bodyParams = new JSONObject();
-		ProcessRequest processRequest = new ProcessRequest();
-		
-		if(request != null) {
-			String logMsg = "Sending request to device :: "+request.toString();
-			log.log(Level.INFO,logMsg);
-			requestParams = (JSONObject) request.requestParams.clone();
-			bodyParams = (JSONObject) request.bodyParams.clone();
-		}
-		
-		String responseMessage = processRequest.processRequestForMethod("sendCommandToDevice",requestParams,bodyParams);
-		this.setHttpStatusResponse(responseMessage);
-		if (responseMessage.equals("OK")) {
-			msg = "Request processed successfully for SendCommandToDevice method";
-			log.log(Level.INFO, msg);
-		} else {
-			msg = "POST request not worked for sendCommandToDevice Method \n".concat(responseMessage);
-			log.log(Level.SEVERE, msg);
-		}
-
-	}
-
-	/**
-	 * Mehtod used to process the request
-	 * Calling processRequestForMethod - sendCommandToDevice
-	 */
-	
-	public String processRequestAsync(SendCommandToDeviceRequest request) {
-		String msg = "";
-		ProcessRequest processRequest = new ProcessRequest();		
-		if(request != null) {
-			String logMsg = "Sending request to device :: "+request.toString();
-			log.log(Level.INFO,logMsg);
-		}		
-		String responseMessage ="";
-		try {
-			responseMessage = processRequest.asyncCallSendCommandToDevice(request);
-			this.setHttpStatusResponse(responseMessage);
-			if (responseMessage.equals("OK")) {
-				msg = "Request processed successfully for SendCommandToDevice method";
-				log.log(Level.INFO, msg);
-			} else {
-				msg = "POST request not worked for sendCommandToDevice Method \n".concat(responseMessage);
-				log.log(Level.SEVERE, msg);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return responseMessage;
-
 	}
 	
 	@Override

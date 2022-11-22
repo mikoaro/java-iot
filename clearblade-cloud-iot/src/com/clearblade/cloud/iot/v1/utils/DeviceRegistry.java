@@ -52,12 +52,20 @@ public class DeviceRegistry {
 		return new Builder(this);
 	}
 
-	public static DeviceRegistry of(String id, String name, List<EventNotificationConfig> eventNotificationConfigs,StateNotificationConfig stateNotificationConfig,MqttConfig mqttConfig,HttpConfig httpConfig,LogLevel logLevel,List<RegistryCredential> credentials) {
-		return newBuilder().setId(id).setName(name).setEventNotificationConfigs(eventNotificationConfigs).setStateNotificationConfig(stateNotificationConfig).setMqttConfig(mqttConfig).setHttpConfig(httpConfig).setLogLevel(logLevel).setCredentials(credentials).build();
+	public static DeviceRegistry of(String id, String name, List<EventNotificationConfig> eventNotificationConfigs,
+			StateNotificationConfig stateNotificationConfig, MqttConfig mqttConfig, HttpConfig httpConfig,
+			LogLevel logLevel, List<RegistryCredential> credentials) {
+		return newBuilder().setId(id).setName(name).setEventNotificationConfigs(eventNotificationConfigs)
+				.setStateNotificationConfig(stateNotificationConfig).setMqttConfig(mqttConfig).setHttpConfig(httpConfig)
+				.setLogLevel(logLevel).setCredentials(credentials).build();
 	}
 
-	public static String format(String id, String name, List<EventNotificationConfig> eventNotificationConfigs,StateNotificationConfig stateNotificationConfig,MqttConfig mqttConfig,HttpConfig httpConfig,LogLevel logLevel,List<RegistryCredential> credentials) {
-		return newBuilder().setId(id).setName(name).setEventNotificationConfigs(eventNotificationConfigs).setStateNotificationConfig(stateNotificationConfig).setMqttConfig(mqttConfig).setHttpConfig(httpConfig).setLogLevel(logLevel).setCredentials(credentials).build()
+	public static String format(String id, String name, List<EventNotificationConfig> eventNotificationConfigs,
+			StateNotificationConfig stateNotificationConfig, MqttConfig mqttConfig, HttpConfig httpConfig,
+			LogLevel logLevel, List<RegistryCredential> credentials) {
+		return newBuilder().setId(id).setName(name).setEventNotificationConfigs(eventNotificationConfigs)
+				.setStateNotificationConfig(stateNotificationConfig).setMqttConfig(mqttConfig).setHttpConfig(httpConfig)
+				.setLogLevel(logLevel).setCredentials(credentials).build()
 				.toString();
 	}
 
@@ -179,6 +187,62 @@ public class DeviceRegistry {
 				 +",credentials="+this.credentials);
 	}
 
+	@SuppressWarnings("unchecked")
+	public String createDeviceJSONObject(String parentLocation) {
+		JSONObject output = new JSONObject();
+
+		if (id != null)
+			output.put("id", id);
+		if (name != null) {
+			if (!name.startsWith("projects"))
+				name = parentLocation + "/registries/" + name;
+			output.put("name", name);
+		}
+		if (logLevel != null)
+			output.put("logLevel", logLevel.name());
+		if (httpConfig != null) {
+			output.put("httpConfig", this.httpConfig.getJsonObject());
+		} else {
+			JSONObject json = new JSONObject();
+			json.put("httpEnabledState", "HTTP_ENABLED");
+			output.put("httpConfig", json);
+		}
+		if (mqttConfig != null) {
+			output.put("mqttConfig", this.mqttConfig.getJsonObject());
+		} else {
+			JSONObject json = new JSONObject();
+			json.put("mqttEnabledState", "MQTT_ENABLED");
+			output.put("mqttConfig", json);
+		}
+		if (stateNotificationConfig != null) {
+			output.put("stateNotificationConfig", this.stateNotificationConfig.getJsonObject());
+		} else {
+			JSONObject json = new JSONObject();
+			json.put("pubsubTopicName", "");
+			output.put("stateNotificationConfig", json);
+		}
+
+		if (eventNotificationConfigs != null) {
+			JSONArray eventsArray = new JSONArray();
+			for (int i = 0; i < eventNotificationConfigs.size(); i++) {
+				eventsArray.add(eventNotificationConfigs.get(i).getJsonObject());
+			}
+			output.put("eventNotificationConfigs", eventsArray);
+		}
+
+		if (credentials != null) {
+			JSONArray credentialArray = new JSONArray();
+			for (int i = 0; i < credentials.size(); i++) {
+				credentialArray.add(credentials.get(i).getJsonObject());
+			}
+
+			output.put("credentials", credentialArray);
+		}
+
+		return output.toJSONString();
+	}
+
+	@SuppressWarnings("rawtypes")
 	public void loadFromString(String inputStr) {
 		try {
 			JSONParser parser = new JSONParser();
@@ -197,20 +261,15 @@ public class DeviceRegistry {
 					if (key.equals("name")) {
 						this.name = value.toString();
 					}
-					if (key.equals("credentials")) {
-						List<RegistryCredential> credentialList = new ArrayList<>();
-						RegistryCredential credentialObj = new RegistryCredential();
-						credentialList.add(credentialObj);
-						this.credentials = credentialList;
-					}
-					if(key.equals("eventNotificationConfigs")) {
+					if (key.equals("eventNotificationConfigs")) {
 						JSONArray eventJsonArray = (JSONArray) value;
 						List<EventNotificationConfig> eventNotificationCfgs = new ArrayList<>();
 						Iterator eventIterator = eventJsonArray.iterator();
 						while (eventIterator.hasNext()) {
 							JSONObject eventJson = (JSONObject) eventIterator.next();
-							EventNotificationConfig eventObj = EventNotificationConfig.newBuilder().setSubfolderMatches((String)eventJson.get("subfolderMatches"))
-									.setPubsubTopicName((String)eventJson.get("pubsubTopicName"))
+							EventNotificationConfig eventObj = EventNotificationConfig.newBuilder()
+									.setSubfolderMatches((String) eventJson.get("subfolderMatches"))
+									.setPubsubTopicName((String) eventJson.get("pubsubTopicName"))
 									.build();
 							eventNotificationCfgs.add(eventObj);
 						}
@@ -227,20 +286,37 @@ public class DeviceRegistry {
 						JSONObject mqttJsonObject = (JSONObject) value;
 						MqttConfig mqttCfg = new MqttConfig();
 						if (mqttJsonObject.containsKey("mqttEnabledState"))
-							mqttCfg.setMqttEnabledState(MqttState.valueOf((String) mqttJsonObject.get("mqttEnabledState")));
-						this.mqttConfig = mqttCfg;						
+							mqttCfg.setMqttEnabledState(
+									MqttState.valueOf((String) mqttJsonObject.get("mqttEnabledState")));
+						this.mqttConfig = mqttCfg;
 					}
 					if(key.equals("httpConfig")) {
 						JSONObject httpJsonObject = (JSONObject) value;
 						HttpConfig httpCfg = new HttpConfig();
 						if (httpJsonObject.containsKey("httpEnabledState"))
-							httpCfg.setHttpEnabledState(HttpState.valueOf((String) httpJsonObject.get("httpEnabledState")));
-						this.httpConfig = httpCfg;						
+							httpCfg.setHttpEnabledState(
+									HttpState.valueOf((String) httpJsonObject.get("httpEnabledState")));
+						this.httpConfig = httpCfg;
 					}
 					if (key.equals("logLevel")) {
 						if (value != null) {
 							this.logLevel = LogLevel.valueOf(value.toString());
 						}
+					}
+					if (key.equals("credentials")) {
+						JSONArray credJsonArray = (JSONArray) value;
+						if (credJsonArray != null) {
+							List<RegistryCredential> registryCredentialsArray = new ArrayList<>();
+							Iterator credIterator = credJsonArray.iterator();
+							while (credIterator.hasNext()) {
+								JSONObject credJson = (JSONObject) credIterator.next();
+								RegistryCredential registryCredential = RegistryCredential.newBuilder().build();
+								registryCredential.loadFromJson(credJson);
+								registryCredentialsArray.add(registryCredential);
+							}
+							credentials = registryCredentialsArray;
+						}
+
 					}
 				}
 			}

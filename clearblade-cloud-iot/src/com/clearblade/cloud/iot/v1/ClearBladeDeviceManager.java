@@ -11,6 +11,8 @@ import com.clearblade.cloud.iot.v1.devicestateslist.ListDeviceStatesResponse;
 import com.clearblade.cloud.iot.v1.getdevice.GetDeviceRequest;
 import com.clearblade.cloud.iot.v1.listdeviceconfigversions.ListDeviceConfigVersionsRequest;
 import com.clearblade.cloud.iot.v1.listdeviceconfigversions.ListDeviceConfigVersionsResponse;
+import com.clearblade.cloud.iot.v1.listdeviceregistries.ListDeviceRegistriesRequest;
+import com.clearblade.cloud.iot.v1.listdeviceregistries.ListDeviceRegistriesResponse;
 import com.clearblade.cloud.iot.v1.modifycloudtodeviceconfig.ModifyCloudToDeviceConfigRequest;
 import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceRequest;
 import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceResponse;
@@ -27,7 +29,7 @@ public class ClearBladeDeviceManager {
 
 	public Device getDevice(GetDeviceRequest request) {
 		SyncClient syncClient = new SyncClient();
-		String[] responseArray = syncClient.get(configParameters.getDevicesURLExtension(), request.toString());
+		String[] responseArray = syncClient.get(configParameters.getDevicesURLExtension(), request.toString(),false);
 		int responseCode = Integer.parseInt(responseArray[0]);
 		if(responseCode == 200) {
 			Device device = Device.newBuilder().build();
@@ -59,7 +61,7 @@ public class ClearBladeDeviceManager {
 		String[] params = request.getParams();
 		String reqParams = params[0];
 		String body = params[1];
-		String[] responseArray = syncClient.post(configParameters.getDevicesURLExtension(), reqParams, body);
+		String[] responseArray = syncClient.post(configParameters.getDevicesURLExtension(), reqParams, body, false);
 		int responseCode = Integer.parseInt(responseArray[0]);
 		if (responseCode == 200) {
 			Device deviceObj = Device.newBuilder().build();
@@ -91,7 +93,7 @@ public class ClearBladeDeviceManager {
 	
 	public void deleteDevice(DeleteDeviceRequest request) {
 		SyncClient syncClient = new SyncClient();
-		String[] responseArray = syncClient.delete(configParameters.getDevicesURLExtension(), request.toString());
+		String[] responseArray = syncClient.delete(configParameters.getDevicesURLExtension(), request.toString(),false);
 		System.out.println(
 				"Response for delete is " + responseArray[0] + "::" + responseArray[1] + "::" + responseArray[2]);
 	}
@@ -113,7 +115,7 @@ public class ClearBladeDeviceManager {
 		String[] params = request.getBodyAndParams();
 		String reqParams = params[0];
 		String body = params[1];
-		String[] responseArray = syncClient.patch(configParameters.getDevicesURLExtension(), reqParams, body);
+		String[] responseArray = syncClient.update(configParameters.getDevicesURLExtension(), reqParams, body);
 		int responseCode = Integer.parseInt(responseArray[0]);
 		if (responseCode == 200) {
 			Device deviceObj = Device.newBuilder().build();
@@ -145,7 +147,7 @@ public class ClearBladeDeviceManager {
 		SyncClient syncClient = new SyncClient();
 		String[] paramBody = request.getBodyAndParams();
 		String[] responseArray = syncClient.post(configParameters.getCloudiotURLExtension(), paramBody[0],
-				paramBody[1]);
+				paramBody[1], false);
 		BindDeviceToGatewayResponse response = BindDeviceToGatewayResponse.Builder.newBuilder().build();
 		response.setHttpStatusCode(Integer.parseInt(responseArray[0]));
 		response.setHttpStatusResponse(responseArray[1]);
@@ -172,7 +174,7 @@ public class ClearBladeDeviceManager {
 		SyncClient syncClinet = new SyncClient();
 		String[] paramBody = request.getBodyAndParams();
 		String[] responseArray = syncClinet.post(configParameters.getCloudiotURLExtension(), paramBody[0],
-				paramBody[1]);
+				paramBody[1], false);
 		UnbindDeviceFromGatewayResponse response = UnbindDeviceFromGatewayResponse.Builder.newBuilder().build();
 		response.setHttpStatusCode(Integer.parseInt(responseArray[0]));
 		response.setHttpStatusResponse(responseArray[1]);
@@ -199,7 +201,7 @@ public class ClearBladeDeviceManager {
 		SyncClient syncClient = new SyncClient();
 		String[] paramBody = request.getBodyAndParams();
 		String[] responseArray = syncClient.post(configParameters.getDevicesURLExtension(), paramBody[0],
-				paramBody[1]);
+				paramBody[1], false);
 		System.out.println(responseArray[2]);
 		SendCommandToDeviceResponse response = SendCommandToDeviceResponse.Builder.newBuilder().build();
 		response.setHttpStatusCode(Integer.parseInt(responseArray[0]));
@@ -227,7 +229,7 @@ public class ClearBladeDeviceManager {
 
 	public DevicesListResponse listDevices(DevicesListRequest request) {
 		SyncClient syncClient = new SyncClient();
-		String[] responseArray = syncClient.get(configParameters.getDevicesURLExtension(), request.getParamsForList());
+		String[] responseArray = syncClient.get(configParameters.getDevicesURLExtension(), request.getParamsForList(),false);
 		int responseCode = Integer.parseInt(responseArray[0]);
 		if (responseCode == 200) {
 			DevicesListResponse devicesListResponse = DevicesListResponse.Builder.newBuilder()
@@ -241,7 +243,8 @@ public class ClearBladeDeviceManager {
 	public DevicesListResponse asyncListDevices(DevicesListRequest request) {
 		try {
 			AsyncClient asyncClient = new AsyncClient();
-			String[] responseArray = asyncClient.asyncListDevices(configParameters.getDevicesURLExtension(), request.getParamsForList());
+			String[] responseArray = asyncClient.asyncListDevices(configParameters.getDevicesURLExtension(),
+					request.getParamsForList());
 			int responseCode = Integer.parseInt(responseArray[0]);
 			if (responseCode == 200) {
 				DevicesListResponse devicesListResponse = DevicesListResponse.Builder.newBuilder()
@@ -259,7 +262,7 @@ public class ClearBladeDeviceManager {
 		SyncClient syncClient = new SyncClient();
 		String[] paramBody = request.getBodyAndParams();
 		String[] responseArray = syncClient.post(configParameters.getDevicesURLExtension(), paramBody[0],
-				paramBody[1]);
+				paramBody[1], false);
 		System.out.println(responseArray[2]);
 		DeviceConfig deviceConfig = DeviceConfig.newBuilder().build();
 		if (Integer.parseInt(responseArray[0]) == 200)
@@ -288,7 +291,7 @@ public class ClearBladeDeviceManager {
 	public ListDeviceStatesResponse listDeviceStates(ListDeviceStatesRequest request) {
 		SyncClient syncClient = new SyncClient();
 		String[] responseArray = syncClient.get(configParameters.getDevicesStatesURLExtension(),
-				request.getParamsForList());
+				request.getParamsForList(),false);
 		int responseCode = Integer.parseInt(responseArray[0]);
 		if (responseCode == 200) {
 			ListDeviceStatesResponse listDeviceStatesResponse = ListDeviceStatesResponse.Builder.newBuilder()
@@ -320,10 +323,11 @@ public class ClearBladeDeviceManager {
 	public ListDeviceConfigVersionsResponse listDeviceConfigVersions(ListDeviceConfigVersionsRequest request) {
 		SyncClient syncClient = new SyncClient();
 		String[] responseArray = syncClient.get(configParameters.getCloudiotConfigURLExtension(),
-				request.getParamsForList());
+				request.getParamsForList(),false);
 		int responseCode = Integer.parseInt(responseArray[0]);
 		if (responseCode == 200) {
-			ListDeviceConfigVersionsResponse listDeviceConfigVersionsResponse = ListDeviceConfigVersionsResponse.Builder.newBuilder()
+			ListDeviceConfigVersionsResponse listDeviceConfigVersionsResponse = ListDeviceConfigVersionsResponse.Builder
+					.newBuilder()
 					.buildResponse(responseArray[2]).build();
 			// deviceObj.loadFromString(responseArray[2]);
 			return listDeviceConfigVersionsResponse;
@@ -334,11 +338,13 @@ public class ClearBladeDeviceManager {
 	public ListDeviceConfigVersionsResponse asyncListDeviceConfigVersions(ListDeviceConfigVersionsRequest request) {
 		try {
 			AsyncClient asyncClient = new AsyncClient();
-			String[] responseArray = asyncClient.asyncListDeviceConfigVersions(configParameters.getCloudiotConfigURLExtension(),
+			String[] responseArray = asyncClient.asyncListDeviceConfigVersions(
+					configParameters.getCloudiotConfigURLExtension(),
 					request.getParamsForList());
 			int responseCode = Integer.parseInt(responseArray[0]);
 			if (responseCode == 200) {
-				ListDeviceConfigVersionsResponse listDeviceConfigVersionsResponse = ListDeviceConfigVersionsResponse.Builder.newBuilder()
+				ListDeviceConfigVersionsResponse listDeviceConfigVersionsResponse = ListDeviceConfigVersionsResponse.Builder
+						.newBuilder()
 						.buildResponse(responseArray[2]).build();
 				// deviceObj.loadFromString(responseArray[2]);
 				return listDeviceConfigVersionsResponse;
@@ -349,5 +355,31 @@ public class ClearBladeDeviceManager {
 		return null;
 	}
 
+	public ListDeviceRegistriesResponse listDeviceRegistries(ListDeviceRegistriesRequest request) {
+		SyncClient syncClient = new SyncClient();
+		String[] responseArray = syncClient.get(configParameters.getCloudiotURLExtension(), request.getParamsForList(),true);
+		int responseCode = Integer.parseInt(responseArray[0]);
+		if (responseCode == 200) {
+			ListDeviceRegistriesResponse deviceRegistriesListResponse = ListDeviceRegistriesResponse.Builder.newBuilder()
+					.buildResponse(responseArray[2]).build();
+			return deviceRegistriesListResponse;
+		}
+		return null;
+	}
 
+	public ListDeviceRegistriesResponse asyncListDeviceRegistries(ListDeviceRegistriesRequest request) {
+		try {
+			AsyncClient asyncClient = new AsyncClient();
+			String[] responseArray = asyncClient.asyncListDeviceRegistries(configParameters.getCloudiotURLExtension(), request.getParamsForList(),true);
+			int responseCode = Integer.parseInt(responseArray[0]);
+			if (responseCode == 200) {
+				ListDeviceRegistriesResponse deviceRegistriesListResponse = ListDeviceRegistriesResponse.Builder.newBuilder()
+						.buildResponse(responseArray[2]).build();
+				return deviceRegistriesListResponse;
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

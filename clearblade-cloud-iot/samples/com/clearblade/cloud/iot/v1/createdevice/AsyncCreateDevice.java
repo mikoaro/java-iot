@@ -2,11 +2,9 @@ package com.clearblade.cloud.iot.v1.createdevice;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.clearblade.cloud.iot.v1.DeviceManagerAsyncClient;
-import com.clearblade.cloud.iot.v1.DeviceManagerClient;
 import com.clearblade.cloud.iot.v1.utils.Device;
 import com.clearblade.cloud.iot.v1.utils.DeviceConfig;
 import com.clearblade.cloud.iot.v1.utils.GatewayConfig;

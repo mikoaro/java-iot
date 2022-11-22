@@ -1,12 +1,6 @@
 package com.clearblade.cloud.iot.v1.modifycloudtodeviceconfig;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.json.simple.JSONObject;
-
-import com.clearblade.cloud.iot.v1.ProcessRequest;
-import com.clearblade.cloud.iot.v1.utils.Constants;
 
 public class ModifyCloudToDeviceConfigResponse {
 

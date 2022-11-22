@@ -1,5 +1,7 @@
 package com.clearblade.cloud.iot.v1.utils;
 
+import org.json.simple.JSONObject;
+
 public class StateNotificationConfig {
 
 	private String pubsubTopicName;
@@ -52,6 +54,13 @@ public class StateNotificationConfig {
 	}
 	@Override
 	public String toString() {
-		return "pubsubTopicName="+this.pubsubTopicName;
-	}	
+		return "pubsubTopicName=" + this.pubsubTopicName;
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONObject getJsonObject() {
+		JSONObject json = new JSONObject();
+		json.put("pubsubTopicName", this.pubsubTopicName);
+		return json;
+	}
 }

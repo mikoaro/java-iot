@@ -77,6 +77,7 @@ public class AuthParams {
 			e.printStackTrace();
 		}
 		System.out.println(adminSystemKey);
+		System.out.println(adminToken);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -94,8 +95,10 @@ public class AuthParams {
 			SetHttpConnection setCon = new SetHttpConnection();
 			HttpsURLConnection con = setCon.getConnection(obj);
 			con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY, adminToken);
-			con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_KEY, Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_ACCEPT_VALUE);
-			con.addRequestProperty(Constants.HTTP_REQUEST_PROPERTY_ACCEPT_KEY, Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_ACCEPT_VALUE);
+			con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_KEY,
+					Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_ACCEPT_VALUE);
+			con.addRequestProperty(Constants.HTTP_REQUEST_PROPERTY_ACCEPT_KEY,
+					Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_ACCEPT_VALUE);
 			con.setRequestMethod(Constants.HTTP_REQUEST_METHOD_TYPE_POST);
 			con.setDoOutput(true);			
 			StringBuilder response = new StringBuilder();

@@ -349,8 +349,7 @@ public class Device {
 		return deviceStr;
 	}
 
-
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String createDeviceJSONObject() {
 		String bodyStr = "";
 		JSONObject deviceObj = new JSONObject();
@@ -411,6 +410,7 @@ public class Device {
 		return bodyStr;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void loadFromString(String inputStr) {
 		try {
 			JSONParser parser = new JSONParser();
@@ -496,40 +496,43 @@ public class Device {
 
 					if (key.equals("metadata")) {
 						JSONObject metadataJsonObject = (JSONObject) value;
-
-						Map<String, String> metadataMap = new HashMap<>();
-						Set metadataSet = metadataJsonObject.keySet();
-						if (metadataSet.size() > 0) {
-							Iterator metadIterator = metadataSet.iterator();
-							while (metadIterator.hasNext()) {
-								String metadataKey = (String) metadIterator.next();
-								String metatdataValue = (String) metadataJsonObject.get(metadataKey);
-								metadataMap.put(metadataKey, metatdataValue);
+						if (metadataJsonObject != null) {
+							Map<String, String> metadataMap = new HashMap<>();
+							Set metadataSet = metadataJsonObject.keySet();
+							if (metadataSet.size() > 0) {
+								Iterator metadIterator = metadataSet.iterator();
+								while (metadIterator.hasNext()) {
+									String metadataKey = (String) metadIterator.next();
+									String metatdataValue = (String) metadataJsonObject.get(metadataKey);
+									metadataMap.put(metadataKey, metatdataValue);
+								}
 							}
-						}
 
-						this.metadata = metadataMap;
+							this.metadata = metadataMap;
+						}
 					}
 					if (key.equals("gatewayConfig")) {
 						JSONObject gatewayConfigJsonObject = (JSONObject) value;
-						GatewayConfig gatewayConfig = new GatewayConfig();
-						if (gatewayConfigJsonObject.containsKey("gatewayType"))
-							gatewayConfig.setGatewayType(
-									GatewayType.valueOf((String) gatewayConfigJsonObject.get("gatewayType")));
-						if (gatewayConfigJsonObject.containsKey("gatewayAuthMethod"))
-							gatewayConfig.setGatewayAuthMethod(GatewayAuthMethod
-									.valueOf((String) gatewayConfigJsonObject.get("gatewayAuthMethod")));
-						if (gatewayConfigJsonObject.containsKey("lastAccessedGatewayId"))
-							gatewayConfig.setLastAccessedGatewayId(
-									(String) gatewayConfigJsonObject.get("lastAccessedGatewayId"));
-						if (gatewayConfigJsonObject.containsKey("lastAccessedGatewayTime"))
-							gatewayConfig.setLastAccessedGatewayTime(
-									(String) gatewayConfigJsonObject.get("lastAccessedGatewayTime"));
+						if (gatewayConfigJsonObject != null) {
+							GatewayConfig gatewayConfig = new GatewayConfig();
+							if (gatewayConfigJsonObject.containsKey("gatewayType"))
+								gatewayConfig.setGatewayType(
+										GatewayType.valueOf((String) gatewayConfigJsonObject.get("gatewayType")));
+							if (gatewayConfigJsonObject.containsKey("gatewayAuthMethod"))
+								gatewayConfig.setGatewayAuthMethod(GatewayAuthMethod
+										.valueOf((String) gatewayConfigJsonObject.get("gatewayAuthMethod")));
+							if (gatewayConfigJsonObject.containsKey("lastAccessedGatewayId"))
+								gatewayConfig.setLastAccessedGatewayId(
+										(String) gatewayConfigJsonObject.get("lastAccessedGatewayId"));
+							if (gatewayConfigJsonObject.containsKey("lastAccessedGatewayTime"))
+								gatewayConfig.setLastAccessedGatewayTime(
+										(String) gatewayConfigJsonObject.get("lastAccessedGatewayTime"));
 
-						this.gatewayConfig = gatewayConfig;
+							this.gatewayConfig = gatewayConfig;
+						}
 					}
 				}
-			}	
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

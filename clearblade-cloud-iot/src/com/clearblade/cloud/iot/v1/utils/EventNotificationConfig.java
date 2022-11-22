@@ -1,5 +1,7 @@
 package com.clearblade.cloud.iot.v1.utils;
 
+import org.json.simple.JSONObject;
+
 public class EventNotificationConfig {
 
 	private String subfolderMatches;
@@ -71,5 +73,15 @@ public class EventNotificationConfig {
 	@Override
 	public String toString() {
 		return "subfolderMatches= "+this.subfolderMatches+",pubsubTopicName="+this.pubsubTopicName;
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONObject getJsonObject() {
+		JSONObject json = new JSONObject();
+		json.put("pubsubTopicName", this.pubsubTopicName);
+		if (this.subfolderMatches != null) {
+			json.put("subfolderMatches", this.subfolderMatches);
+		}
+		return json;
 	}
 }

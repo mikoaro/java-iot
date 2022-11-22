@@ -1,12 +1,7 @@
 package com.clearblade.cloud.iot.v1.getdeviceregistry;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.json.simple.JSONObject;
-
-import com.clearblade.cloud.iot.v1.ProcessRequest;
-import com.clearblade.cloud.iot.v1.utils.Constants;
 import com.clearblade.cloud.iot.v1.utils.RegistryName;
 
 public class GetDeviceRegistryResponse {
@@ -17,7 +12,7 @@ public class GetDeviceRegistryResponse {
 	private int httpStatusCode;
 	private String httpStatusResponse;
 	private RegistryName registry;
-
+s
 	protected GetDeviceRegistryResponse(Builder builder) {
 		this.request = builder.request;
 	}
@@ -61,33 +56,6 @@ public class GetDeviceRegistryResponse {
 		// to return outer instance
 		public GetDeviceRegistryResponse build() {
 			return new GetDeviceRegistryResponse(this);
-		}
-	}
-
-	/**
-	 * Mehtod used to process the request Calling processRequestForMethod -
-	 * GetDeviceRegistry
-	 */
-	@SuppressWarnings("unchecked")
-	public void processRequest(GetDeviceRegistryRequest request) {
-		String msg = "";
-		ProcessRequest processRequest = new ProcessRequest();
-		JSONObject requestParams = new JSONObject();
-		JSONObject bodyParams = new JSONObject();
-		if(request != null) {
-			requestParams.put("name", request.toString());
-		}
-		String responseMessage = processRequest.processRequestForMethod(Constants.GET_DEVICE_REGISTRY, requestParams, bodyParams);
-		this.setHttpStatusResponse(responseMessage);
-		if (responseMessage.equals("OK")) {
-			this.setHttpStatusCode(200);
-			msg = "Request processed for GET_DEVICE_REGISTRY method";
-			
-			log.log(Level.INFO, msg);
-		} else {
-			this.setHttpStatusCode(0);
-			msg = "Request for GET_DEVICE_REGISTRY failed \n" .concat(responseMessage);
-			log.log(Level.SEVERE, msg);
 		}
 	}
 

@@ -1,11 +1,7 @@
 package com.clearblade.cloud.iot.v1.getdevice;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.json.simple.JSONObject;
-
-import com.clearblade.cloud.iot.v1.ProcessRequest;
 import com.clearblade.cloud.iot.v1.utils.Device;
 
 public class GetDeviceResponse {
@@ -60,34 +56,6 @@ public class GetDeviceResponse {
 		// to return outer instance
 		public GetDeviceResponse build() {
 			return new GetDeviceResponse(this);
-		}
-	}
-
-	/**
-	 * Mehtod used to process the request Calling processRequestForMethod -
-	 * GetDevice
-	 */
-	@SuppressWarnings("unchecked")
-	public void processRequest(GetDeviceRequest request) {
-		String msg = "";
-		ProcessRequest processRequest = new ProcessRequest();
-		JSONObject requestParams = new JSONObject();
-		JSONObject bodyParams = new JSONObject();
-		if(request != null) {
-			requestParams.put("name", request.toString());
-			requestParams.put("fieldMask", "EMPTY");
-		}
-		String responseMessage = processRequest.processRequestForMethod("getDevice", requestParams, bodyParams);
-		this.setHttpStatusResponse(responseMessage);
-		if (responseMessage.equals("OK")) {
-			this.setHttpStatusCode(200);
-			msg = "Request processed for GetDevice method";
-			
-			log.log(Level.INFO, msg);
-		} else {
-			this.setHttpStatusCode(0);
-			msg = "Request for GetDevice failed \n" .concat(responseMessage);
-			log.log(Level.SEVERE, msg);
 		}
 	}
 

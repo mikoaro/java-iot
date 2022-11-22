@@ -1,13 +1,11 @@
 package com.clearblade.cloud.iot.v1.utils;
 
-import java.sql.Timestamp;
-
 public class X509CertificateDetails {
 
 	private String issuer;
 	private String subject;
-	private Timestamp startTime;
-	private Timestamp expiryTime;
+	private String startTime;
+	private String expiryTime;
 	private String signatureAlgorithm;
 	private String publicKeyType;
 	
@@ -24,16 +22,20 @@ public class X509CertificateDetails {
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	public Timestamp getStartTime() {
+
+	public String getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Timestamp startTime) {
+
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
-	public Timestamp getExpiryTime() {
+
+	public String getExpiryTime() {
 		return expiryTime;
 	}
-	public void setExpiryTime(Timestamp expiryTime) {
+
+	public void setExpiryTime(String expiryTime) {
 		this.expiryTime = expiryTime;
 	}
 	public String getSignatureAlgorithm() {
@@ -51,7 +53,9 @@ public class X509CertificateDetails {
 	
 	@Override
 	public String toString() {
-		return 	"Issuer= "+this.issuer+",Subject="+this.subject+",startTime="+this.startTime+",expiryTime="+this.expiryTime+",signatureAlgorithm="+this.signatureAlgorithm+",publicKeyType="+this.publicKeyType;
+		return "Issuer= " + this.issuer + ",Subject=" + this.subject + ",startTime=" + this.startTime + ",expiryTime="
+				+ this.expiryTime + ",signatureAlgorithm=" + this.signatureAlgorithm + ",publicKeyType="
+				+ this.publicKeyType;
 	}
 	
 }

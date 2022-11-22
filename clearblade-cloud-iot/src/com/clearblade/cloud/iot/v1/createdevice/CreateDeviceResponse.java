@@ -1,11 +1,6 @@
 package com.clearblade.cloud.iot.v1.createdevice;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.json.simple.JSONObject;
-
-import com.clearblade.cloud.iot.v1.ProcessRequest;
 
 public class CreateDeviceResponse {
 

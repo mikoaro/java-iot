@@ -1,5 +1,7 @@
 package com.clearblade.cloud.iot.v1.utils;
 
+import org.json.simple.JSONObject;
+
 public class HttpConfig {
 
 	private HttpState httpEnabledState;
@@ -55,6 +57,13 @@ public class HttpConfig {
 	}
 	@Override
 	public String toString() {
-		return "HttpState="+this.httpEnabledState;
-	}	
+		return "{'httpEnabledState':'" + this.httpEnabledState + "'}";
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONObject getJsonObject() {
+		JSONObject json = new JSONObject();
+		json.put("httpEnabledState", this.httpEnabledState.toString());
+		return json;
+	}
 }

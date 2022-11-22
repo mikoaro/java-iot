@@ -1,12 +1,6 @@
 package com.clearblade.cloud.iot.v1.unbinddevicefromgateway;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.json.simple.JSONObject;
-
-import com.clearblade.cloud.iot.v1.ProcessRequest;
-import com.clearblade.cloud.iot.v1.utils.Constants;
 
 public class UnbindDeviceFromGatewayResponse {
 
@@ -58,34 +52,6 @@ public class UnbindDeviceFromGatewayResponse {
 		// to return outer instance
 		public UnbindDeviceFromGatewayResponse build() {
 			return new UnbindDeviceFromGatewayResponse(this);
-		}
-	}
-
-	/**
-	 * Mehtod used to process the request Calling processRequestForMethod -
-	 * UnbindDeviceFromGatewayRequest
-	 */
-	public void processRequest(UnbindDeviceFromGatewayRequest request) {
-		String msg = "";
-		JSONObject requestParams = new JSONObject();
-		JSONObject bodyParams = new JSONObject();
-		ProcessRequest processRequest = new ProcessRequest();
-		if(request != null) {
-			String logMsg = "Unbind Device To Gateway Request :: "+request.toString();
-			log.log(Level.INFO,logMsg);
-			requestParams = (JSONObject) request.requestParams.clone();
-			bodyParams = (JSONObject) request.bodyParams.clone();
-		}		
-		String responseMessage = processRequest.processRequestForMethod(Constants.UNBIND_DEVICE_FROM_GATEWAY,requestParams,bodyParams);
-		this.setHttpStatusResponse(responseMessage);		
-		if (responseMessage.equals("OK")) {
-			this.setHttpStatusCode(200);
-			msg = "Request processed for UNBIND_DEVICE_TO_GATEWAY method";
-			log.log(Level.INFO, msg);
-		} else {
-			this.setHttpStatusCode(0);
-			msg = "Request for UNBIND_DEVICE_TO_GATEWAY failed \n" .concat(responseMessage);
-			log.log(Level.SEVERE, msg);
 		}
 	}
 

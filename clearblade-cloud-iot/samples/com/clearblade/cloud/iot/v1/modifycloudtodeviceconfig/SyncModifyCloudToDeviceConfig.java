@@ -1,13 +1,9 @@
 package com.clearblade.cloud.iot.v1.modifycloudtodeviceconfig;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.print.DocFlavor.BYTE_ARRAY;
 
 import com.clearblade.cloud.iot.v1.DeviceManagerClient;
 import com.clearblade.cloud.iot.v1.utils.ByteString;
-import com.clearblade.cloud.iot.v1.utils.Device;
 import com.clearblade.cloud.iot.v1.utils.DeviceConfig;
 import com.clearblade.cloud.iot.v1.utils.DeviceName;
 
@@ -23,9 +19,9 @@ public class SyncModifyCloudToDeviceConfig {
 		DeviceManagerClient deviceManagerClient = new DeviceManagerClient();
 		ModifyCloudToDeviceConfigRequest request = ModifyCloudToDeviceConfigRequest.Builder.newBuilder()
 				.setName(DeviceName
-						.of("ingressdevelopmentenv", "us-central1", "MandarTest1", "mandar_device")
+						.of("ingressdevelopmentenv", "us-central1", "Rashmi_Registry_Test", "Rashmi_Device_Test")
 						.toString())
-				.setBinaryData(new ByteString("bmV3TWVzc2FnZUZvckNvbmZpZw==")).setVersionToUpdate("2").build();
+				.setBinaryData(new ByteString("bmV3TWVzc2FnZUZvckNvbmZpZw==")).setVersionToUpdate("6").build();
 		DeviceConfig response = deviceManagerClient.modifyCloudToDeviceConfig(request);
 		System.out.println(response.toString());
 	}

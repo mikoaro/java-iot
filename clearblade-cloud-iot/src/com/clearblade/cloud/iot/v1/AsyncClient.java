@@ -18,13 +18,14 @@ import com.clearblade.cloud.iot.v1.utils.Constants;
 import com.clearblade.cloud.iot.v1.utils.SetHttpConnection;
 
 public class AsyncClient {
-	
+
 	private ConfigParameters configParameters = new ConfigParameters();
 	private String[] responseArray = new String[3];
 	private String apiName;
 	private String params;
 	private String body;
-	
+	private boolean isAdmin = false;
+
 	/**
 	 * Method used to generate URL for apicall
 	 * @param apiName - path to api
@@ -42,20 +43,45 @@ public class AsyncClient {
 	}
 
 	/**
+	 * Method used to generate URL for apicall
+	 * 
+	 * @param apiName - path to api
+	 * @param params  - parameters to be attached to request
+	 * @return URL formed and to be used
+	 */
+	private String generateAdminURL(String apiName, String params) {
+
+		return AuthParams.getBaseURL()
+				.concat(configParameters.getBaseURL())
+				.concat(AuthParams.getAdminSystemKey())
+				.concat(apiName)
+				.concat("?" + params);
+	}
+
+	/**
 	 * Method used to Calls HTTP Get request
 	 * @param apiName
 	 * @param params
 	 * @return String[] containing responseCode, responseMessage and response object
 	 */
 	private Object get() {
-		AuthParams.setRegistryCredentials();
+		String finalURL = "";
+		if (isAdmin) {
+			AuthParams.setAdminCredentials();
+			finalURL = generateAdminURL(apiName, params);
+		} else {
+			AuthParams.setRegistryCredentials();
+			finalURL = generateURL(apiName, params);
+		}
 		try {
-			String finalURL = generateURL(apiName, params);
 			System.out.println(finalURL);
 			URL obj = new URL(finalURL);
 			SetHttpConnection setCon = new SetHttpConnection();
 			HttpsURLConnection con = setCon.getConnection(obj);
-			con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY, AuthParams.getUserToken());
+			if(isAdmin)
+				con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY, AuthParams.getAdminToken());
+			else
+				con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY, AuthParams.getUserToken());
 			con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_KEY,
 					Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_ACCEPT_VALUE);
 			con.addRequestProperty(Constants.HTTP_REQUEST_PROPERTY_ACCEPT_KEY,
@@ -95,15 +121,26 @@ public class AsyncClient {
 	 * @return String[] containing responseCode, responseMessage and response object
 	 */
 	public Object post() {
-		AuthParams.setRegistryCredentials();
+		String finalURL = "";
+		if (isAdmin) {
+			AuthParams.setAdminCredentials();
+			finalURL = generateAdminURL(apiName, params);
+		} else {
+			AuthParams.setRegistryCredentials();
+			finalURL = generateURL(apiName, params);
+		}
 
 		try {
-			String finalURL = generateURL(apiName, params);
 			System.out.println(finalURL);
 			URL obj = new URL(finalURL);
 			SetHttpConnection setCon = new SetHttpConnection();
 			HttpsURLConnection con = setCon.getConnection(obj);
-			con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY, AuthParams.getUserToken());
+			if (isAdmin)
+				con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY,
+						AuthParams.getAdminToken());
+			else
+				con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY,
+						AuthParams.getUserToken());
 			con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_KEY,
 					Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_ACCEPT_VALUE);
 			con.addRequestProperty(Constants.HTTP_REQUEST_PROPERTY_ACCEPT_KEY,
@@ -147,14 +184,25 @@ public class AsyncClient {
 	 * @return String[] containing responseCode, responseMessage and response object
 	 */
 	public Object delete() {
-		AuthParams.setRegistryCredentials();
+		String finalURL = "";
+		if (isAdmin) {
+			AuthParams.setAdminCredentials();
+			finalURL = generateAdminURL(apiName, params);
+		} else {
+			AuthParams.setRegistryCredentials();
+			finalURL = generateURL(apiName, params);
+		}
 		try {
-			String finalURL = generateURL(apiName, params);
 			System.out.println(finalURL);
 			URL obj = new URL(finalURL);
 			SetHttpConnection setCon = new SetHttpConnection();
 			HttpsURLConnection con = setCon.getConnection(obj);
-			con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY, AuthParams.getUserToken());
+			if (isAdmin)
+				con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY,
+						AuthParams.getAdminToken());
+			else
+				con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY,
+						AuthParams.getUserToken());
 			con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_KEY,
 					Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_ACCEPT_VALUE);
 			con.addRequestProperty(Constants.HTTP_REQUEST_PROPERTY_ACCEPT_KEY,
@@ -194,14 +242,14 @@ public class AsyncClient {
 	 */
 	public Object update() {
 		AuthParams.setRegistryCredentials();
-
+		String	finalURL = generateURL(apiName, params);
 		try {
-			String finalURL = generateURL(apiName, params);
 			System.out.println(finalURL);
 			URL obj = new URL(finalURL);
 			SetHttpConnection setCon = new SetHttpConnection();
 			HttpsURLConnection con = setCon.getConnection(obj);
-			con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY, AuthParams.getUserToken());
+			con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY,
+					AuthParams.getUserToken());
 			con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_KEY,
 					Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_ACCEPT_VALUE);
 			con.addRequestProperty(Constants.HTTP_REQUEST_PROPERTY_ACCEPT_KEY,
@@ -432,66 +480,10 @@ public class AsyncClient {
 		return responseArray;
 	}
 
-	//Registry Apis
-	/**
-	 * Method used to generate URL for apicall
-	 * @param apiName - path to api
-	 * @param params - parameters to be attached to request
-	 * @return URL formed and to be used
-	 */
-	private String generateAdminURL(String apiName, String params) {
+	// Registry Apis
 
-		return AuthParams.getBaseURL()
-	  					 .concat(configParameters.getBaseURL())
-	  					 .concat(AuthParams.getUserSystemKey())
-	  					 .concat(apiName)
-	  					 .concat("?"+params);
-	}
-	/**
-	 * Method used to Calls HTTP Get request
-	 * @param apiName
-	 * @param params
-	 * @return String[] containing responseCode, responseMessage and response object
-	 */
-	public Object getRegistry() {
-		AuthParams.setRegistryCredentials();
-		try {
-		String finalURL = generateAdminURL(apiName, params);
-		System.out.println(finalURL);
-		URL obj = new URL(finalURL);
-		SetHttpConnection setCon = new SetHttpConnection();
-		HttpsURLConnection con = setCon.getConnection(obj);
-		con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_TOKEN_KEY, AuthParams.getUserToken());
-		con.setRequestProperty(Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_KEY, Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_ACCEPT_VALUE);
-		con.addRequestProperty(Constants.HTTP_REQUEST_PROPERTY_ACCEPT_KEY, Constants.HTTP_REQUEST_PROPERTY_CONTENT_TYPE_ACCEPT_VALUE);
-		con.setRequestMethod(Constants.HTTP_REQUEST_METHOD_TYPE_GET);
-		StringBuilder response = new StringBuilder();
-		responseArray[0] = String.valueOf(con.getResponseCode()); 
-		responseArray[1] = con.getResponseMessage(); 
-		BufferedReader in = null;
-		if (con.getErrorStream() != null) {
-			in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-		} else if (con.getInputStream() != null) {
-			in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		}
-		String inputLine;
-		String responseMessage = "";
-		if (in != null) {
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			responseMessage = response.toString();
-			responseArray[2] = responseMessage; 
-		}
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		return responseArray;
-	}
-	
 	private Future<Object> getRegistryAsync() {
-		return CompletableFuture.supplyAsync(this::getRegistry);
+		return CompletableFuture.supplyAsync(this::get);
 	}
 
 	public String[] asyncGetRegistry(String apiName,String params) throws InterruptedException {
@@ -507,5 +499,81 @@ public class AsyncClient {
 		return responseArray;
 	}
 
+	private Future<Object> createRegistryAsync() {
+		return CompletableFuture.supplyAsync(this::post);
+	}
 
+	public String[] asyncCreateDeviceRegistry(String apiName, String params, String body, boolean isAdmin)
+			throws InterruptedException {
+		this.apiName = apiName;
+		this.params = params;
+		this.body = body;
+		this.isAdmin = isAdmin;
+		Future<Object> future = createRegistryAsync();
+		try {
+			future.get(15000, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			e.printStackTrace();
+			Thread.currentThread().interrupt();
+		}
+		return responseArray;
+	}
+
+	private Future<Object> updateRegistryAsync() {
+		return CompletableFuture.supplyAsync(this::update);
+	}
+
+	public String[] asyncUpdateDeviceRegistry(String apiName, String params, String body)
+			throws InterruptedException {
+		this.apiName = apiName;
+		this.params = params;
+		this.body = body;
+		Future<Object> future = updateRegistryAsync();
+		try {
+			future.get(15000, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			e.printStackTrace();
+			Thread.currentThread().interrupt();
+		}
+		return responseArray;
+	}
+
+	private Future<Object> deleteRegistryAsync() {
+		return CompletableFuture.supplyAsync(this::delete);
+	}
+
+	public String[] asyncDeleteDeviceRegistry(String apiName, String params, String body, boolean isAdmin)
+			throws InterruptedException {
+		this.apiName = apiName;
+		this.params = params;
+		this.body = body;
+		this.isAdmin = isAdmin;
+		Future<Object> future = deleteRegistryAsync();
+		try {
+			future.get(15000, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			e.printStackTrace();
+			Thread.currentThread().interrupt();
+		}
+		return responseArray;
+	}
+	private Future<Object> listDeviceRegistriesAsync() {
+		return CompletableFuture.supplyAsync(this::get);
+	}
+
+	public String[] asyncListDeviceRegistries(String apiName, String params,boolean isAdmin)
+			throws InterruptedException {
+		this.apiName = apiName;
+		this.params = params;
+		this.isAdmin = isAdmin;
+		Future<Object> future = listDeviceRegistriesAsync();
+		try {
+			future.get(15000, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+			e.printStackTrace();
+			Thread.currentThread().interrupt();
+		}
+		return responseArray;
+	}
+		
 }

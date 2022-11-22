@@ -1,7 +1,5 @@
 package com.clearblade.cloud.iot.v1.utils;
 
-import javax.swing.JSeparator;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 

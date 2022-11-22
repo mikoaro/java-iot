@@ -5,7 +5,9 @@ import java.util.logging.Logger;
 import com.clearblade.cloud.iot.v1.binddevicetogateway.BindDeviceToGatewayRequest;
 import com.clearblade.cloud.iot.v1.binddevicetogateway.BindDeviceToGatewayResponse;
 import com.clearblade.cloud.iot.v1.createdevice.CreateDeviceRequest;
+import com.clearblade.cloud.iot.v1.createdeviceregistry.CreateDeviceRegistryRequest;
 import com.clearblade.cloud.iot.v1.deletedevice.DeleteDeviceRequest;
+import com.clearblade.cloud.iot.v1.deletedeviceregistry.DeleteDeviceRegistryRequest;
 import com.clearblade.cloud.iot.v1.deviceslist.DevicesListRequest;
 import com.clearblade.cloud.iot.v1.deviceslist.DevicesListResponse;
 import com.clearblade.cloud.iot.v1.devicestateslist.ListDeviceStatesRequest;
@@ -14,12 +16,15 @@ import com.clearblade.cloud.iot.v1.getdevice.GetDeviceRequest;
 import com.clearblade.cloud.iot.v1.getdeviceregistry.GetDeviceRegistryRequest;
 import com.clearblade.cloud.iot.v1.listdeviceconfigversions.ListDeviceConfigVersionsRequest;
 import com.clearblade.cloud.iot.v1.listdeviceconfigversions.ListDeviceConfigVersionsResponse;
+import com.clearblade.cloud.iot.v1.listdeviceregistries.ListDeviceRegistriesRequest;
+import com.clearblade.cloud.iot.v1.listdeviceregistries.ListDeviceRegistriesResponse;
 import com.clearblade.cloud.iot.v1.modifycloudtodeviceconfig.ModifyCloudToDeviceConfigRequest;
 import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceRequest;
 import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceResponse;
 import com.clearblade.cloud.iot.v1.unbinddevicefromgateway.UnbindDeviceFromGatewayRequest;
 import com.clearblade.cloud.iot.v1.unbinddevicefromgateway.UnbindDeviceFromGatewayResponse;
 import com.clearblade.cloud.iot.v1.updatedevice.UpdateDeviceRequest;
+import com.clearblade.cloud.iot.v1.updatedeviceregistry.UpdateDeviceRegistryRequest;
 import com.clearblade.cloud.iot.v1.utils.Device;
 import com.clearblade.cloud.iot.v1.utils.DeviceConfig;
 import com.clearblade.cloud.iot.v1.utils.DeviceRegistry;
@@ -132,5 +137,24 @@ public class DeviceManagerAsyncClient {
 		return cbManager.asyncGetDeviceRegistry(request);
 	}
 
+	public DeviceRegistry createDeviceRegistry(CreateDeviceRegistryRequest request) {
+		ClearBladeRegistryManager cbManager = new ClearBladeRegistryManager();
+		return cbManager.asyncCreateDeviceRegistry(request);
+	}
+
+	public DeviceRegistry updateDeviceRegistry(UpdateDeviceRegistryRequest request) {
+		ClearBladeRegistryManager cbManager = new ClearBladeRegistryManager();
+		return cbManager.asyncUpdateDeviceRegistry(request);
+	}
+
+	public void deleteDeviceRegistry(DeleteDeviceRegistryRequest request) {
+		ClearBladeRegistryManager cbManager = new ClearBladeRegistryManager();
+		cbManager.asyncDeleteDeviceRegistry(request);
+	}
+
+	public ListDeviceRegistriesResponse listDeviceRegistries(ListDeviceRegistriesRequest request) {
+		ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
+		return cbManager.asyncListDeviceRegistries(request);
+	}
 
 }

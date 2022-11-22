@@ -163,7 +163,7 @@ public class ConfigParameters {
 
 	public void setBaseURL(String baseURL) {
 		this.baseURL = baseURL;
-	}	
+	}
 
 	public String getCloudiotConfigURLExtension() {
 		return cloudiotConfigURLExtension;

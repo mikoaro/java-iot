@@ -26,7 +26,7 @@ public class PublicKeyCertificate {
 	}
 	@Override
 	public String toString() {
-		return "PublicKeyCertificateFormat="+this.format.toString()+",Certificate="+certificate+",X509CertificateDetails="+this.x509Details.toString();
+		return "PublicKeyCertificateFormat=" + this.format.toString() + ",Certificate=" + certificate;
 	}
 	
 }

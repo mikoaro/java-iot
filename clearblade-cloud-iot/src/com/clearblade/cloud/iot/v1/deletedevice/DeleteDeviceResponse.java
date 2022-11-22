@@ -1,11 +1,6 @@
 package com.clearblade.cloud.iot.v1.deletedevice;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.json.simple.JSONObject;
-
-import com.clearblade.cloud.iot.v1.ProcessRequest;
 
 public class DeleteDeviceResponse {
 
@@ -57,33 +52,6 @@ public class DeleteDeviceResponse {
 		// to return outer instance
 		public DeleteDeviceResponse build() {
 			return new DeleteDeviceResponse(this);
-		}
-	}
-
-	/**
-	 * Mehtod used to process the request Calling processRequestForMethod -
-	 * DeleteDevice
-	 */
-	@SuppressWarnings("unchecked")
-	public void processRequest(DeleteDeviceRequest request) {
-		String msg = "";
-
-		ProcessRequest processRequest = new ProcessRequest();
-		JSONObject requestParams = new JSONObject();
-		JSONObject bodyParams = new JSONObject();
-		if(request != null) {
-			requestParams.put("name", request.toString());
-		}
-		String responseMessage = processRequest.processRequestForMethod("deleteDevice", requestParams, bodyParams);
-		this.setHttpStatusResponse(responseMessage);
-		if (responseMessage.equals("OK")) {
-			this.setHttpStatusCode(200);
-			msg = "Request processed for DeleteDevice method";
-			log.log(Level.INFO, msg);
-		} else {
-			this.setHttpStatusCode(0);
-			msg = "Request for DeleteDevice failed \n".concat(responseMessage);
-			log.log(Level.SEVERE, msg);
 		}
 	}
 

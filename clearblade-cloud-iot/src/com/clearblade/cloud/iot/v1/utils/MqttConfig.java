@@ -1,5 +1,7 @@
 package com.clearblade.cloud.iot.v1.utils;
 
+import org.json.simple.JSONObject;
+
 public class MqttConfig {
 
 	private MqttState mqttEnabledState;
@@ -53,6 +55,13 @@ public class MqttConfig {
 	}
 	@Override
 	public String toString() {
-		return this.mqttEnabledState.toString();
-	}	
+		return "{'mqttEnabledState':'" + this.mqttEnabledState + "'}";
+	}
+
+	@SuppressWarnings("unchecked")
+	public JSONObject getJsonObject() {
+		JSONObject json = new JSONObject();
+		json.put("mqttEnabledState", this.mqttEnabledState.toString());
+		return json;
+	}
 }

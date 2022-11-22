@@ -5,7 +5,9 @@ import java.util.logging.Logger;
 import com.clearblade.cloud.iot.v1.binddevicetogateway.BindDeviceToGatewayRequest;
 import com.clearblade.cloud.iot.v1.binddevicetogateway.BindDeviceToGatewayResponse;
 import com.clearblade.cloud.iot.v1.createdevice.CreateDeviceRequest;
+import com.clearblade.cloud.iot.v1.createdeviceregistry.CreateDeviceRegistryRequest;
 import com.clearblade.cloud.iot.v1.deletedevice.DeleteDeviceRequest;
+import com.clearblade.cloud.iot.v1.deletedeviceregistry.DeleteDeviceRegistryRequest;
 import com.clearblade.cloud.iot.v1.deviceslist.DevicesListRequest;
 import com.clearblade.cloud.iot.v1.deviceslist.DevicesListResponse;
 import com.clearblade.cloud.iot.v1.devicestateslist.ListDeviceStatesRequest;
@@ -14,12 +16,15 @@ import com.clearblade.cloud.iot.v1.getdevice.GetDeviceRequest;
 import com.clearblade.cloud.iot.v1.getdeviceregistry.GetDeviceRegistryRequest;
 import com.clearblade.cloud.iot.v1.listdeviceconfigversions.ListDeviceConfigVersionsRequest;
 import com.clearblade.cloud.iot.v1.listdeviceconfigversions.ListDeviceConfigVersionsResponse;
+import com.clearblade.cloud.iot.v1.listdeviceregistries.ListDeviceRegistriesRequest;
+import com.clearblade.cloud.iot.v1.listdeviceregistries.ListDeviceRegistriesResponse;
 import com.clearblade.cloud.iot.v1.modifycloudtodeviceconfig.ModifyCloudToDeviceConfigRequest;
 import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceRequest;
 import com.clearblade.cloud.iot.v1.sendcommandtodevice.SendCommandToDeviceResponse;
 import com.clearblade.cloud.iot.v1.unbinddevicefromgateway.UnbindDeviceFromGatewayRequest;
 import com.clearblade.cloud.iot.v1.unbinddevicefromgateway.UnbindDeviceFromGatewayResponse;
 import com.clearblade.cloud.iot.v1.updatedevice.UpdateDeviceRequest;
+import com.clearblade.cloud.iot.v1.updatedeviceregistry.UpdateDeviceRegistryRequest;
 import com.clearblade.cloud.iot.v1.utils.Device;
 import com.clearblade.cloud.iot.v1.utils.DeviceConfig;
 import com.clearblade.cloud.iot.v1.utils.DeviceRegistry;
@@ -29,28 +34,31 @@ public class DeviceManagerClient {
 	static Logger log = Logger.getLogger(DeviceManagerClient.class.getName());
 
 	/**
-	 * Calling getDevice api 
+	 * Calling getDevice api
+	 * 
 	 * @param request
 	 * @return Device object
 	 */
-	
-	  public Device getDevice(GetDeviceRequest request) {
-		  ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
-		  return cbManager.getDevice(request);
-	  }
+
+	public Device getDevice(GetDeviceRequest request) {
+		ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
+		return cbManager.getDevice(request);
+	}
 
 	/**
-	 * Calling createDevice api 
+	 * Calling createDevice api
+	 * 
 	 * @param request
 	 * @return Device object
-	 */		
-	  public Device createDevice(CreateDeviceRequest request) {
-		  ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
-		  return cbManager.createDevice(request);
-	  }
+	 */
+	public Device createDevice(CreateDeviceRequest request) {
+		ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
+		return cbManager.createDevice(request);
+	}
 
 	/**
 	 * Calling bindDeviceToGateway api
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -61,6 +69,7 @@ public class DeviceManagerClient {
 
 	/**
 	 * Calling unbindDeviceFromGateway api
+	 * 
 	 * @param request
 	 * @return
 	 */
@@ -71,22 +80,24 @@ public class DeviceManagerClient {
 
 	/**
 	 * Calling deleteDevice api
+	 * 
 	 * @param request
 	 */
 	public void deleteDevice(DeleteDeviceRequest request) {
 		ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
-		cbManager.deleteDevice(request);		
+		cbManager.deleteDevice(request);
 	}
 
 	/**
-	 * Calling updateDevice api 
+	 * Calling updateDevice api
+	 * 
 	 * @param request
 	 * @return Device object
-	 */		
-	  public Device updateDevice(UpdateDeviceRequest request) {
-		  ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
-		  return cbManager.updateDevice(request);
-	  }
+	 */
+	public Device updateDevice(UpdateDeviceRequest request) {
+		ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
+		return cbManager.updateDevice(request);
+	}
 
 	public SendCommandToDeviceResponse sendCommandToDevice(SendCommandToDeviceRequest request) {
 		ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
@@ -97,7 +108,6 @@ public class DeviceManagerClient {
 	public DevicesListResponse listDevices(DevicesListRequest request) {
 		ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
 		return cbManager.listDevices(request);
-
 	}
 
 	public DeviceConfig modifyCloudToDeviceConfig(ModifyCloudToDeviceConfigRequest request) {
@@ -117,16 +127,36 @@ public class DeviceManagerClient {
 
 	}
 
-	//Registry Apis
+	// Registry Apis
 	/**
-	 * Calling getDeviceRegistry api 
+	 * Calling getDeviceRegistry api
+	 * 
 	 * @param request
 	 * @return DeviceRegistry object
 	 */
-	  public DeviceRegistry getDeviceRegistry(GetDeviceRegistryRequest request) {
-		  ClearBladeRegistryManager cbManager = new ClearBladeRegistryManager();
-		  return cbManager.getRegistry(request);
-	  }
+	public DeviceRegistry getDeviceRegistry(GetDeviceRegistryRequest request) {
+		ClearBladeRegistryManager cbManager = new ClearBladeRegistryManager();
+		return cbManager.getRegistry(request);
+	}
 
+	public DeviceRegistry createDeviceRegistry(CreateDeviceRegistryRequest request) {
+		ClearBladeRegistryManager cbManager = new ClearBladeRegistryManager();
+		return cbManager.createDeviceRegistry(request);
+	}
+
+	public DeviceRegistry updateDeviceRegistry(UpdateDeviceRegistryRequest request) {
+		ClearBladeRegistryManager cbManager = new ClearBladeRegistryManager();
+		return cbManager.updateDeviceRegistry(request);
+	}
+
+	public void deleteDeviceRegistry(DeleteDeviceRegistryRequest request) {
+		ClearBladeRegistryManager cbManager = new ClearBladeRegistryManager();
+		cbManager.deleteDeviceRegistry(request);
+	}
+
+	public ListDeviceRegistriesResponse listDeviceRegistries(ListDeviceRegistriesRequest request) {
+		ClearBladeDeviceManager cbManager = new ClearBladeDeviceManager();
+		return cbManager.listDeviceRegistries(request);
+	}
 
 }
