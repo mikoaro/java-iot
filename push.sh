@@ -1,3 +1,3 @@
 git add .
-git commit -am "make it better"
-git push
+git commit -am "add reame"
+git push --set-upstream origin add-readme
