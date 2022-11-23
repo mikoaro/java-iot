@@ -1,1 +1,1 @@
-# ClearBlade Cloud Internet of Things (IoT) Core Client for Java
+# ClearBlade Internet of Things (IoT) Core Client for Java
